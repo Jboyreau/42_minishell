@@ -34,7 +34,13 @@ int	main(void)
 		if (parser(lexer(&hll)) == SUCCESS)
 			execute_tree(hll.tr);
 		else
+		{
+			if (hll.str)
+				free(hll.str);
+			if (hll.tr)
+				free(hll.tr);
 			return (EXIT_FAILURE);
+		}
 		if (hll.str)
 			free(hll.str);
 		if (hll.tr)
