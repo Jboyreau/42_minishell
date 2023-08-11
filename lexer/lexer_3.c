@@ -11,10 +11,10 @@ static void	ch_type(t_leaf *tr, char *str, int len, int count)
 		fill_leaf(tr, ARG, len, str);
 	else if ((*(tr - 1)).type == R_QUOTE || (*(tr - 1)).type == DR_QUOTE)
 		fill_leaf(tr, FIL, len, str);
-	else if ((*(tr - 1)).type > NL && (*(tr - 1)).type <= OR)
-		fill_leaf(tr, CMD, len, str);
 	else if ((*(tr - 1)).type == DL_QUOTE)
 		fill_leaf(tr, LIM, len, str);
+	else if ((*(tr - 1)).type > NL && (*(tr - 1)).type <= OR)
+		fill_leaf(tr, CMD, len, str);
 }
 
 static void	fnormal_string(t_leaf *tr, char *str, int *i, int *count)
