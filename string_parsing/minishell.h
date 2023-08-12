@@ -87,6 +87,12 @@ enum types
 /*******************************************************************************/
 };
 
+typedef struct s_local_var
+{
+	char	*name;
+	char	*content;
+} t_lv;
+
 typedef struct s_leaf
 {
 	char	type;

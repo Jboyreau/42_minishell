@@ -1,21 +1,37 @@
+#include <stdlib.h>
 
-#define ALLOC 0
-#define UNALLOC 1
+static int word_len(t_lv *lv, char *word)
+{
+	;
+}
 
-static char	quote(t_leaf *node)
+static void	quote(t_leaf *node)
+{
+	char	*new_word;
+	int i = 0;
+
+	new_word = malloc(((*node).len - 1));
+	i = 0;
+	while (i < (*node).len - 2)
+	{
+		*(new_word + i) = *((*node).word + i + 1);
+		++i;
+	}
+	*(new_word + i) = 0;
+	(*node).word = new_word;
+}
+
+static void dquote(t_leaf *node)
 {
 
 }
 
-static char dquote(t_leaf *node)
+static void normal(t_leaf *node)
 {
+
 }
 
-static char normal(t_leaf *node)
-{
-}
-
-char	parse_string(t_leaf *node)
+void	parse_string(t_leaf *node)
 {
 	char *word;
 

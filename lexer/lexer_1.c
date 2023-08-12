@@ -35,10 +35,11 @@ static void	normal_string(char *str, int *i, int *count)
 
 static void	dq_sequence(char *str, int *i, int *count)
 {
-	int	j;
+	int			j;
+	static int	bidon;
 
 	j = *i;
-	while (*(str + j))
+	while (*(str + j) && char_is_token(*(str + j), *(str + j + 1), &bidon) == FAILURE)
 		++j;
 	while (*(str + j) != '\"')
 		--j;
@@ -49,10 +50,11 @@ static void	dq_sequence(char *str, int *i, int *count)
 
 static void	q_sequence(char *str, int *i, int *count)
 {
-	int	j;
+	int			j;
+	static int	bidon;
 
 	j = *i;
-	while (*(str + j))
+	while (*(str + j) && char_is_token(*(str + j), *(str + j + 1), &bidon) == FAILURE)
 		++j;
 	while (*(str + j) != '\'')
 		--j;

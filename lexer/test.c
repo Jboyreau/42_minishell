@@ -20,8 +20,9 @@ int main (void)
 	str[9] = "((ls | cat)&&(rev|cat))||ls      > salut\n";
 	str[10] = "\"Salut\n";
 	str[11] = "<<Limiter\n";
+	str[12] = "echo \"toto\"  |  echo \"toto\"\n";
 
-	while (i < 12)
+	while (i < 13)
 	{
 		printf("Prompt : %s", str[i]);
 		hll.str = str[i];

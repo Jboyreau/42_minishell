@@ -20,7 +20,7 @@ static void	ch_type(t_leaf *tr, char *str, int len, int count)
 static void	fnormal_string(t_leaf *tr, char *str, int *i, int *count)
 {
 	int s;
-	static int bidon = 0;
+	static int bidon;
 
 	s = *i;
 	while (*(str + (*i)))
@@ -36,10 +36,11 @@ static void	fnormal_string(t_leaf *tr, char *str, int *i, int *count)
 
 static void	fdq_sequence(t_leaf *tr, char *str, int *i, int *count)
 {
-	int	j;
+	int			j;
+	static int	bidon;
 
 	j = *i;
-	while (*(str + j))
+	while (*(str + j) && char_is_token(*(str + j), *(str + j + 1), &bidon) == FAILURE)
 		++j;
 	while (*(str + j) != '\"')
 		--j;
@@ -51,10 +52,11 @@ static void	fdq_sequence(t_leaf *tr, char *str, int *i, int *count)
 
 static void	fq_sequence(t_leaf *tr, char *str, int *i, int *count)
 {
-	int	j;
+	int			j;
+	static int	bidon;
 
 	j = *i;
-	while (*(str + j))
+	while (*(str + j) && char_is_token(*(str + j), *(str + j + 1), &bidon) == FAILURE)
 		++j;
 	while (*(str + j) != '\'')
 		--j;
