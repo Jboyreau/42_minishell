@@ -45,7 +45,7 @@ static void	fdq_sequence(t_leaf *tr, char *str, int *i, int *count)
 		--j;
 	if (*i == j)
 		return (fnormal_string(tr, str, i, count));	
-	ch_type(tr, str + (*i) + 1, j - ((*i) + 1), *count);
+	ch_type(tr, str + (*i), (j - (*i)) + 1, *count);
 	return (*i = j + 1, ++(*count), (void)0);
 }
 
@@ -60,7 +60,7 @@ static void	fq_sequence(t_leaf *tr, char *str, int *i, int *count)
 		--j;
 	if (*i == j)
 		return (fnormal_string(tr, str, i, count));
-	ch_type(tr, str + (*i) + 1, j - ((*i) + 1), *count);
+	ch_type(tr, str + (*i), (j - (*i)) + 1, *count);
 	return (*i = j + 1, ++(*count), (void)0);
 }
 

@@ -19,11 +19,6 @@
 		Operators		:
 			(	unary
 					string)
-			$	unary			(substite l'operand et l'operateur par une valeur)
-					string
-					?		(fait référence à une variable contenant le statut de sortie de la derniere commande)
-			=	binary			(affecte une valeur à une variable)
-					variable = value
 			<	binary/unary	(input redirection)
 					commande < file
 					< file (sans commande spécifié, lit stdin à partir de file sans rien faire d'autre)
@@ -36,19 +31,26 @@
 					<< LIMITER (sans commande spécifié, lit stdin à partir d'stdin sans rine faire d'autre)
 			|	binary
 					cmd | cmd
-			*	binary/unary	(se substitue par tous les noms de fichiers du dossier courant, la commande est dupliquée autant de fois qu'il y a une correspondance entre les fichiers du dossier et l'operand)
-					commande *string
-					commande ...*...
-					*string
-					...*...
 			&&	binary		(go yt)
 					cmd && cmd
 			||	binary		(go yt)
 					cmd || cmd
 
-		Constantes		:
+		Constantes(export param) :
 			string	"Alice" ou Alice
 			tableau	("rouge" "vert" "bleu")
+			=	binary			(affecte une valeur à une variable)
+					variable = value
+
+		Dans les strings:
+			*	binary/unary	(se substitue par tous les noms de fichiers du dossier courant, la commande est dupliquée autant de fois qu'il y a une correspondance entre les fichiers du dossier et l'operand)
+					commande *string
+					commande ...*...
+					*string
+					...*...
+			$	unary			(substite l'operand et l'operateur par une valeur)
+					string
+					?		(fait référence à une variable contenant le statut de sortie de la derniere commande)
 	}
 */
 
