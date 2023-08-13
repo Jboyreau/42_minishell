@@ -45,6 +45,7 @@ int	main(void)
 			free(hll.str);
 		if (hll.tr)
 			free(hll.tr);
+		//TODO : destroyer
 	}
 	return (EXIT_SUCCESS);
 }

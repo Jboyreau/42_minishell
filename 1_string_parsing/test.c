@@ -5,9 +5,9 @@
 #define ALLOC 0
 #define UNALLOC 1 
 
-int main (void)
+int main (int argc, char *arg[], char *env[])
 {
-	t_leaf	tr[500];
+/*	t_leaf	tr[500];
 
 	tr[0] = {.type = 0, .len = , .word = "toto\"$USER\""};	
 	tr[1] = {.type = 0, .len = , .word = "toto\'$USER\'"};
@@ -27,6 +27,9 @@ int main (void)
 		printf("%s\n", (*(tr + i)).word);
 		if (str)
 			free(str);
-	}
+	}*/
+
+	//export_var(NULL, NULL, NULL, env);
+	printf("pointeur = %p, premier membre = %s\n", env, *env);
 	return (EXIT_SUCCESS);
 }

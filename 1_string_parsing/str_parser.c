@@ -1,5 +1,5 @@
 #include <stdlib.h>
-
+/*
 static int word_len(t_lv *lv, char *word)
 {
 	;
@@ -41,4 +41,4 @@ void	parse_string(t_leaf *node)
 	if (*(word + 0) = '\"' && *(word + (*node).len - 1) == '\"')
 		return(dquote(node));
 	return(normal(node));
-}
+}*/

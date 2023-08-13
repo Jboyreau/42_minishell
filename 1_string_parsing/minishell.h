@@ -117,5 +117,6 @@ void	flongest_token(t_leaf *tr, char *str, int *i, int *count);
 void	fill_leaf(t_leaf *tr, char type, int len, char *word);
 t_cmd	*lexer(t_cmd *hll);
 
+t_lv	*export_var(t_lv *va, char *name, char *content, char **env);
 char	parse_string(t_leaf *node);
 #endif
