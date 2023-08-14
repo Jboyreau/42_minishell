@@ -37,7 +37,6 @@ int	va_len(t_lv *va)
 	return (len);
 }
 
-
 char	env_to_va(char *var, t_lv *va)
 {
 	int		i;
@@ -51,7 +50,6 @@ char	env_to_va(char *var, t_lv *va)
 		return (FAILURE);
 	i = -1;
 	j = 0;
-	equal = 0;
 	while (*(var + (++i)) != '=')
 		*((*va).name + i) = *(var + i);
 	*((*va).name + i) = 0;
@@ -66,29 +64,32 @@ char	env_to_va(char *var, t_lv *va)
 	return (SUCCESS);
 }
 
-static char	va_init(t_lv *va, char **env)
+static char	va_init(t_lv *va, char **env, int *size)
 {
-	len = 0;
-	while (*(env + len))
-		++len;
-	va = malloc((len + 1) * sizeof(va));
+	int len;
+
+	*size = 0;
+	while (*(env + (*size)))
+		++(*size);
+	(*size) <= 1;
+	va = malloc((size) * sizeof(va));
 	if (va == NULL)
 		return (FAILURE);
 	len = -1;
 	while (*(env + (++len)))
 		if (env_to_va(*(env + len), va + len) == FAILURE)
-			return (free(va), NULL);
+			return (NULL); //TODO : va destroyer
 	(*(va + len)).name = NULL;
 	return (SUCCESS);
 }
 
 t_lv	*export_var(t_lv *va, char *name, char *content, char **env)
 {
-	static int	size = 10;
+	static int	size;
 	int			len;
 
 	if (va == NULL)
-		if (va_init(va, env) == FAILURE)
+		if (va_init(va, env, &size) == FAILURE)
 			return (NULL);
 	len = va_len(va);
 	if (len + 2 > size)
