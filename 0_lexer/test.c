@@ -22,8 +22,9 @@ int main (void)
 	str[11] = "<<Limiter\n";
 	str[12] = "echo \"toto>\"  |  echo \"toto\"\n";
 	str[13] = "echo \'toto $USER\' $USER salut \'test\'\n";
+	str[14] = "\"'\"'\"'";
 
-	while (i < 14)
+	while (i < 15)
 	{
 		printf("Prompt : %s", str[i]);
 		hll.str = str[i];

@@ -36,22 +36,11 @@ static void	normal_string(char *str, int *i, int *count)
 static void	dq_sequence(char *str, int *i, int *count)
 {
 	int			j;
-	int			quote;
-	static int	bidon;
 
 	j = *i + 1;
-	quote = 0;
-	while (*(str + j))
-	{
-		if (*(str + j) == '\"')
-			quote = 1;
-		if (quote && char_is_token(*(str + j), *(str + j + 1), &bidon) == SUCCESS)
-			break ;
+	while (*(str + j) != '\"' && *(str + j))
 		++j;
-	}
-	while (*(str + j) != '\"')
-		--j;
-	if (*i == j)
+	if (*(str + j) == '\0')
 		return (normal_string(str, i, count));
 	return (*i = j + 1, ++(*count), (void)0);
 }
@@ -59,22 +48,11 @@ static void	dq_sequence(char *str, int *i, int *count)
 static void	q_sequence(char *str, int *i, int *count)
 {
 	int			j;
-	int			quote;
-	static int	bidon;
 
 	j = *i + 1;
-	quote = 0;
-	while (*(str + j))
-	{
-		if (*(str + j) == '\'')
-			quote = 1;
-		if (quote && char_is_token(*(str + j), *(str + j + 1), &bidon) == SUCCESS)
-			break ;
+	while (*(str + j) != '\'' && *(str + j))
 		++j;
-	}
-	while (*(str + j) != '\'')
-		--j;
-	if (*i == j)
+	if (*(str + j) == '\0')
 		return (normal_string(str, i, count));
 	return (*i = j + 1, ++(*count), (void)0);
 }
