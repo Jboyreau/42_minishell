@@ -52,7 +52,7 @@ char	env_to_va(char *var, t_lv *va)
 	*((*va).name + i) = 0;
 	(*va).content = (*va).name + (++i);
 	j = 0;
-	while (*(var + i))
+	while (*(var + i + j))
 	{
 		*((*va).content + j) = *(var + i + j);
 		++j;
