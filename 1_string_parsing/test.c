@@ -11,12 +11,14 @@ void print_va(t_lv *va)
 
 	if (va == NULL)
 		return ;
+	i = 0;	
 	while ((*(va + i)).name)
 	{
-		printf("%s ; ", (*(va + i)).name);	
+		printf("%s ; ", (*(va + i)).name);
 		printf("%s\n", (*(va + i)).content);
 		++i;
 	}
+	printf("\n\n\n");
 }
 
 int main (int argc, char *arg[], char *env[])

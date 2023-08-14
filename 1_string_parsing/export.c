@@ -25,10 +25,7 @@ char	allocate_var_name(char *var, char **name, char **content, int len)
 	int		i;
 	int		j;
 
-	i = 0;
-	while (*(var + i))
-		++i;
-	*name = malloc(i + 1);
+	*name = malloc(len + 1);
 	if (*name == NULL)
 		return (FAILURE);
 	i = -1;
@@ -36,6 +33,8 @@ char	allocate_var_name(char *var, char **name, char **content, int len)
 	while (*(var + (++i)) != '=' && i < len)
 		*(*name + i) = *(var + i);
 	*(*name + i) = 0;
+	if (i == len)
+		return (*content = *name + i, SUCCESS);
 	*content = *name + (++i);
 	j = 0;
 	while (*(var + i + j) && i +j < len)
@@ -56,6 +55,5 @@ t_lv	*ft_export(t_lv *va, char **env, char *variable, int len)
 	if (variable)
 		if (allocate_var_name(variable, &name, &content, len) == FAILURE)
 			return (NULL);
-	va = export_var(va, name, content, env);
-	return (va);
+	return (export_var(va, name, content, env));
 }

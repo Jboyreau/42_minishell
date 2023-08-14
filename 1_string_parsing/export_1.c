@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include "minishell.h"
 
@@ -68,8 +69,8 @@ static char	va_init(t_lv **va, char **env, int *size)
 	*size = 0;
 	while (*(env + (*size)))
 		++(*size);
-	(*size) <= 1;
-	*va = malloc((*size) * sizeof(*va));
+	(*size) <<= 1;
+	*va = malloc((*size) * sizeof(t_lv));
 	if (*va == NULL)
 		return (FAILURE);
 	len = -1;
@@ -99,8 +100,8 @@ t_lv	*export_var(t_lv *va, char *name, char *content, char **env)
 		if (new_va == NULL)
 			return (destroy_va(va)); //TODO : va destroyer
 	}
-	(*(va + len - 1)).name = name;
-	(*(va + len - 1)).content = content;
-	(*(va + len)).name = NULL;
+	(*(va + len)).name = name;
+	(*(va + len)).content = content;
+	(*(va + len + 1)).name = NULL;
 	return (va);
 }
