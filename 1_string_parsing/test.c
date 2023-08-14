@@ -5,11 +5,28 @@
 #define ALLOC 0
 #define UNALLOC 1 
 
+void print_va(t_lv *va)
+{
+	int	i;
+
+	if (va == NULL)
+		return ;
+	while ((*(va + i)).name)
+	{
+		printf("%s ; ", (*(va + i)).name);	
+		printf("%s\n", (*(va + i)).content);
+		++i;
+	}
+}
+
 int main (int argc, char *arg[], char *env[])
 {
-/*	t_leaf	tr[500];
+	static t_lv	*va = NULL;
+	t_leaf		tr[500];
 
-	tr[0] = {.type = 0, .len = , .word = "toto\"$USER\""};	
+	(*tr).type = 0; (*tr).len = 7; (*tr).word = "toto=42";
+	(*(tr + 1)).type = 0; (*(tr + 1)).len = 6; (*(tr + 1)).word = "tonton";
+/*	tr[0] = {.type = 0, .len = , .word = "toto\"$USER\""};	
 	tr[1] = {.type = 0, .len = , .word = "toto\'$USER\'"};
 	tr[2] = {.type = 0, .len = , .word = "toto$var"};
 	tr[3] = {.type = 0, .len = , .word = "$var"};
@@ -28,8 +45,14 @@ int main (int argc, char *arg[], char *env[])
 		if (str)
 			free(str);
 	}*/
-
-	//export_var(NULL, NULL, NULL, env);
-	printf("pointeur = %p, premier membre = %s\n", env, *env);
+//init :
+	va = ft_export(va, env, NULL, 0);
+	print_va(va);
+//add:
+	va = ft_export(va, env, (*tr).word, (*tr).len);	
+	print_va(va);
+	va = ft_export(va, env, (*(tr + 1)).word, (*(tr + 1)).len);
+	print_va(va);
+	destroy_va(va);
 	return (EXIT_SUCCESS);
 }

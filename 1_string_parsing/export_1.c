@@ -69,7 +69,7 @@ static char	va_init(t_lv **va, char **env, int *size)
 	while (*(env + (*size)))
 		++(*size);
 	(*size) <= 1;
-	*va = malloc((size) * sizeof(*va));
+	*va = malloc((*size) * sizeof(*va));
 	if (*va == NULL)
 		return (FAILURE);
 	len = -1;
@@ -89,7 +89,7 @@ t_lv	*export_var(t_lv *va, char *name, char *content, char **env)
 	if (va == NULL)
 	{
 		if (va_init(&va, env, &size) == FAILURE)
-			return (destroy_va(va * (va == NULL)), NULL); //TODO : va destroyer
+			return (destroy_va(va)); //TODO : va destroyer
 		return (va);
 	}
 	len = va_len(va);
@@ -97,7 +97,7 @@ t_lv	*export_var(t_lv *va, char *name, char *content, char **env)
 	{
 		va = realloc_va(va, &new_va, &size);
 		if (new_va == NULL)
-			return (destroy_va(va), NULL); //TODO : va destroyer
+			return (destroy_va(va)); //TODO : va destroyer
 	}
 	(*(va + len - 1)).name = name;
 	(*(va + len - 1)).content = content;
