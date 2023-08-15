@@ -10,7 +10,7 @@ t_lv	*realloc_va(t_lv *va, t_lv **new_va, int *size)
 	int		i;
 
 	*size <<= 1;
-	*new_va = malloc(*size * sizeof(va));
+	*new_va = malloc(*size * sizeof(t_lv));
 	if (*new_va == NULL)
 		return (va);
 	i = 0;
@@ -81,27 +81,29 @@ static char	va_init(t_lv **va, char **env, int *size)
 	return (SUCCESS);
 }
 
-t_lv	*export_var(t_lv *va, char *name, char *content, char **env)
+t_lv	*export_var(t_lv *va, char *n, char *c, char **env)
 {
 	static int	size;
 	t_lv		*new_va;
-	int			len;
+	int			l;
 
 	if (va == NULL)
 	{
 		if (va_init(&va, env, &size) == FAILURE)
-			return (destroy_va(va)); //TODO : va destroyer
+			return (destroy_va(va));
 		return (va);
 	}
-	len = va_len(va);
-	if (len + 2 > size)
+	if (find_name(n, va, &l) == SUCCESS)
+	{
+		free((va[l]).name);
+		return ((va[l]).content = c, (va[l]).name = n, va);
+	}
+	l = va_len(va);
+	if (l + 2 > size)
 	{
 		va = realloc_va(va, &new_va, &size);
 		if (new_va == NULL)
-			return (destroy_va(va)); //TODO : va destroyer
+			return (destroy_va(va));
 	}
-	(*(va + len)).name = name;
-	(*(va + len)).content = content;
-	(*(va + len + 1)).name = NULL;
-	return (va);
+	return ((va[l]).name = n, (va[l]).content = c, (va[l + 1]).name = NULL, va);
 }

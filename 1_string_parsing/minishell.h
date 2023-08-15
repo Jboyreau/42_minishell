@@ -98,6 +98,7 @@ typedef struct s_leaf
 	char	type;
 	int		len;
 	char	*word;
+	char	**arg;
 	struct s_tree	*dad;
 	struct s_tree	*r;
 	struct s_tree	*l;
@@ -120,5 +121,6 @@ t_cmd	*lexer(t_cmd *hll);
 t_lv	*ft_export(t_lv *va, char **env, char *variable, int len);
 t_lv	*export_var(t_lv *va, char *name, char *content, char **env);
 t_lv	*destroy_va(t_lv *va);
+char	find_name(char *name, t_lv *va, int *l);
 //char	parse_string(t_leaf *node);
 #endif

@@ -28,6 +28,8 @@ int main (int argc, char *arg[], char *env[])
 
 	(*tr).type = 0; (*tr).len = 7; (*tr).word = "toto=42";
 	(*(tr + 1)).type = 0; (*(tr + 1)).len = 6; (*(tr + 1)).word = "tonton";
+	(*(tr + 2)).type = 0; (*(tr + 2)).len = 7; (*(tr + 2)).word = "toto=2A";
+	(*(tr + 3)).type = 0; (*(tr + 3)).len = 13; (*(tr + 3)).word = "tonton=Xavier";
 /*	tr[0] = {.type = 0, .len = , .word = "toto\"$USER\""};	
 	tr[1] = {.type = 0, .len = , .word = "toto\'$USER\'"};
 	tr[2] = {.type = 0, .len = , .word = "toto$var"};
@@ -54,6 +56,11 @@ int main (int argc, char *arg[], char *env[])
 	va = ft_export(va, env, (*tr).word, (*tr).len);	
 	print_va(va);
 	va = ft_export(va, env, (*(tr + 1)).word, (*(tr + 1)).len);
+	print_va(va);
+//replace:
+	va = ft_export(va, env, (*(tr + 2)).word, (*(tr + 2)).len);	
+	print_va(va);
+	va = ft_export(va, env, (*(tr + 3)).word, (*(tr + 3)).len);
 	print_va(va);
 	destroy_va(va);
 	return (EXIT_SUCCESS);
