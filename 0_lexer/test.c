@@ -19,7 +19,7 @@ int main (void)
 	str[8] = "ls -la| cat -A| rev | rev >> salut.txt \n";
 	str[9] = "((ls | cat)&&(rev|cat))||ls      > salut\n";
 	str[10] = "\"Salut\n";
-	str[11] = "<<Limiter\n";
+	str[11] = "cmd <<Limiter\n";
 	str[12] = "echo \"toto>\"  |  echo \"toto\"\n";
 	str[13] = "echo \'toto $USER\' $USER salut \'test\'\n";
 	str[14] = "echo \"'\"'\"'\n";

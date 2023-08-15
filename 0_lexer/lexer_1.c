@@ -41,11 +41,13 @@ static void	dq_sequence(char *str, int *i, int *count)
 	j = *i + 1;
 	while (*(str + j) != '\"' && *(str + j))
 		++j;
-	while (char_is_token(str[j], str[j + 1], &b) == 1 || *(str + j) == ' ')
-		++j;
-	if (*(str + j) == char_is_token(str[j], str[j + 1], &b) == SUCCESS)
+	if (*(str + j) == 0)
 		return (normal_string(str, i, count));
-	return (*i = j + 1, ++(*count), (void)0);
+	while (char_is_token(str[j], str[j + 1], &b) == 1 && *(str + j) != ' ')
+		++j;	
+	if (*(str + j) == '\n')
+		return (normal_string(str, i, count));
+	return (*i = j, ++(*count), (void)0);
 }
 
 static void	q_sequence(char *str, int *i, int *count)
@@ -56,11 +58,13 @@ static void	q_sequence(char *str, int *i, int *count)
 	j = *i + 1;
 	while (*(str + j) != '\'' && *(str + j))
 		++j;
-	while (char_is_token(str[j], str[j + 1], &b) == 1 || *(str + j) == ' ')
-		++j;
-	if (*(str + j) == char_is_token(str[j], str[j + 1], &b) == SUCCESS)
+	if (*(str + j) == 0)
 		return (normal_string(str, i, count));
-	return (*i = j + 1, ++(*count), (void)0);
+	while (char_is_token(str[j], str[j + 1], &b) == 1 && *(str + j) != ' ')
+		++j;
+	if (*(str + j) == '\n')
+		return (normal_string(str, i, count));
+	return (*i = j, ++(*count), (void)0);
 }
 
 void	longest_token(char *str, int *i, int *count)
