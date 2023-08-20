@@ -54,25 +54,28 @@
 	}
 */
 
+enum ret
+{
+	SUCCESS,
+	FAILURE,
+};
+
 enum types
 {
 //Indentifiers:
-	ARG,			// ARGUMENTS		0
-	FIL,			// FILE				1
-	CMD,			// COMMANDE			2
-	LIM,			// LIMITER HEREDOC	3
+	WORD,			//					0
 //Punctuations:
-	CLS_PAR,		// )				4
-	NL,				// \n				5
+	CLS_PAR,		// )				1
+	NL,				// \n				2
 //Operators:
-	OP_PAR,			// (				6
-	L_QUOTE,		// <				7
-	R_QUOTE,		// >				8
-	DL_QUOTE,		// <<				9
-	DR_QUOTE,		// >>				10
-	PIPE,			// |				11
-	AND,			// &&				12
-	OR,				// ||				13
+	OP_PAR,			// (				3
+	L_QUOTE,		// <				4
+	R_QUOTE,		// >				5
+	DL_QUOTE,		// <<				6
+	DR_QUOTE,		// >>				7
+	PIPE,			// |				8
+	AND,			// &&				9
+	OR,				// ||				10
 //Constantes:
 	STR,			// STRING == ARG d'export
 	ARR,			// tableau == ARG d'export
@@ -87,11 +90,19 @@ enum types
 /*******************************************************************************/
 };
 
+typedef struct s_local_var
+{
+	char	*name;
+	char	*content;
+} t_lv;
+
 typedef struct s_leaf
 {
+	char	cmd;
 	char	type;
 	int		len;
 	char	*word;
+	char	**arg;
 	struct s_tree	*dad;
 	struct s_tree	*r;
 	struct s_tree	*l;
@@ -104,11 +115,20 @@ typedef struct s_commands
 	int		count;
 } t_cmd;
 
+//lexer:
 char	char_is_token(char c0, char c1, int *i);
 char	fchar_is_token(t_leaf *tr, char *str, int *i);
 void	longest_token(char *str, int *i, int *count);
 void	flongest_token(t_leaf *tr, char *str, int *i, int *count);
 void	fill_leaf(t_leaf *tr, char type, int len, char *word);
 t_cmd	*lexer(t_cmd *hll);
+//string_parsing:
+t_lv	*ft_export(t_lv *va, char **env, char *variable, int len);
+t_lv	*export_var(t_lv *va, char *name, char *content, char **env);
+t_lv	*destroy_va(t_lv *va);
+char	find_name(char *name, t_lv *va, int *l);
+//arg_format:
+char	args_to_array(t_leaf *cmd, t_leaf *arg);
 
+//char	parse_string(t_leaf *node);
 #endif

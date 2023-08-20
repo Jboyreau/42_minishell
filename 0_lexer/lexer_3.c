@@ -3,20 +3,6 @@
 #define SUCCESS 0
 #define FAILURE 1
 
-static void	ch_type(t_leaf *tr, char *str, int len, int count)
-{
-	if (count == 0)
-		return (fill_leaf(tr, CMD, len, str), (void)0);
-	if ((*(tr - 1)).type == CMD || (*(tr - 1)).type == ARG)
-		fill_leaf(tr, ARG, len, str);
-	else if ((*(tr - 1)).type == R_QUOTE || (*(tr - 1)).type == DR_QUOTE || (*(tr - 1)).type == L_QUOTE)
-		fill_leaf(tr, FIL, len, str);
-	else if ((*(tr - 1)).type == DL_QUOTE)
-		fill_leaf(tr, LIM, len, str);
-	else if ((*(tr - 1)).type > NL && (*(tr - 1)).type <= OR)
-		fill_leaf(tr, CMD, len, str);
-}
-
 static void	fnormal_string(t_leaf *tr, char *str, int *i, int *count)
 {
 	int s;
@@ -26,12 +12,12 @@ static void	fnormal_string(t_leaf *tr, char *str, int *i, int *count)
 	while (*(str + (*i)))
 	{
 		if (*(str + (*i)) == ' ')
-			return (ch_type(tr, str + s, *i-s, *count), ++(*count), (void)0);
+			return (fill_leaf(tr, WORD, *i-s, str + s), ++(*count), (void)0);
 		if (char_is_token(*(str + (*i)), *(str + (*i) + 1), &bidon) == SUCCESS)
-			return (ch_type(tr, str + s, *i-s, *count), ++(*count), (void)0);
+			return (fill_leaf(tr, WORD, *i-s, str + s), ++(*count), (void)0);
 		++(*i);
 	}
-	return (ch_type(tr, str + s, *i-s, *count), ++(*count), (void)0);
+	return (fill_leaf(tr, WORD, *i-s, str + s), ++(*count), (void)0);
 }
 
 static void	fdq_sequence(t_leaf *tr, char *str, int *i, int *count)
@@ -48,7 +34,7 @@ static void	fdq_sequence(t_leaf *tr, char *str, int *i, int *count)
 		++j;
 	if (*(str + j) == '\n')
 		return (fnormal_string(tr, str, i, count));
-	ch_type(tr, str + (*i), (j - (*i)), *count);
+	fill_leaf(tr, WORD, (j - (*i)), str + (*i));
 	return (*i = j, ++(*count), (void)0);
 }
 
@@ -66,7 +52,7 @@ static void	fq_sequence(t_leaf *tr, char *str, int *i, int *count)
 		++j;
 	if (*(str + j) == '\n')
 		return (fnormal_string(tr, str, i, count));
-	ch_type(tr, str + (*i), (j - (*i)), *count);
+	fill_leaf(tr, WORD, (j - (*i)), str + (*i));
 	return (*i = j, ++(*count), (void)0);
 }
 

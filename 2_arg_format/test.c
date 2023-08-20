@@ -14,12 +14,12 @@ int	main(int argc, char **argv, char **env)
 {
 	t_leaf	tr[500];
 
-	(*tr).type = CMD; (*tr).len = 3; (*tr).word = "cmd"; (*tr).arg = NULL;	
-	(*(tr + 1)).type = ARG; (*(tr + 1)).len = 3; (*(tr + 1)).word = "arg";
-	(*(tr + 2)).type = ARG; (*(tr + 2)).len = 4; (*(tr + 2)).word = "arg1";
-	(*(tr + 3)).type = ARG; (*(tr + 3)).len = 4; (*(tr + 3)).word = "arg2";
-	(*(tr + 4)).type = ARG; (*(tr + 4)).len = 4; (*(tr + 4)).word = "arg3";
-	(*(tr + 5)).type = ARG; (*(tr + 5)).len = 4; (*(tr + 5)).word = "arg4";
+	(*tr).type = WORD; (*tr).len = 3; (*tr).word = "cmd"; (*tr).arg = NULL;	
+	(*(tr + 1)).type = WORD; (*(tr + 1)).len = 3; (*(tr + 1)).word = "arg";
+	(*(tr + 2)).type = WORD; (*(tr + 2)).len = 4; (*(tr + 2)).word = "arg1";
+	(*(tr + 3)).type = WORD; (*(tr + 3)).len = 4; (*(tr + 3)).word = "arg2";
+	(*(tr + 4)).type = WORD; (*(tr + 4)).len = 4; (*(tr + 4)).word = "arg3";
+	(*(tr + 5)).type = WORD; (*(tr + 5)).len = 4; (*(tr + 5)).word = "arg4";
 	(*(tr + 6)).word = NULL;
 
 	int i = 0;

@@ -63,22 +63,19 @@ enum ret
 enum types
 {
 //Indentifiers:
-	ARG,			// ARGUMENTS		0
-	FIL,			// FILE				1
-	CMD,			// COMMANDE			2
-	LIM,			// LIMITER HEREDOC	3
+	WORD,			//					0
 //Punctuations:
-	CLS_PAR,		// )				4
-	NL,				// \n				5
+	CLS_PAR,		// )				1
+	NL,				// \n				2
 //Operators:
-	OP_PAR,			// (				6
-	L_QUOTE,		// <				7
-	R_QUOTE,		// >				8
-	DL_QUOTE,		// <<				9
-	DR_QUOTE,		// >>				10
-	PIPE,			// |				11
-	AND,			// &&				12
-	OR,				// ||				13
+	OP_PAR,			// (				3
+	L_QUOTE,		// <				4
+	R_QUOTE,		// >				5
+	DL_QUOTE,		// <<				6
+	DR_QUOTE,		// >>				7
+	PIPE,			// |				8
+	AND,			// &&				9
+	OR,				// ||				10
 //Constantes:
 	STR,			// STRING == ARG d'export
 	ARR,			// tableau == ARG d'export
@@ -101,6 +98,7 @@ typedef struct s_local_var
 
 typedef struct s_leaf
 {
+	char	cmd;
 	char	type;
 	int		len;
 	char	*word;
