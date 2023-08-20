@@ -1,18 +1,20 @@
+https://www.usna.edu/Users/cs/wcbrown/courses/F20SI413/firstFollowPredict/ffp.html
 Prompt -> And_or
 Prompt -> Prompt'
 Prompt' -> And_or Prompt'
 Prompt' -> epsilon
-And_or -> Pipeline
-And_or -> And_or And_or'
+And_or -> Pipeline And_or''
+And_or'' -> And_or' And_or''
+And_or'' -> epsilon
 And_or' -> dp Nl Pipeline
 And_or' -> && Nl Pipeline
 Nl -> n Nl'
 Nl -> epsilon Nl'
 Nl' -> n Nl'
 Nl' -> epsilon
-Pipeline -> Cmd
-Pipeline -> Pipeline
-Pipeline -> Nl Cmd
+Pipeline -> Cmd Pipeline'
+Pipeline' -> pipe NL CMD Pipeline'
+Pipeline' -> epsilon
 Cmd -> Par
 Cmd -> P Cmd''
 Cmd -> w Cmd'
