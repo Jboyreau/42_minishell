@@ -27,6 +27,7 @@ P -> Ior P'
 P' -> Ior P'
 P' -> epsilon
 S -> w S''
+S -> Ior S''
 S'' -> S' S''
 S'' -> epsilon
 S' -> Ior
