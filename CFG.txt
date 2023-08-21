@@ -13,7 +13,7 @@ Nl -> epsilon Nl'
 Nl' -> n Nl'
 Nl' -> epsilon
 Pipeline -> Cmd Pipeline'
-Pipeline' -> pipe NL CMD Pipeline'
+Pipeline' -> pipe NL Cmd Pipeline'
 Pipeline' -> epsilon
 Cmd -> Par
 Cmd -> P Cmd''

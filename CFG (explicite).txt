@@ -1,45 +1,27 @@
-Prompt -> And_or
-Prompt -> Prompt'
-	Prompt' -> And_or Prompt'
-	Prompt' -> epsilon
+Prompt -> And_or | Prompt'
+	Prompt' -> And_or Prompt' | epsilon
 
 And_or -> Pipeline And_or''
-	And_or'' -> And_or' And_or''
-	And_or'' -> epsilon
-		And_or' -> || New_line Pipeline
-		And_or' -> && New_line Pipeline
+	And_or'' -> And_or' And_or'' | epsilon
+		And_or' -> || New_line Pipeline | && New_line Pipeline
 
-New_line -> \n New_line'
-New_line -> epsilon New_line'
-	New_line' -> \n New_line'
-	New_line' -> epsilon
+New_line -> \n New_line' | epsilon New_line'
+	New_line' -> \n New_line' | epsilon
 
 Pipeline -> Cmd Pipeline'
-	Pipeline' -> | New_line CMD Pipeline'
-	Pipeline' -> epsilon
+	Pipeline' -> pipe New_line Cmd Pipeline' | epsilon
 
-Cmd -> Parentheses
-Cmd -> Prefixe Cmd''
-Cmd -> word Cmd'
-	Cmd'' -> word Cmd'
-	Cmd'' -> epsilon
-		Cmd' -> Suffixe
-		Cmd' -> epsilon
+Cmd -> Parentheses | Prefixe Cmd'' | word Cmd'
+	Cmd'' -> word Cmd' | epsilon
+		Cmd' -> Suffixe | epsilon
 
 Parentheses -> ( And_or )
 
 Prefixe -> I/O_Redirection Prefixe'
-	Prefixe' -> I/O_Redirection Prefixe'
-	Prefixe' -> epsilon
+	Prefixe' -> I/O_Redirection Prefixe' | epsilon
 
-Suffixe -> word Suffixe''
-Suffixe -> I/O_Redirection Suffixe''
-	Suffixe'' -> Suffixe' Suffixe''
-	Suffixe'' -> epsilon
-		Suffixe' -> I/O_Redirection
-		Suffixe' -> word
+Suffixe -> word Suffixe'' | I/O_Redirection Suffixe''
+	Suffixe'' -> Suffixe' Suffixe'' | epsilon
+		Suffixe' -> I/O_Redirection | word
 
-I/O_Redirection -> < word
-I/O_Redirection -> > word
-I/O_Redirection -> >> word
-I/O_Redirection -> << word
+I/O_Redirection -> < word | > word | >> word | << word

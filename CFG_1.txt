@@ -1,0 +1,20 @@
+http://hackingoff.com/compilers/predict-first-follow-set
+Prompt -> And_or | Prompt'
+Prompt' -> And_or Prompt' | EPSILON
+And_or -> Pipeline And_or''
+And_or'' -> And_or' And_or'' | EPSILON
+And_or' -> dp Nl Pipeline | && Nl Pipeline
+Nl -> n Nl' | EPSILON Nl'
+Nl' -> n Nl' | EPSILON
+Pipeline -> Cmd Pipeline'
+Pipeline' -> pipe NL Cmd Pipeline' | EPSILON
+Cmd -> Par | P Cmd'' | w Cmd'
+Cmd'' -> w Cmd' | EPSILON
+Cmd' -> S | EPSILON
+Par -> p And_or p
+P -> Ior P'
+P' -> Ior P' | EPSILON
+S -> w S'' | Ior S''
+S'' -> S' S'' | EPSILON
+S' -> Ior | w
+Ior -> < w | > w | >> w | << w
