@@ -6,6 +6,7 @@ int main (void)
 {
 	static t_cmd	hll = {.str = (char *)1, .tr = NULL};	
 	char			*str[10000];
+	rule_elem		**rules;
 	int				i = 0;
 
 	str[0] = "salut\n";
@@ -23,8 +24,8 @@ int main (void)
 	str[12] = "echo \"toto>\"  |  echo \"toto\"\n";
 	str[13] = "echo \'toto $USER\' $USER salut \'test\'\n";
 	str[14] = "echo \"'\"'\"'\n";
-	str[15] = "cat \"file\"\"file\"\n";	
-	str[16] = "cat \"file\" \"file\"\n";	
+	str[15] = "cat \"file\"\"file\"\n";
+	str[16] = "cat \"file\" \"file\"\n";
 	str[17] = "cat \"file\"|\"file\"\n";
 	str[18] = "< file cmd file >\n";
 
@@ -33,6 +34,8 @@ int main (void)
 		printf("Prompt : %s", str[i]);
 		hll.str = str[i];
 		lexer(&hll);
+		rules = init_rules();
+		parser(hll.tr, rules);
 		if (hll.tr)
 			free(hll.tr);
 		++i;

@@ -12,22 +12,7 @@
 
 static void	destroyer(t_cmd hll)
 {
-	int		i;
-	t_leaf	*tr;
-
-	i = -1;
-	tr = hll.tr;
-	while (++i < hll.count)
-	{
-		if ((*(tr + i)).type < CLS_PAR)
-			free((*(tr + i)).word);
-		if ((*(tr + i)).type == CMD)
-			free((*(tr + i)).arg);
-	}
-	if (hll.str)
-		free(hll.str);
-	if (hll.tr)
-		free(hll.tr);
+	;
 }
 
 int	ft_readline(char **line, const char* prompt)
@@ -54,7 +39,10 @@ int	main(int agrc, char *argv, char **en)
 		if (ft_readline(&(hll.str), "minishell_user:") == FAILURE)
 			return (EXIT_FAILURE);
 		if (parser(lexer(&hll)) == SUCCESS)
-			execute_tree(hll.tr);
+			if (*(hll.tr + hll.count - 2).type > DR_QUOTE && *(hll.tr + hll.count - 2).type <= OR)
+				continue ;
+			else
+				execute_tree(hll.tr);
 		else
 			return (destroyer(hll), EXIT_FAILURE);
 		destroyer(hll);

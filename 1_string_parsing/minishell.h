@@ -68,26 +68,14 @@ enum types
 	CLS_PAR,		// )				1
 	NL,				// \n				2
 //Operators:
-	OP_PAR,			// (				3
 	L_QUOTE,		// <				4
 	R_QUOTE,		// >				5
 	DL_QUOTE,		// <<				6
 	DR_QUOTE,		// >>				7
+	OP_PAR,			// (				3
 	PIPE,			// |				8
 	AND,			// &&				9
 	OR,				// ||				10
-//Constantes:
-	STR,			// STRING == ARG d'export
-	ARR,			// tableau == ARG d'export
-/*******************************************************************************/
-//Dans les strings:	(invisible pour le shell à l'exterieur d'une string)		/
-	DOLLAR,			// $														/
-	EQUAL,			// =														/
-	QUOTE,			// ' (inside a string)										/
-	D_D_QUOTE,		// " (inside a string)										/
-	STAR,			// *														/
-	VAR,			// VARIABLE													/
-/*******************************************************************************/
 };
 
 typedef struct s_local_var
@@ -98,7 +86,7 @@ typedef struct s_local_var
 
 typedef struct s_leaf
 {
-	char	cmd;
+	char	f_type;
 	char	type;
 	int		len;
 	char	*word;

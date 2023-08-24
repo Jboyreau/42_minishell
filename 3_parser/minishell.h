@@ -1,6 +1,6 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
+# define NB_RULES 19
 /*	Token types:
 	{
 		Indentifiers	:
@@ -103,6 +103,8 @@ typedef struct s_commands
 	int		count;
 } t_cmd;
 
+typedef unsigned long long int rule_elem;
+
 //lexer:
 char	char_is_token(char c0, char c1, int *i);
 char	fchar_is_token(t_leaf *tr, char *str, int *i);
@@ -117,6 +119,7 @@ t_lv	*destroy_va(t_lv *va);
 char	find_name(char *name, t_lv *va, int *l);
 //arg_format:
 char	args_to_array(t_leaf *cmd, t_leaf *arg);
-
-//char	parse_string(t_leaf *node);
+//Syntaxe analysis:
+rule_elem	*init_rules();
+char		parser(t_leaf *tr, rule_elem *prompt);
 #endif

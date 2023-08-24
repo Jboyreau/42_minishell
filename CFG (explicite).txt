@@ -1,11 +1,10 @@
-Prompt -> And_or | Prompt'
-	Prompt' -> And_or Prompt' | epsilon
+Prompt -> And_or Prompt | epsilon
 
 And_or -> Pipeline And_or''
 	And_or'' -> And_or' And_or'' | epsilon
 		And_or' -> || New_line Pipeline | && New_line Pipeline
 
-New_line -> \n New_line' | epsilon New_line'
+New_line -> \n New_line' | epsilon
 	New_line' -> \n New_line' | epsilon
 
 Pipeline -> Cmd Pipeline'
