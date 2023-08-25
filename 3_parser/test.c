@@ -4,9 +4,9 @@
 
 int main (void)
 {
-	static t_cmd	hll = {.str = (char *)1, .tr = NULL};	
+	static t_cmd	hll = {.str = (char *)1, .tr = NULL};
 	char			*str[10000];
-	rule_elem		**rules;
+	rule_elem		*start;
 	int				i = 0;
 
 	str[0] = "salut\n";
@@ -29,13 +29,13 @@ int main (void)
 	str[17] = "cat \"file\"|\"file\"\n";
 	str[18] = "< file cmd file >\n";
 
+	start = init_rules();
 	while (i < 19)
 	{
 		printf("Prompt : %s", str[i]);
 		hll.str = str[i];
 		lexer(&hll);
-		rules = init_rules();
-		parser(hll.tr, rules);
+		parser(hll.tr, start);
 		if (hll.tr)
 			free(hll.tr);
 		++i;

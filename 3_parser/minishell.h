@@ -63,19 +63,20 @@ enum ret
 enum types
 {
 //Indentifiers:
-	WORD,			//					0
+	W,				//					0
 //Punctuations:
 	CLS_PAR,		// )				1
 	NL,				// \n				2
 //Operators:
-	L_QUOTE,		// <				4
-	R_QUOTE,		// >				5
-	DL_QUOTE,		// <<				6
-	DR_QUOTE,		// >>				7
+	L,				// <				4
+	R,				// >				5
+	DL,				// <<				6
+	DR,				// >>				7
 	OP_PAR,			// (				3
 	PIPE,			// |				8
 	AND,			// &&				9
 	OR,				// ||				10
+	Z,				// ZERO_LINK		11	
 };
 
 typedef struct s_local_var

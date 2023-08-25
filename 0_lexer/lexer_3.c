@@ -12,12 +12,12 @@ static void	fnormal_string(t_leaf *tr, char *str, int *i, int *count)
 	while (*(str + (*i)))
 	{
 		if (*(str + (*i)) == ' ')
-			return (fill_leaf(tr, WORD, *i-s, str + s), ++(*count), (void)0);
+			return (fill_leaf(tr, W, *i-s, str + s), ++(*count), (void)0);
 		if (char_is_token(*(str + (*i)), *(str + (*i) + 1), &bidon) == SUCCESS)
-			return (fill_leaf(tr, WORD, *i-s, str + s), ++(*count), (void)0);
+			return (fill_leaf(tr, W, *i-s, str + s), ++(*count), (void)0);
 		++(*i);
 	}
-	return (fill_leaf(tr, WORD, *i-s, str + s), ++(*count), (void)0);
+	return (fill_leaf(tr, W, *i-s, str + s), ++(*count), (void)0);
 }
 
 static void	fdq_sequence(t_leaf *tr, char *str, int *i, int *count)
@@ -34,7 +34,7 @@ static void	fdq_sequence(t_leaf *tr, char *str, int *i, int *count)
 		++j;
 	if (*(str + j) == '\n')
 		return (fnormal_string(tr, str, i, count));
-	fill_leaf(tr, WORD, (j - (*i)), str + (*i));
+	fill_leaf(tr, W, (j - (*i)), str + (*i));
 	return (*i = j, ++(*count), (void)0);
 }
 
@@ -52,7 +52,7 @@ static void	fq_sequence(t_leaf *tr, char *str, int *i, int *count)
 		++j;
 	if (*(str + j) == '\n')
 		return (fnormal_string(tr, str, i, count));
-	fill_leaf(tr, WORD, (j - (*i)), str + (*i));
+	fill_leaf(tr, W, (j - (*i)), str + (*i));
 	return (*i = j, ++(*count), (void)0);
 }
 

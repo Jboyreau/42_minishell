@@ -19,14 +19,14 @@ char	fchar_is_token(t_leaf *tr, char *str, int *i)
 	if (*(str + (*i)) == '<')
 	{
 		if (*(str + (*i)) == *(str + (*i) + 1))
-			return (fill_leaf(tr, DL_QUOTE, 2, str + (*i)), (*i) += 2, SUCCESS);
-		return (fill_leaf(tr, L_QUOTE, 1, str + (*i)), ++(*i), SUCCESS);
+			return (fill_leaf(tr, DL, 2, str + (*i)), (*i) += 2, SUCCESS);
+		return (fill_leaf(tr, L, 1, str + (*i)), ++(*i), SUCCESS);
 	}
 	if (*(str + (*i)) == '>')
 	{
 		if (*(str + (*i)) == *(str + (*i) + 1))
-			return (fill_leaf(tr, DR_QUOTE, 2, str + (*i)), (*i) += 2, SUCCESS);
-		return (fill_leaf(tr, R_QUOTE, 1, str + (*i)), ++(*i), SUCCESS);
+			return (fill_leaf(tr, DR, 2, str + (*i)), (*i) += 2, SUCCESS);
+		return (fill_leaf(tr, R, 1, str + (*i)), ++(*i), SUCCESS);
 	}
 	if (*(str + (*i)) == '|' )
 	{
