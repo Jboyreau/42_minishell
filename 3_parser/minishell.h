@@ -113,6 +113,7 @@ typedef struct s_commands
 } t_cmd;
 
 typedef unsigned long long int rule_elem;
+typedef	rule_elem r;
 
 //lexer:
 char	char_is_token(char c0, char c1, int *i);
