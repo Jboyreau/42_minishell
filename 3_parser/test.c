@@ -35,7 +35,7 @@ int main (void)
 		printf("Prompt : %s", str[i]);
 		hll.str = str[i];
 		lexer(&hll);
-		parser(hll.tr, start);
+		parser(hll.tr, init_rules());
 		if (hll.tr)
 			free(hll.tr);
 		++i;
