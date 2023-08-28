@@ -15,5 +15,5 @@ rule_elem	*init_rules()
 	*(suf + 3) = (rule_elem)suf1;
 	*(suf + 5) = (rule_elem)red;
 	*(suf + 6) = (rule_elem)suf1;
-	return (init_id(init1(red, pre1, tst, suf)));
+	return (init_id(init1(red, tst, suf)));
 }

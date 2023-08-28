@@ -34,10 +34,10 @@ char	print_error(int type)
 {
 	static char	tokens[] = "0)0<>00(|000";
 
-	if (*(tab + type) != '0')
+	if (*(tokens + type) != '0')
 	{
 		write(2, "minishell: syntax error near unexpected token '", 47);
-		write(2, tab + type, 1);
+		write(2, tokens + type, 1);
 		return (write(2, "'\n", 2), FAILURE);
 	}
 	if (type == NL)

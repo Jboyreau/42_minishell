@@ -89,24 +89,23 @@ enum file_type
 
 enum rule_id
 {
-	PT,
-	TST,
-	TST1,
-	TST2,
-	P,
-	P1,
-	NL,
-	CMD,
-	CMD1,
-	CMD2,
-	PAR,
-	NL,
-	PRE,
-	PRE1
-	SUF,
-	SUF1,
-	SUF2,
-	RED,
+	PT_,
+	TST_,
+	TST1_,
+	TST2_,
+	P_,
+	P1_,
+	NL_,
+	CMD_,
+	CMD1_,
+	CMD2_,
+	PAR_,
+	PRE_,
+	PRE1_,
+	SUF_,
+	SUF1_,
+	SUF2_,
+	RED_,
 };
 
 typedef struct	s_local_var
@@ -166,7 +165,7 @@ char	find_name(char *name, t_lv *va, int *l);
 char	args_to_array(t_leaf *cmd, t_leaf *arg);
 //Syntaxe analysis:
 rule_elem	*init_rules();
-rule_elem	*init1(r *red, r *pre1, r *tst, r *suf);
+rule_elem	*init1(r *red, r *tst, r *suf);
 rule_elem	*init_id(rule_elem *prompt);
 char		parser(t_leaf *tr, rule_elem *prompt);
 char		print_error(int type);

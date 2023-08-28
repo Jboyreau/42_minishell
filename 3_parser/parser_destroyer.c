@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "minishell.h"
 
 static void	parser_destroyer2(rule_elem *pre, rule_elem *suf)
@@ -65,7 +66,7 @@ void	parser_destroyer(rule_elem *pt)
 	tst1 = (void *)(*(tst + 3));
 	tst2 = (void *)(*(tst1 + 2));
 	if (*(pt + 1))
-		free((void)(*(pt + 1)));
+		free((void *)(*(pt + 1)));
 	if (*(tst + 1))
 		free((void *)(*(tst + 1)));
 	if (*(p + 1))

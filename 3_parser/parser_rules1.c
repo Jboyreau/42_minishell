@@ -58,7 +58,7 @@ static rule_elem	*init2(r *suf, r *par, r *pre, r *tst)
 	return (init3(cmd, tst));
 }
 
-rule_elem	*init1(r *red, r *pre1, r *tst, r *suf)
+rule_elem	*init1(r *red, r *tst, r *suf)
 {
 	static	r pre1[] = {0, 0, -3, -3, -2, Z, -1, L, R, DL, DR, -1};	//Prefixe1 -> I/O_Redirection Prefixe1 | epsilon
 	static	r pre[] = {0, 0, -3, -3, -1, L, R, DL, DR, -1};			//Prefixe -> I/O_Redirection Prefixe1
