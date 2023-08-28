@@ -76,7 +76,7 @@ enum types
 	PIPE,			// |				8
 	AND,			// &&				9
 	OR,				// ||				10
-	Z,				// ZERO_LINK		11	
+	Z,				// ZERO_LINK		11
 };
 
 enum file_type
@@ -87,7 +87,29 @@ enum file_type
 	FIL,	//file		3
 };
 
-typedef struct s_local_var
+enum rule_id
+{
+	PT,
+	TST,
+	TST1,
+	TST2,
+	P,
+	P1,
+	NL,
+	CMD,
+	CMD1,
+	CMD2,
+	PAR,
+	NL,
+	PRE,
+	PRE1
+	SUF,
+	SUF1,
+	SUF2,
+	RED,
+};
+
+typedef struct	s_local_var
 {
 	char	*name;
 	char	*content;
@@ -105,7 +127,7 @@ typedef struct s_leaf
 	struct s_tree	*l;
 } t_leaf;
 
-typedef struct s_commands
+typedef struct	s_commands
 {
 	char	*str;
 	t_leaf	*tr;
@@ -114,6 +136,19 @@ typedef struct s_commands
 
 typedef unsigned long long int rule_elem;
 typedef	rule_elem r;
+
+typedef struct	s_location
+{
+	rule_elem	*prev;
+	int			index;
+} t_loc;
+
+typedef struct	s_rule_state
+{
+	int			size;
+	int			lstate;
+	int			id;
+} t_rs;
 
 //lexer:
 char	char_is_token(char c0, char c1, int *i);
@@ -131,7 +166,9 @@ char	find_name(char *name, t_lv *va, int *l);
 char	args_to_array(t_leaf *cmd, t_leaf *arg);
 //Syntaxe analysis:
 rule_elem	*init_rules();
-rule_elem	*init1(rule_elem *red, rule_elem *pre1, rule_elem *tst, rule_elem *suf);
+rule_elem	*init1(r *red, r *pre1, r *tst, r *suf);
+rule_elem	*init_id(rule_elem *prompt);
 char		parser(t_leaf *tr, rule_elem *prompt);
 char		print_error(int type);
+void		parser_destroyer(rule_elem *prompt);
 #endif
