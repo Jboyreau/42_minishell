@@ -167,7 +167,7 @@ char	args_to_array(t_leaf *cmd, t_leaf *arg);
 rule_elem	*init_rules();
 rule_elem	*init1(r *red, r *tst, r *suf);
 rule_elem	*init_id(rule_elem *prompt);
-char		parser(t_leaf *tr, rule_elem *rule);
+char		parser(t_leaf *tr, rule_elem *prompt);
 char		print_error(int type);
 void		parser_destroyer(rule_elem *prompt);
 #endif
