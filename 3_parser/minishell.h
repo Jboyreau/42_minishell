@@ -108,6 +108,14 @@ enum rule_id
 	RED_,
 };
 
+enum production_result
+{
+	DIVE,
+	STAY,
+	ASCEND,
+	QUIT,
+};
+
 typedef struct	s_local_var
 {
 	char	*name;
@@ -170,4 +178,5 @@ rule_elem	*init_id(rule_elem *prompt);
 char		parser(t_leaf *tr, rule_elem *rule);
 char		print_error(int type);
 void		parser_destroyer(rule_elem *prompt);
+char	ft_alloc(t_rs *state, t_loc);
 #endif

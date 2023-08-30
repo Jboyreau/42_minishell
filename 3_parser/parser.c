@@ -1,33 +1,47 @@
 #include "minishell.h"
 
-static void	check_value(r **rule)
+static char	check_production(r **rule, char type, char *f_type)
 {
-	t_loc	*loc;
+	t_loc	*location;
+	int		*lstate;
 
-	loc = ((t_loc *)*(*rule + 1)) + (*((t_rs *)(*rule))).lstate;
-	if ((*((t_rs *)(*rule))).lstate == 0)
-		//choose_production()
-	if (*((*rule) + (*loc).index) > 11)
+	lstate = &((*((t_rs *)(**rule))).lstate);
+	location = (((t_loc *)(*((*rule) + 1))) + lstate);
+	if ( (*location).index != 0)
 	{
-		*rule = (r *)(*((*rule) + (*loc).index));
-		++((*loc).index);
+		if (*((*rule) + (*location).index) < 0)
+		{
+			if (id == PT_)
+				return (QUIT);
+			else
+				return (ascend());
+		}
+		return (firstof_one());
 	}
-	else
+	return (firstof_all());
 }
-static void	check_state(r *rule)
+
+static char	check_state(t_rs *state, t_loc *array)
 {
-	if ((*((t_rs *)rule)).size == 0)
-		ft_alloc(rule);
-	if ((*((t_rs *)rule)).size - 1 <= (*((t_rs *)rule)).lstate)
-		ft_realloc(rule);
+	if ((*state).size == 0 || (*state).size - 1 == lstate)
+		return (ft_alloc(state, array));
 }
 
 static char	find_token(char *f_type, char type, rule_elem **rule)
 {
+	char	ret;
+
 	while (1)
 	{
-		check_state(*rule);
-		check_value(rule, type, f_type);
+		if (check_state((t_rs *)*rule, (t_loc *)*rule + 1) == FAILURE)
+			return (FAILURE);
+		ret = check_production(rule, type, f_type);
+		if (ret == DIVE || ret == ASCEND)
+			continue ;
+		if (ret == STAY)
+			break ;
+		if (ret == QUIT)
+			return (FAILURE);
 	}
 	return (SUCCESS);
 }
