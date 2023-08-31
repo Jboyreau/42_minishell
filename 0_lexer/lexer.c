@@ -52,11 +52,12 @@ static int	token_count(char *str)
 
 t_cmd	*lexer(t_cmd *hll)
 {
-	(*hll).count = token_count((*hll).str);
+	(*hll).count = token_count((*hll).str) + 1;
 	(*hll).tr = malloc((*hll).count * sizeof(t_leaf));
 	if ((*hll).tr == NULL)
 		return (NULL);
 	fill_tree((*hll).str, (*hll).tr);
+	fill_leaf((*hll).tr + (*hll).count - 1, -1, 0, NULL);
 //debug
 	int i = 0;
 	t_leaf *tr = (*hll).tr;

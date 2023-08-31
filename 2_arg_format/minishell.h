@@ -1,6 +1,5 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
 /*	Token types:
 	{
 		Indentifiers	:
@@ -58,24 +57,34 @@ enum ret
 {
 	SUCCESS,
 	FAILURE,
+	MEM_FAIL,
 };
 
 enum types
 {
 //Indentifiers:
-	WORD,			//					0
+	W,				//					0
 //Punctuations:
 	CLS_PAR,		// )				1
 	NL,				// \n				2
 //Operators:
-	L_QUOTE,		// <				4
-	R_QUOTE,		// >				5
-	DL_QUOTE,		// <<				6
-	DR_QUOTE,		// >>				7
-	OP_PAR,			// (				3
+	L,				// <				3
+	R,				// >				4
+	DL,				// <<				5
+	DR,				// >>				6
+	OP_PAR,			// (				7
 	PIPE,			// |				8
 	AND,			// &&				9
 	OR,				// ||				10
+	Z,				// ZERO_LINK		11	
+};
+
+enum file_type
+{
+	CMD,	//commande	0
+	ARG,	//argument	1
+	LIM,	//limiter	2
+	FIL,	//file		3
 };
 
 typedef struct s_local_var
@@ -103,6 +112,8 @@ typedef struct s_commands
 	int		count;
 } t_cmd;
 
+typedef unsigned long long int rule_elem;
+
 //lexer:
 char	char_is_token(char c0, char c1, int *i);
 char	fchar_is_token(t_leaf *tr, char *str, int *i);
@@ -117,6 +128,9 @@ t_lv	*destroy_va(t_lv *va);
 char	find_name(char *name, t_lv *va, int *l);
 //arg_format:
 char	args_to_array(t_leaf *cmd, t_leaf *arg);
-
-//char	parse_string(t_leaf *node);
+//Syntaxe analysis:
+rule_elem	*init_rules();
+rule_elem	*init1(rule_elem *red, rule_elem *pre1, rule_elem *tst, rule_elem *suf);
+char		parser(t_leaf *tr, rule_elem *prompt);
+char		print_error(int type);
 #endif

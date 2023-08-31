@@ -1,6 +1,5 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
-# define NB_RULES 19
 /*	Token types:
 	{
 		Indentifiers	:
@@ -58,6 +57,7 @@ enum ret
 {
 	SUCCESS,
 	FAILURE,
+	MEM_FAIL,
 };
 
 enum types
@@ -68,14 +68,23 @@ enum types
 	CLS_PAR,		// )				1
 	NL,				// \n				2
 //Operators:
-	L,				// <				4
-	R,				// >				5
-	DL,				// <<				6
-	DR,				// >>				7
-	OP_PAR,			// (				3
+	L,				// <				3
+	R,				// >				4
+	DL,				// <<				5
+	DR,				// >>				6
+	OP_PAR,			// (				7
 	PIPE,			// |				8
 	AND,			// &&				9
 	OR,				// ||				10
+	Z,				// ZERO_LINK		11	
+};
+
+enum file_type
+{
+	CMD,	//commande	0
+	ARG,	//argument	1
+	LIM,	//limiter	2
+	FIL,	//file		3
 };
 
 typedef struct s_local_var
@@ -121,5 +130,7 @@ char	find_name(char *name, t_lv *va, int *l);
 char	args_to_array(t_leaf *cmd, t_leaf *arg);
 //Syntaxe analysis:
 rule_elem	*init_rules();
+rule_elem	*init1(rule_elem *red, rule_elem *pre1, rule_elem *tst, rule_elem *suf);
 char		parser(t_leaf *tr, rule_elem *prompt);
+char		print_error(int type);
 #endif

@@ -178,5 +178,6 @@ rule_elem	*init_id(rule_elem *prompt);
 char		parser(t_leaf *tr, rule_elem *rule);
 char		print_error(int type);
 void		parser_destroyer(rule_elem *prompt);
-char	ft_alloc(t_rs *state, t_loc);
+char		firstof_all(r **rule, char type, char *f_type);
+char		firstof_all(r **rule, char type, char *f_type);
 #endif

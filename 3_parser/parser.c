@@ -1,4 +1,10 @@
+#include <stdlib.h>
 #include "minishell.h"
+
+static char	ft_alloc(t_rs *state, t_loc)
+{
+	return (SUCCESS);
+}
 
 static char	check_production(r **rule, char type, char *f_type)
 {
@@ -11,30 +17,28 @@ static char	check_production(r **rule, char type, char *f_type)
 	{
 		if (*((*rule) + (*location).index) < 0)
 		{
-			if (id == PT_)
+			if ((*((t_rs *)(*(*rule)))).id == PT_)
 				return (QUIT);
 			else
-				return (ascend());
+				return (ascend(ASCEND, rule));
 		}
-		return (firstof_one());
+		return (firstof_one(rule, type, f_type, (*location).index));
 	}
-	return (firstof_all());
-}
-
-static char	check_state(t_rs *state, t_loc *array)
-{
-	if ((*state).size == 0 || (*state).size - 1 == lstate)
-		return (ft_alloc(state, array));
+	return (firstof_all(rule, type, f_type));
 }
 
 static char	find_token(char *f_type, char type, rule_elem **rule)
 {
 	char	ret;
+	t_rs	*state;
+	t_loc	*location;
 
 	while (1)
 	{
-		if (check_state((t_rs *)*rule, (t_loc *)*rule + 1) == FAILURE)
-			return (FAILURE);
+		state = (t_rs *)(*(*rule));
+		location = (t_loc *)(*((*rule) + 1));
+		if ((*state).size == 0 || (*state).size - 1 == (*size).lstate)
+			return (ft_alloc_loc(state, location));
 		ret = check_production(rule, type, f_type);
 		if (ret == DIVE || ret == ASCEND)
 			continue ;
@@ -54,8 +58,8 @@ char	parser(t_leaf *tr, rule_elem *rule)
 	while ((*(tr + i)).type != -1)
 	{
 		if (find_token(&(*(tr + i)).f_type, (*(tr + i)).type, &rule) == FAILURE)
-			return (parser_destroyer(prompt), print_error((*(tr + i)).type));
+			return (reset_lstate(prompt), print_error((*(tr + i)).type)); //TODO : reset_lstate_location()
 		++i;
 	}
-	return (parser_destroyer(prompt), SUCCESS);
+	return (reset_lstate(prompt), SUCCESS); //TODO : reset_lstate_location()
 }
