@@ -1,6 +1,6 @@
 https://www.usna.edu/Users/cs/wcbrown/courses/F20SI413/firstFollowPredict/ffp.html
 Prompt -> And_or Prompt
-Prompt -> epsilon
+Prompt -> n
 And_or -> Pipeline And_or''
 And_or'' -> And_or' And_or''
 And_or'' -> epsilon

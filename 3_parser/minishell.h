@@ -158,19 +158,19 @@ typedef struct	s_rule_state
 } t_rs;
 
 //lexer:
-char	char_is_token(char c0, char c1, int *i);
-char	fchar_is_token(t_leaf *tr, char *str, int *i);
-void	longest_token(char *str, int *i, int *count);
-void	flongest_token(t_leaf *tr, char *str, int *i, int *count);
-void	fill_leaf(t_leaf *tr, char type, int len, char *word);
-t_cmd	*lexer(t_cmd *hll);
+char		char_is_token(char c0, char c1, int *i);
+char		fchar_is_token(t_leaf *tr, char *str, int *i);
+void		longest_token(char *str, int *i, int *count);
+void		flongest_token(t_leaf *tr, char *str, int *i, int *count);
+void		fill_leaf(t_leaf *tr, char type, int len, char *word);
+t_cmd		*lexer(t_cmd *hll);
 //string_parsing:
-t_lv	*ft_export(t_lv *va, char **env, char *variable, int len);
-t_lv	*export_var(t_lv *va, char *name, char *content, char **env);
-t_lv	*destroy_va(t_lv *va);
-char	find_name(char *name, t_lv *va, int *l);
+t_lv		*ft_export(t_lv *va, char **env, char *variable, int len);
+t_lv		*export_var(t_lv *va, char *name, char *content, char **env);
+t_lv		*destroy_va(t_lv *va);
+char		find_name(char *name, t_lv *va, int *l);
 //arg_format:
-char	args_to_array(t_leaf *cmd, t_leaf *arg);
+char		args_to_array(t_leaf *cmd, t_leaf *arg);
 //Syntaxe analysis:
 rule_elem	*init_rules();
 rule_elem	*init1(r *red, r *tst, r *suf);
@@ -179,5 +179,8 @@ char		parser(t_leaf *tr, rule_elem *rule);
 char		print_error(int type);
 void		parser_destroyer(rule_elem *prompt);
 char		firstof_all(r **rule, char type, char *f_type);
-char		firstof_all(r **rule, char type, char *f_type);
+char		firstof_one(r **rule, char type, char *f_type, int i);
+char		dive(int i, r **rule);
+char		stay(r **rule, char type, char *f_type, int i);
+char		ascend(r **rule);
 #endif

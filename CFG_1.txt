@@ -1,5 +1,5 @@
 http://hackingoff.com/compilers/predict-first-follow-set
-Prompt -> And_or Prompt | EPSILON
+Prompt -> And_or Prompt | n
 And_or -> Pipeline And_or''
 And_or'' -> And_or' And_or'' | EPSILON
 And_or' -> dp Nl Pipeline | && Nl Pipeline

@@ -4,7 +4,7 @@
 
 static rule_elem	*init5(rule_elem *tst)
 {
-	static	r pt[] = {0, 0, -3, -3, -2, Z, -1, OP_PAR, L, R, DL, DR, W, -1};	//Prompt -> And_or Prompt | epsilon
+	static	r pt[] = {0, 0, -3, -3, -2, NL, -1, OP_PAR, L, R, DL, DR, W, -1};	//Prompt -> And_or Prompt | epsilon
 
 	*(pt + 2) = (rule_elem)tst;
 	*(pt + 3) = (rule_elem)pt;

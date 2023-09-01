@@ -1,17 +1,23 @@
 #include "minishell.h"
 
-static char action(char ret, int i, r **rule) //TODO:dive, ascend, stay, quit 
+static char	firstof(r* rule, int type)
 {
-	if (ret == DIVE)
-		return (dive());
-	if (ret == ASCEND)
-		return (ascend());
-	if (ret == STAY)
-		return (stay());
-	return (quit());
+	int	i;
+
+	i = 2;
+	while (*(rule + i) != -1)
+		++i;
+	++i;
+	while(*(rule + i) != -1)
+	{
+		if (*(rule + i) == type)
+			return (type);
+		++i;
+	}
+	return (12);
 }
 
-char	rule_is_last(r *rule)
+static char	rule_is_last(r *rule)
 {
 	int	i;
 
@@ -23,7 +29,7 @@ char	rule_is_last(r *rule)
 	return (FAILURE);
 }
 
-char	search_epsilon(r *rule)
+static char	search_epsilon(r *rule)
 {
 	int	i;
 
@@ -37,31 +43,42 @@ char	search_epsilon(r *rule)
 
 char	firstof_one(r **rule, char type, char *f_type, int i)
 {
+	if (*((*rule) + i) < 0)
+	{
+		if ((*((t_rs *)(*(*rule)))).id == PT_)
+			return (STAY);
+		else
+			return (ascend(rule));
+	}
 	if (*((*rule) + i) < Z && *((*rule) + i) == type)
-		return (action(STAY, i, rule));
-	if (*((*rule) + i) > Z && firstof((r *)(*((*rule) + i))) == type)
-		return (action(DIVE, i, rule));
+		return (stay(rule, type, f_type, i));
+	if (*((*rule) + i) > Z && firstof((r *)(*((*rule) + i)), type) == type)
+		return (dive(i, rule));
 	if (search_epsilon(*rule) == SUCCESS)
-		return (action(ASCEND, i, rule));
-	return (action(QUIT, i, rule));
+		return (ascend(rule));
+	return (QUIT);
 }
 
 char	firstof_all(r **rule, char type, char *f_type)
 {
 	int		i;
+	t_loc	*l;
+	int		ls;
 
+	l = (t_loc *)(*((*rule) + 1));
+	ls = (*((t_rs *)(**rule))).lstate;
 	i = 2;
 	while (*((*rule) + i) != -1)
 	{
 		if (*((*rule) + i) < Z && *((*rule) + i) == type)
-				return (action(STAY, i, rule));
-		if (*((*rule) + i) > Z && firstof((r *)(*((*rule) + i))) == type)
-				return (action(DIVE, i, rule));
+				return (((*(l + ls)).index) = i, stay(rule, type, f_type, i));
+		if (*((*rule) + i) > Z && firstof((r *)(*((*rule) + i)), type) == type)
+				return (((*(l + ls)).index) = i, dive(i, rule));
 		if (rule_is_last((*rule) + i) ==  SUCCESS)
 		{
 			if (search_epsilon(*rule) == SUCCESS)
-				return (action(ASCEND, i, rule));
-			return (action(QUIT, i, rule));
+				return (ascend(rule));
+			return (QUIT);
 		}
 		while (*((*rule) + i) != -1 && *((*rule) + i) != -2)
 			++i;
