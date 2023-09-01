@@ -1,12 +1,20 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "minishell.h"
 
-static char	ft_alloc_loc(t_rs *state, r *loc)
+char	ft_alloc_loc(t_rs *state, r *loc) //TODO : final version
 {
-	*loc = (r)malloc(20000 * sizeof(t_loc *));
+	int		i;
+	t_loc	*location;
+
+	(*state).size = 20000;
+	*loc = (r)malloc((*state).size * sizeof(t_loc));
 		if (*loc == 0)
 			return (MEM_FAIL);
-	(*state).size = 20000;
+	i = -1;
+	location = (t_loc *)(*loc);
+	while (++i < (*state).size)
+		(*(location + i)).index = 0;
 	return (SUCCESS);
 }
 
@@ -17,6 +25,7 @@ static char	check_production(r **rule, char type, char *f_type)
 
 	lstate = (*((t_rs *)(**rule))).lstate;
 	location = (((t_loc *)(*((*rule) + 1))) + lstate);
+printf("index = %d, rule = %d, value = %lld \n", (*location).index, (*((t_rs *)(**rule))).id, *((*rule) + (*location).index));
 	if ((*location).index != 0)
 		return (firstof_one(rule, type, f_type, (*location).index));
 	return (firstof_all(rule, type, f_type));
@@ -56,10 +65,10 @@ char	parser(t_leaf *tr, rule_elem *rule)
 	{
 		ret = find_token(&(*(tr + i)).f_type, (*(tr + i)).type, &rule);
 		if (ret == FAILURE)
-			return (reset_lstate(prompt), print_error((*(tr + i)).type)); //TODO : reset_lstate_location()
+			return (reset_state(prompt), print_error((*(tr + i)).type));
 		if (ret == MEM_FAIL)
 			return (MEM_FAIL);
 		++i;
 	}
-	return (reset_lstate(prompt), SUCCESS); //TODO : reset_lstate_location()
+	return (reset_state(prompt), SUCCESS);
 }

@@ -43,19 +43,22 @@ static char	search_epsilon(r *rule)
 
 char	firstof_one(r **rule, char type, char *f_type, int i)
 {
-	if (*((*rule) + i) < 0)
+	if (*((*rule) + i) == -1 || *((*rule) + i) == -2)
 	{
 		if ((*((t_rs *)(*(*rule)))).id == PT_)
-			return (STAY);
+			return (QUIT);
 		else
 			return (ascend(rule));
 	}
 	if (*((*rule) + i) < Z && *((*rule) + i) == type)
 		return (stay(rule, type, f_type, i));
-	if (*((*rule) + i) > Z && firstof((r *)(*((*rule) + i)), type) == type)
-		return (dive(i, rule));
-	if (search_epsilon(*rule) == SUCCESS)
-		return (ascend(rule));
+	if (*((*rule) + i) > Z)
+	{
+		if (firstof((r *)(*((*rule) + i)), type) == type)
+			return (dive(i, rule));
+		if (search_epsilon((r*)(*((*rule) + i))) == SUCCESS)
+			return (ascend(rule));
+	}
 	return (QUIT);
 }
 

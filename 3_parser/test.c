@@ -27,12 +27,22 @@ int main (void)
 	str[15] = "cat \"file\"\"file\"\n";
 	str[16] = "cat \"file\" \"file\"\n";
 	str[17] = "cat \"file\"|\"file\"\n";
-	str[18] = "< file cmd file >\n";
+	str[18] = "cmd |<| ls\n";
+	str[19] = "|\n";
+	str[20] = "( | )\n";
+	str[21] = "<(cmd|cmd)\n";
+	str[22] = "(ls | ls | (ls && (ls || ls) | ls && ls)) && (ls|ls|ls) \n";
+	str[23] = ">|\n";
+	str[24] = "|>>\n";
+	str[25] = ")\n";
+	str[26] = "\n";
+	str[27] = "< file cmd arg > file arg arg\n";
+	str[28] = "cmd |\n";
 
 	start = init_rules();
-	while (i < 19)
+	while (i < 29)
 	{
-		printf("Prompt : %s", str[i]);
+		printf("\nPrompt : %s", str[i]);
 		hll.str = str[i];
 		lexer(&hll);
 		parser(hll.tr, start);

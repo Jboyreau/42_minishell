@@ -89,23 +89,23 @@ enum file_type
 
 enum rule_id
 {
-	PT_,
-	TST_,
-	TST1_,
-	TST2_,
-	P_,
-	P1_,
-	NL_,
-	CMD_,
-	CMD1_,
-	CMD2_,
-	PAR_,
-	PRE_,
-	PRE1_,
-	SUF_,
-	SUF1_,
-	SUF2_,
-	RED_,
+	PT_,	//0
+	TST_,	//1
+	TST1_,	//2
+	TST2_,	//3
+	P_,		//4
+	P1_,	//5
+	NL_,	//6
+	CMD_,	//7
+	CMD1_,	//8
+	CMD2_,	//9
+	PAR_,	//10
+	PRE_,	//11
+	PRE1_,	//12
+	SUF_,	//13
+	SUF1_,	//14
+	SUF2_,	//15
+	RED_,	//16
 };
 
 enum production_result
@@ -183,4 +183,6 @@ char		firstof_one(r **rule, char type, char *f_type, int i);
 char		dive(int i, r **rule);
 char		stay(r **rule, char type, char *f_type, int i);
 char		ascend(r **rule);
+void		reset_state(rule_elem *pt);
+char	ft_alloc_loc(t_rs *state, r *loc);
 #endif

@@ -1,7 +1,9 @@
+#include <stdio.h>
 #include "minishell.h"
 
 char dive(int i, r **rule)
 {
+	t_rs	*state;
 	r		*prev;
 	t_loc	*loc;
 	int		lstate;
@@ -11,9 +13,13 @@ char dive(int i, r **rule)
 	++((*(loc + lstate)).index);
 	prev = *rule;
 	*rule = (r *)(*((*rule) + i));
-	loc = (t_loc *)(*((*rule) + 1));
+
 	++((*((t_rs *)(**rule))).lstate);
 	lstate = (*((t_rs *)(**rule))).lstate;
+	state = (t_rs *)(*(*rule));
+	if ((*state).size == 0 || (*state).size - 1 == (*state).lstate)
+		ft_alloc_loc(state, (*rule) + 1);
+	loc = (t_loc *)(*((*rule) + 1));
 	(*(loc + lstate)).prev = prev;
 	return (DIVE);
 }
