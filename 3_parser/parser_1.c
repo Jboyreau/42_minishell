@@ -57,7 +57,10 @@ char	firstof_one(r **rule, char type, char *f_type, int i)
 		if (firstof((r *)(*((*rule) + i)), type) == type)
 			return (dive(i, rule));
 		if (search_epsilon((r*)(*((*rule) + i))) == SUCCESS)
-			return (ascend(rule));
+		{
+			return (++((*((t_loc *)(*((*rule) + 1)) 
+			+ (*((t_rs *)(*(*rule)))).lstate)).index), ASCEND);
+		}
 	}
 	return (QUIT);
 }

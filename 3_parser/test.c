@@ -31,16 +31,17 @@ int main (void)
 	str[19] = "|\n";
 	str[20] = "( | )\n";
 	str[21] = "<(cmd|cmd)\n";
-	str[22] = "(ls | ls | (ls && (ls || ls) | ls && ls)) && (ls|ls|ls) \n";
+	str[22] = "cmd |\n";
 	str[23] = ">|\n";
 	str[24] = "|>>\n";
 	str[25] = ")\n";
 	str[26] = "\n";
-	str[27] = "< file cmd arg > file arg arg\n";
-	str[28] = "cmd |\n";
+	str[27] = "< file cmd arg > file arg > file arg > file arg arg\n";
+	str[28] = "(ls | ls | cat -A -A -A && (ls || ls) | ls && ls)) && (ls|ls|ls)\n";
+	str[29] = "(ls | < file ls > file -la | cat -A -A -A && (< file ls || ls > file) | ls && ls) && (ls|ls|ls)\n";
 
 	start = init_rules();
-	while (i < 29)
+	while (i < 30)
 	{
 		printf("\nPrompt : %s", str[i]);
 		hll.str = str[i];
