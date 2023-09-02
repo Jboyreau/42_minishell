@@ -13,12 +13,12 @@ char dive(int i, r **rule)
 	++((*(loc + lstate)).index);
 	prev = *rule;
 	*rule = (r *)(*((*rule) + i));
-
 	++((*((t_rs *)(**rule))).lstate);
 	lstate = (*((t_rs *)(**rule))).lstate;
 	state = (t_rs *)(*(*rule));
 	if ((*state).size == 0 || (*state).size - 1 == (*state).lstate)
-		ft_alloc_loc(state, (*rule) + 1);
+		if (ft_alloc_loc(state, (*rule) + 1) == MEM_FAIL)
+			return (MEM_FAIL);
 	loc = (t_loc *)(*((*rule) + 1));
 	(*(loc + lstate)).prev = prev;
 	return (DIVE);
@@ -62,6 +62,6 @@ char stay(r **rule, char type, char *f_type, int i)
 		if (*((*rule) + i - 1) == DL)
 			return(*f_type = LIM, STAY);
 		return(*f_type = FIL, STAY);
-	}	
+	}
 	return (STAY);
 }
