@@ -76,7 +76,7 @@ enum types
 	PIPE,			// |				8
 	AND,			// &&				9
 	OR,				// ||				10
-	Z,				// ZERO_LINK		11	
+	Z,				// ZERO_LINK		11
 };
 
 enum file_type
@@ -87,7 +87,40 @@ enum file_type
 	FIL,	//file		3
 };
 
-typedef struct s_local_var
+enum rule_id
+{
+	PT_,	//0
+	TST_,	//1
+	TST1_,	//2
+	TST2_,	//3
+	P_,		//4
+	P1_,	//5
+	NL_,	//6
+	CMD_,	//7
+	CMD1_,	//8
+	CMD2_,	//9
+	PAR_,	//10
+	PRE_,	//11
+	PRE1_,	//12
+	SUF_,	//13
+	SUF1_,	//14
+	SUF2_,	//15
+	RED_,	//16
+};
+
+enum production_result
+{
+	DIVE,
+	STAY,
+	ASCEND,
+	QUIT,
+};
+
+typedef unsigned long long int rule_elem;
+
+typedef	rule_elem r;
+
+typedef struct	s_local_var
 {
 	char	*name;
 	char	*content;
@@ -105,32 +138,58 @@ typedef struct s_leaf
 	struct s_tree	*l;
 } t_leaf;
 
-typedef struct s_commands
+typedef struct	s_commands
 {
 	char	*str;
 	t_leaf	*tr;
+	t_lv	*va;
+	r		*start;
+	char	ret;
 	int		count;
 } t_cmd;
 
-typedef unsigned long long int rule_elem;
+typedef struct	s_location
+{
+	rule_elem	*prev;
+	int			index;
+} t_loc;
 
-//lexer:
-char	char_is_token(char c0, char c1, int *i);
-char	fchar_is_token(t_leaf *tr, char *str, int *i);
-void	longest_token(char *str, int *i, int *count);
-void	flongest_token(t_leaf *tr, char *str, int *i, int *count);
-void	fill_leaf(t_leaf *tr, char type, int len, char *word);
-t_cmd	*lexer(t_cmd *hll);
-//string_parsing:
-t_lv	*ft_export(t_lv *va, char **env, char *variable, int len);
-t_lv	*export_var(t_lv *va, char *name, char *content, char **env);
-t_lv	*destroy_va(t_lv *va);
-char	find_name(char *name, t_lv *va, int *l);
-//arg_format:
-char	args_to_array(t_leaf *cmd, t_leaf *arg);
+typedef struct	s_rule_state
+{
+	int			size;
+	int			lstate;
+	int			id;
+} t_rs;
+
+//Lexer:
+char		char_is_token(char c0, char c1, int *i);
+char		fchar_is_token(t_leaf *tr, char *str, int *i);
+void		longest_token(char *str, int *i, int *count);
+void		flongest_token(t_leaf *tr, char *str, int *i, int *count);
+void		fill_leaf(t_leaf *tr, char type, int len, char *word);
+t_leaf		*lexer(t_cmd *hll);
+//String_parsing:
+t_lv		*ft_export(t_lv *va, char **env, char *variable, int len);
+t_lv		*export_var(t_lv *va, char *name, char *content, char **env);
+t_lv		*destroy_va(t_lv *va);
+char		find_name(char *name, t_lv *va, int *l);
+void		print_va(t_lv *va);
+//Arg_format:
+char		args_to_array(t_leaf *cmd, t_leaf *arg);
 //Syntaxe analysis:
 rule_elem	*init_rules();
-rule_elem	*init1(rule_elem *red, rule_elem *pre1, rule_elem *tst, rule_elem *suf);
-char		parser(t_leaf *tr, rule_elem *prompt);
+rule_elem	*init1(r *red, r *tst, r *suf);
+rule_elem	*init_id(rule_elem *prompt);
+char		parser(t_leaf *tr, rule_elem *rule);
 char		print_error(int type);
+void		parser_destroyer(rule_elem *prompt);
+char		firstof_all(r **rule, char type, char *f_type);
+char		firstof_one(r **rule, char type, char *f_type, int i);
+char		dive(int i, r **rule);
+char		stay(r **rule, char type, char *f_type, int i);
+char		ascend(r **rule);
+void		reset_state(rule_elem *pt);
+char		ft_alloc_loc(t_rs *state, r *loc);
+//Execute
+void execute_tree(t_leaf *tree, t_lv *va);
 #endif

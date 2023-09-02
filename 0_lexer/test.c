@@ -8,7 +8,7 @@ int main (void)
 	char			*str[10000];
 	int				i = 0;
 
-	str[0] = "salut\n";
+	str[0] = "export | export\n";
 	str[1] = "salut<<\n";
 	str[2] = "salut >>\n";
 	str[3] = "salut\"toto\"\n";

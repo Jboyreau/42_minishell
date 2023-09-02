@@ -10,9 +10,18 @@
 #define SUCCESS 0
 #define FAILURE 1
 
-static void	destroyer(t_cmd hll)
+static void	destroy_all(t_lv *va, r *start)
 {
-	;
+	destroy_va(va);
+	parser_destroyer(start);
+}
+
+static void	destroy_hll(t_cmd *hll)
+{
+	if ((*hll).str)
+		free((*hll).str);
+	if ((*hll).tr)
+		free((*hll).tr);
 }
 
 int	ft_readline(char **line, const char* prompt)
@@ -28,25 +37,26 @@ int	ft_readline(char **line, const char* prompt)
 		return (perror("readline() failure : "), FAILURE);
 }
 
-int	main(int agrc, char *argv, char **en)
+int	main(int agrc, char *argv, char **env)
 {
-	static	t_cmd hll = {.str = (char *)1, .tr = NULL};
-	static	t_lv *va = NULL;
+	static	t_cmd	hll = {.str = NULL, .tr = NULL, .va = NULL};
 
-	va = ft_export(va, env, NULL, 0);
+	hll.va = ft_export(hll.va, env, NULL, 0);
+	hll.start = init_rules(); 
 	while (1)
 	{
-		if (ft_readline(&(hll.str), "minishell_user:") == FAILURE)
+		if (ft_readline(&(hll.str), "minishell_user: ") == FAILURE)
 			return (EXIT_FAILURE);
-		if (parser(lexer(&hll)) == SUCCESS)
-			if (*(hll.tr + hll.count - 2).type > DR_QUOTE && *(hll.tr + hll.count - 2).type <= OR)
+		hll.ret = parser(lexer(&hll), hll.start);
+		if (hll.ret == SUCCESS)
+		{
+			if ((*(hll.tr + hll.count - 3)).type > OP_PAR && (*(hll.tr + hll.count - 3)).type < Z)
 				continue ;
-			else
-				execute_tree(hll.tr);
-		else
-			return (destroyer(hll), EXIT_FAILURE);
-		destroyer(hll);
+			execute_tree(hll.tr, hll.va);
+		}
+		else if (hll.ret == MEM_FAIL)
+			return (destroy_hll(&hll), destroy_all(hll.va, hll.start), EXIT_FAILURE);
+		destroy_hll(&hll);
 	}
-	destroy_va(va);
-	return (EXIT_SUCCESS);
+	return (destroy_all(hll.va, hll.start), EXIT_SUCCESS);
 }
