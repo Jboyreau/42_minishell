@@ -144,8 +144,12 @@ typedef struct	s_commands
 	t_leaf	*tr;
 	t_lv	*va;
 	r		*start;
+	char	*str1;
+	char	*str2;
 	char	ret;
 	int		count;
+	int		len;
+	int		len1;
 } t_cmd;
 
 typedef struct	s_location

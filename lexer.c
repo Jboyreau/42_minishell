@@ -52,6 +52,8 @@ static int	token_count(char *str)
 
 t_leaf	*lexer(t_cmd *hll)
 {
+	if ((*hll).str == NULL)
+		return (NULL);
 	(*hll).count = token_count((*hll).str) + 2;
 	(*hll).tr = malloc((*hll).count * sizeof(t_leaf));
 	if ((*hll).tr == NULL)

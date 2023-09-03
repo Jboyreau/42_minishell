@@ -91,7 +91,7 @@ char	parser(t_leaf *tr, rule_elem *rule)
 	r	*prompt;
 
 	if (tr == NULL)
-		return (FAILURE);
+		return (MEM_FAIL);
 	i = 0;
 	prompt = rule;
 	while ((*(tr + i)).type != -1)
