@@ -130,6 +130,7 @@ typedef struct s_leaf
 {
 	char	f_type;
 	char	type;
+	int		fdl;
 	int		len;
 	char	*word;
 	char	**arg;
