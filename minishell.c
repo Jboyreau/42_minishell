@@ -41,12 +41,11 @@ static int	ft_readline(char **line, const char *prompt)
 
 static char	check_nl(t_cmd *hll, char type, int i, int j)
 {
-	while (type > OP_PAR && type < Z)
+	while (type > OP_PAR && type < Z || type == NL)
 	{
 		(dll(NULL, &(*hll).tr), (*hll).str1 = (*hll).str);
-		if (ft_readline(&((*hll).str), "> ") == FAILURE)
+		if (ft_readline(&((*hll).str2), "> ") == FAILURE)
 			return (MEM_FAIL);
-		(*hll).str2 = (*hll).str;
 		(*hll).len = -1;
 		while (*((*hll).str1 + (++(*hll).len)))
 			(*hll).len1 = -1;
@@ -61,8 +60,9 @@ static char	check_nl(t_cmd *hll, char type, int i, int j)
 		j = -1;
 		while (i + (++j) < (*hll).len + 2 && (*hll).str)
 			*((*hll).str + i + j) = *((*hll).str2 + j);
-		if (free((*hll).str2), parser(lexer(hll), (*hll).start))
-			return (free((*hll).tr), parser(lexer(hll), (*hll).start));
+		(*hll).ret = parser(lexer(hll), (*hll).start);
+		if (free((*hll).str2), (*hll).ret)
+			return (free((*hll).tr), (*hll).ret);
 		(free((*hll).str1), type = (*((*hll).tr + (*hll).count - 3)).type);
 	}
 	return (SUCCESS);

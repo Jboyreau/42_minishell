@@ -1,0 +1,7 @@
+Here_doc :
+	-FIFO's fd liked to limiter;
+	-"lim" ou 'lim' -> no expand;
+Export
+	-export "" ou '' -> invalid;
+	-export $NULL <=> export;
+Signals;

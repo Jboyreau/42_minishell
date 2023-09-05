@@ -10,7 +10,7 @@ char dive(int i, r **rule)
 
 	loc = (t_loc *)(*((*rule) + 1));
 	lstate = (*((t_rs *)(**rule))).lstate;
-	++((*(loc + lstate)).index);
+	((*(loc + lstate)).index) = i + 1;
 	prev = *rule;
 	*rule = (r *)(*((*rule) + i));
 	++((*((t_rs *)(**rule))).lstate);
