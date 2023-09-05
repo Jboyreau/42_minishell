@@ -185,7 +185,7 @@ rule_elem	*init_rules();
 rule_elem	*init1(r *red, r *tst, r *suf);
 rule_elem	*init_id(rule_elem *prompt);
 char		parser(t_leaf *tr, rule_elem *rule);
-char		print_error(int type);
+char		print_error(int type, char *word, int len);
 void		parser_destroyer(rule_elem *prompt);
 char		firstof_all(r **rule, char type, char *f_type);
 char		firstof_one(r **rule, char type, char *f_type, int i);

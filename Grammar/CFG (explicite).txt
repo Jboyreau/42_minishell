@@ -1,4 +1,4 @@
-Prompt -> And_or Prompt | \n									firstof(Prompt) = {<, >, >>, <<, w, E}
+Prompt -> And_or Prompt | \n									firstof(Prompt) = {\n, <, >, >>, <<, E}
 
 And_or -> Pipeline And_or1										firstof(And_or) = {(, <, >, >>, <<, w}
 	And_or1 -> And_or2 And_or1 | epsilon						firstof(And_or1) = {||, &&, E}

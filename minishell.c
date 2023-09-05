@@ -62,7 +62,7 @@ static char	check_nl(t_cmd *hll, char type, int i, int j)
 			*((*hll).str + i + j) = *((*hll).str2 + j);
 		(*hll).ret = parser(lexer(hll), (*hll).start);
 		if (free((*hll).str2), (*hll).ret)
-			return (free((*hll).tr), (*hll).ret);
+			return ((*hll).ret);
 		(free((*hll).str1), type = (*((*hll).tr + (*hll).count - 3)).type);
 	}
 	return (SUCCESS);

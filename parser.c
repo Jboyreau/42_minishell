@@ -98,7 +98,7 @@ char	parser(t_leaf *tr, rule_elem *rule)
 	{
 		ret = find_token(&(*(tr + i)).f_type, (*(tr + i)).type, &rule);
 		if (ret == FAILURE)
-			return (reset_state(prompt), print_error((*(tr + i)).type));
+			return (reset_state(prompt), print_error((*(tr + i)).type, (*(tr + i)).word, (*(tr + i)).len));
 		if (ret == MEM_FAIL)
 			return (MEM_FAIL);
 		++i;
