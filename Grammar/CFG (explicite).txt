@@ -23,3 +23,10 @@ Suffixe -> word Suffixe1 | I/O_Redirection Suffixe1				firstof(Suffixe) = {<, >,
 		Suffixe2 -> I/O_Redirection | word						firstof(Suffixe2) = {<, >, >>, <<, w}
 
 I/O_Redirection -> < word | > word | >> word | << word			firstof(I/O_Rdeirection) = {<, >, >>, <<}
+
+((token stirng)) ((cmd) | cmd) | (cmd | (cmd))
+((((cmd) | cmd) | (cmd | (cmd))))
+pour op_par chercher parenthèse fermante1.
+pour op_par suivante chercher parenthèse fermante2.
+si *(fermante + 1) = fermante2
+	failure
