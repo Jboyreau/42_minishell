@@ -1,3 +1,4 @@
+#include <signal.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <readline/readline.h>
@@ -29,14 +30,14 @@ static void	dll(char **str, t_leaf **tr) //CRITICAL, DON'T TOUCH.
 static int	ft_readline(char **line, const char *prompt)
 {
 	*line = readline(prompt);
+	if (*line == NULL)
+		return (FAILURE);
 	if (*line)
 	{
 		if (**line)
 			add_history(*line);
 		return (SUCCESS);
 	}
-	if (errno != 0)
-		return (perror("readline() failure : "), FAILURE);
 }
 
 static char	check_nl(t_cmd *hll, char type, int i, int j)

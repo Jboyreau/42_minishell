@@ -96,6 +96,8 @@ char	parser(t_leaf *tr, rule_elem *rule)
 	prompt = rule;
 	while ((*(tr + i)).type != -1)
 	{
+		if ((*(tr + i)).type == CLS_PAR && (*(tr + i + 1)).type == CLS_PAR)	
+			return (reset_state(prompt), print_error((*(tr + i)).type, (*(tr + i)).word, (*(tr + i)).len));
 		ret = find_token(&(*(tr + i)).f_type, (*(tr + i)).type, &rule);
 		if (ret == FAILURE)
 			return (reset_state(prompt), print_error((*(tr + i)).type, (*(tr + i)).word, (*(tr + i)).len));
