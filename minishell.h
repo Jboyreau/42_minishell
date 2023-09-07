@@ -196,6 +196,7 @@ char		ascend(r **rule);
 void		reset_state(rule_elem *pt);
 char		ft_alloc_loc(t_rs *state, r *loc);
 char		c(t_leaf *tr, int *last_par_found);
+char		d(t_leaf *tr);
 //Execute
 void execute_tree(t_leaf *tree, t_lv *va);
 #endif

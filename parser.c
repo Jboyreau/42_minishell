@@ -93,19 +93,21 @@ char	parser(t_leaf *tr, rule_elem *rule)
 
 	if (tr == NULL)
 		return (MEM_FAIL);
-	i = 0;
+	i = -1;
 	j = 0;
 	prompt = rule;
-	while ((*(tr + i)).type != -1)
+	while ((*(tr + (++i))).type != -1)
 	{
+		if ((*(tr + i)).type == CLS_PAR && d(tr + i) == FAILURE)
+			return (reset_state(prompt), FAILURE);
 		if ((*(tr + i)).type == OP_PAR && c(tr + i, &j) == FAILURE)
 			return (reset_state(prompt), print_error(CLS_PAR, 0, 0));
 		ret = find_token(&(*(tr + i)).f_type, (*(tr + i)).type, &rule);
 		if (ret == FAILURE)
-			return (reset_state(prompt), print_error((*(tr + i)).type, (*(tr + i)).word, (*(tr + i)).len));
+			return (reset_state(prompt),
+			print_error((*(tr + i)).type, (*(tr + i)).word, (*(tr + i)).len));
 		if (ret == MEM_FAIL)
 			return (MEM_FAIL);
-		++i;
 	}
 	return (reset_state(prompt), SUCCESS);
 }
