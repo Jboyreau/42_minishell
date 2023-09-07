@@ -22,7 +22,7 @@ char	d(t_leaf *tr)
 	int	i;
 
 	if ((*(tr + 1)).type < L || (*(tr + 1)).type > DR)
-		return (FAILURE);
+		return (SUCCESS);
 	i = 1;
 	while ((*(tr + i)).type > NL && (*(tr + i)).type < OP_PAR)
 		i += 2;
