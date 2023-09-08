@@ -9,9 +9,11 @@ static void	fnormal_string(t_leaf *tr, char *str, int *i, int *count)
 	static int bidon;
 
 	s = *i;
+	if (*(str + (*i)) == '$')
+		++(*i);
 	while (*(str + (*i)))
 	{
-		if (*(str + (*i)) == ' ')
+		if (*(str + (*i)) == ' ' || *(str + (*i)) == '$')
 			return (fill_leaf(tr, W, *i-s, str + s), ++(*count), (void)0);
 		if (char_is_token(*(str + (*i)), *(str + (*i) + 1), &bidon) == SUCCESS)
 			return (fill_leaf(tr, W, *i-s, str + s), ++(*count), (void)0);

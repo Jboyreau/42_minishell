@@ -22,9 +22,11 @@ char	char_is_token(char c0, char c1, int *i)
 
 static void	normal_string(char *str, int *i, int *count)
 {
+	if (*(str + (*i)) == '$')
+		++(*i);
 	while (*(str + (*i)))
 	{
-		if (*(str + (*i)) == ' ')
+		if (*(str + (*i)) == ' ' || *(str + (*i)) == '$')
 			return (++(*count), (void)0);
 		if (char_is_token(*(str + (*i)), *(str + (*i) + 1), i) == SUCCESS)
 			return (*count += 2, (void)0);

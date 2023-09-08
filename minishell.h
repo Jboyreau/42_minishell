@@ -134,9 +134,6 @@ typedef struct s_leaf
 	int		len;
 	char	*word;
 	char	**arg;
-	struct s_tree	*dad;
-	struct s_tree	*r;
-	struct s_tree	*l;
 } t_leaf;
 
 typedef struct	s_commands
