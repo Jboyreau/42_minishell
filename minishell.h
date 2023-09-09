@@ -192,7 +192,7 @@ char		stay(r **rule, char type, char *f_type, int i);
 char		ascend(r **rule);
 void		reset_state(rule_elem *pt);
 char		ft_alloc_loc(t_rs *state, r *loc);
-char		c(t_leaf *tr, int *last_par_found);
+char		c(t_leaf *tr);
 char		d(t_leaf *tr);
 //Execute
 void execute_tree(t_leaf *tree, t_lv *va);
