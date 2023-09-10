@@ -29,16 +29,16 @@ static void	normal_string(char *str, int *i, int *count)
 	if (*(str + (*i)) == '$')
 	{
 		j = *i;
-		while (j > 0 && *(str + j) != '$' && *(str + j) != ' ' &&
+		while (j > -1 && *(str + j) != '$' && *(str + j) != ' ' &&
 		rev_char_is_token(*(str + j), *(str + j + 1), &j) == FAILURE)
 			--j;
-		if ((*str + j) != '$')
-			test == 0;
-		++(*i);
+		if (j > 0)
+			if ((*str + j) == '$')
+				(++(*i), test = 0);
 	}
 	while (*(str + (*i)))
 	{
-		if (*(str + (*i)) == ' ' || (*(str + (*i)) == '$')// && test == 1))
+		if (*(str + (*i)) == ' ' || (*(str + (*i)) == '$' && test == 0))
 			return (++(*count), (void)0);
 		if (char_is_token(*(str + (*i)), *(str + (*i) + 1), i) == SUCCESS)
 			return (*count += 2, (void)0);

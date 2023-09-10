@@ -171,6 +171,7 @@ void		longest_token(char *str, int *i, int *count);
 void		flongest_token(t_leaf *tr, char *str, int *i, int *count);
 void		fill_leaf(t_leaf *tr, char type, int len, char *word);
 t_leaf		*lexer(t_cmd *hll);
+char		rev_char_is_token(char c0, char c1, int *j);
 //String_parsing:
 t_lv		*ft_export(t_lv *va, char **env, char *variable, int len);
 t_lv		*export_var(t_lv *va, char *name, char *content, char **env);

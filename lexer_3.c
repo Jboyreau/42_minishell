@@ -3,19 +3,46 @@
 #define SUCCESS 0
 #define FAILURE 1
 
+char	rev_char_is_token(char c0, char c1, int *j)
+{
+	char *t;
+
+	t = ")\n(<>|";
+
+	if ((c0 == '<' || c0 == '>' || c0 == '|' || c0 == '&') && (c0 == c1))
+			return ((*j) -= 2, SUCCESS);
+	while (*t)
+	{
+		if (c0 == *t)
+			return (--(*j), SUCCESS);
+		++t;
+	}
+	return (FAILURE);
+}
+
 static void	fnormal_string(t_leaf *tr, char *str, int *i, int *count)
 {
 	int s;
-	static int bidon;
+	int	j;
+	int	test;
 
 	s = *i;
+	test = 1;
 	if (*(str + (*i)) == '$')
-		++(*i);
+	{
+		j = *i;
+		while (j > -1 && *(str + j) != '$' && *(str + j) != ' ' &&
+		rev_char_is_token(*(str + j), *(str + j + 1), &j) == FAILURE)
+			--j;
+		if (j > 0)
+			if ((*str + j) == '$')
+				(++(*i), test = 0);
+	}
 	while (*(str + (*i)))
 	{
-		if (*(str + (*i)) == ' ' || *(str + (*i)) == '$')
+		if (*(str + (*i)) == ' ' || (*(str + (*i)) == '$' && test == 0))
 			return (fill_leaf(tr, W, *i-s, str + s), ++(*count), (void)0);
-		if (char_is_token(*(str + (*i)), *(str + (*i) + 1), &bidon) == SUCCESS)
+		if (char_is_token(*(str + (*i)), *(str + (*i) + 1), &j) == SUCCESS)
 			return (fill_leaf(tr, W, *i-s, str + s), ++(*count), (void)0);
 		++(*i);
 	}

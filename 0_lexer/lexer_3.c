@@ -23,26 +23,26 @@ char	rev_char_is_token(char c0, char c1, int *j)
 static void	fnormal_string(t_leaf *tr, char *str, int *i, int *count)
 {
 	int s;
-	static int bidon;
 	int	j;
 	int	test;
 
+	s = *i;
 	test = 1;
 	if (*(str + (*i)) == '$')
 	{
 		j = *i;
-		while (j > 0 && *(str + j) != '$' && *(str + j) != ' ' &&
+		while (j > -1 && *(str + j) != '$' && *(str + j) != ' ' &&
 		rev_char_is_token(*(str + j), *(str + j + 1), &j) == FAILURE)
 			--j;
-		if ((*str + j) != '$')
-			test == 0;
-		++(*i);
+		if (j > 0)
+			if ((*str + j) == '$')
+				(++(*i), test = 0);
 	}
 	while (*(str + (*i)))
 	{
-		if (*(str + (*i)) == ' ' || (*(str + (*i)) == '$')//&& test == 1))
+		if (*(str + (*i)) == ' ' || (*(str + (*i)) == '$' && test == 0))
 			return (fill_leaf(tr, W, *i-s, str + s), ++(*count), (void)0);
-		if (char_is_token(*(str + (*i)), *(str + (*i) + 1), &bidon) == SUCCESS)
+		if (char_is_token(*(str + (*i)), *(str + (*i) + 1), &j) == SUCCESS)
 			return (fill_leaf(tr, W, *i-s, str + s), ++(*count), (void)0);
 		++(*i);
 	}
