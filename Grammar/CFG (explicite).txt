@@ -1,4 +1,4 @@
-Prompt -> And_or Prompt | \n									firstof(Prompt) = {\n, <, >, >>, <<, E}
+Prompt -> And_or Prompt | \n | )								firstof(Prompt) = {\n,(, ), <, >, >>, <<, E}
 
 And_or -> Pipeline And_or1										firstof(And_or) = {(, <, >, >>, <<, w}
 	And_or1 -> And_or2 And_or1 | epsilon						firstof(And_or1) = {||, &&, E}
@@ -13,7 +13,7 @@ Cmd -> Parentheses | Prefixe Cmd1 | word Cmd2					firstof(Cmd) = {(, <, >, >>, <
 	Cmd1 -> word Cmd2 | epsilon									firstof(Cmd1) = {w,E}
 		Cmd2 -> Suffixe | epsilon								firstof(Cmd2) = {<, >, >>, <<, w, E}
 
-Parentheses -> ( And_or )										firstof(Parentheses) = {(}
+Parentheses -> ( Prompt										firstof(Parentheses) = {(}
 
 Prefixe -> I/O_Redirection Prefixe1								firstof(Prefixe) = {<, >, >>, <<}
 	Prefixe1 -> I/O_Redirection Prefixe1 | epsilon				firstof(Prefixe1) = {<, >, >>, <<, E}

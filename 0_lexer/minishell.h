@@ -116,6 +116,7 @@ typedef unsigned long long int rule_elem;
 
 //lexer:
 char	char_is_token(char c0, char c1, int *i);
+char		rev_char_is_token(char c0, char c1, int *j);
 char	fchar_is_token(t_leaf *tr, char *str, int *i);
 void	longest_token(char *str, int *i, int *count);
 void	flongest_token(t_leaf *tr, char *str, int *i, int *count);

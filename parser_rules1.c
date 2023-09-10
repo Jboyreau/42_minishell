@@ -2,16 +2,17 @@
 
 // unsigned long long int cfg[cfg_size] = {{tab_size, lstate, id}, tab{prev, index}, terminals/non_terminals, -2(aka |), -1(aka end), firstof(cfg)}
 
-static rule_elem	*init5(rule_elem *tst)
+static rule_elem	*init5(rule_elem *tst, rule_elem *par)
 {
-	static	r pt[] = {0, 0, -3, -3, -2, NL, -1, NL, L, R, DL, DR, -1};	//Prompt -> And_or Prompt | epsilon
+	static	r pt[] = {0, 0, -3, -3, -2, NL, -2, CLS_PAR, -1,OP_PAR, W, CLS_PAR, NL, L, R, DL, DR, -1};	//Prompt -> And_or Prompt | epsilon
 
 	*(pt + 2) = (rule_elem)tst;
 	*(pt + 3) = (rule_elem)pt;
+	*(par + 3) = (rule_elem)pt;
 	return (pt);
 }
 
-static rule_elem	*init4(rule_elem *nl, rule_elem *p, rule_elem *tst)
+static rule_elem	*init4(rule_elem *nl, rule_elem *p, rule_elem *tst, rule_elem *par)
 {
 	static	r tst2[] = {0, 0, OR, -3, -3, -2, AND, -3, -3, -1, OR, AND, -1};	//And_or2 -> || New_line Pipeline | && New_line Pipeline
 	static	r tst1[] = {0, 0, -3, -3, -2, Z, -1, OR, AND, -1};					//And_or1 -> And_or2 And_or1 | epsilon
@@ -24,10 +25,10 @@ static rule_elem	*init4(rule_elem *nl, rule_elem *p, rule_elem *tst)
 	*(tst1 + 3) = (rule_elem)tst1;
 	*(tst + 2) = (rule_elem)p;
 	*(tst + 3) = (rule_elem)tst1;
-	return (init5(tst));
+	return (init5(tst, par));
 }
 
-static rule_elem	*init3(rule_elem *cmd, rule_elem *tst)
+static rule_elem	*init3(rule_elem *cmd, rule_elem *tst, rule_elem *par)
 {
 	static	r p1[] = {0, 0, PIPE, -3, -3, -3, -2, Z, -1, PIPE, -1};	//Pipeline1 -> pipe New_line Cmd Pipeline1 | epsilon
 	static	r p[] = {0, 0, -3, -3, -1, OP_PAR, L, R, DL, DR, W, -1};	//Pipeline -> Cmd Pipeline1
@@ -39,7 +40,7 @@ static rule_elem	*init3(rule_elem *cmd, rule_elem *tst)
 	*(p + 2) = (rule_elem)cmd;
 	*(p + 3) = (rule_elem)p1;
 	*(nl + 3) = (rule_elem)nl;
-	return (init4(nl, p, tst));
+	return (init4(nl, p, tst, par));
 }
 
 static rule_elem	*init2(r *suf, r *par, r *pre, r *tst)
@@ -55,19 +56,18 @@ static rule_elem	*init2(r *suf, r *par, r *pre, r *tst)
 	*(cmd + 4) = (rule_elem)pre;
 	*(cmd + 5) = (rule_elem)cmd1;
 	*(cmd + 8) = (rule_elem)cmd2;
-	return (init3(cmd, tst));
+	return (init3(cmd, tst, par));
 }
 
 rule_elem	*init1(r *red, r *tst, r *suf)
 {
 	static	r pre1[] = {0, 0, -3, -3, -2, Z, -1, L, R, DL, DR, -1};	//Prefixe1 -> I/O_Redirection Prefixe1 | epsilon
 	static	r pre[] = {0, 0, -3, -3, -1, L, R, DL, DR, -1};			//Prefixe -> I/O_Redirection Prefixe1
-	static	r par[] = {0, 0, OP_PAR, -3, CLS_PAR, -1, OP_PAR, -1};		//Parentheses -> ( Test )
+	static	r par[] = {0, 0, OP_PAR, -3, -1, OP_PAR, -1};		//Parentheses -> ( Test )
 
 	*(pre1 + 2) = (rule_elem)red;
 	*(pre1 + 3) = (rule_elem)pre1;
 	*(pre + 2) = (rule_elem)red;
 	*(pre + 3) = (rule_elem)pre1;
-	*(par + 3) = (rule_elem)tst;
 	return (init2(suf, par, pre, tst));
 }

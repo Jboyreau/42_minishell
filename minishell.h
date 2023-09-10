@@ -165,6 +165,7 @@ typedef struct	s_rule_state
 
 //Lexer:
 char		char_is_token(char c0, char c1, int *i);
+char		rev_char_is_token(char c0, char c1, int *j);
 char		fchar_is_token(t_leaf *tr, char *str, int *i);
 void		longest_token(char *str, int *i, int *count);
 void		flongest_token(t_leaf *tr, char *str, int *i, int *count);
@@ -194,6 +195,7 @@ void		reset_state(rule_elem *pt);
 char		ft_alloc_loc(t_rs *state, r *loc);
 char		c(t_leaf *tr);
 char		d(t_leaf *tr);
+char		e(t_leaf *tr);
 //Execute
 void execute_tree(t_leaf *tree, t_lv *va);
 #endif

@@ -27,7 +27,7 @@ int main (void)
 	str[16] = "cat \"file\" \"file\"\n";	
 	str[17] = "cat \"file\"|\"file\"\n";
 	str[18] = "< file cmd file >\n";
-	str[19] = "$cmd$arg | \"$one$two\" | $ | $USER | '$$' | $$\n";
+	str[19] = "$cmd$arg | \"$one$two\" | $ | $USER | '$$' | $$| e$USER | 'l's\n";
 
 	while (i < 20)
 	{

@@ -1,4 +1,5 @@
 #include "minishell.h"
+#include <stdio.h>
 
 static char	firstof(r* rule, int type)
 {
@@ -10,6 +11,7 @@ static char	firstof(r* rule, int type)
 	++i;
 	while(*(rule + i) != -1)
 	{
+//printf("*(rule + %d) = %lld, type = %d\n", i, *(rule + i), type);
 		if (*(rule + i) == type)
 			return (type);
 		++i;
@@ -45,7 +47,8 @@ char	firstof_one(r **rule, char type, char *f_type, int i)
 {
 	if (*((*rule) + i) == -1 || *((*rule) + i) == -2)
 	{
-		if ((*((t_rs *)(*(*rule)))).id == PT_)
+		if ((*((t_rs *)(*(*rule)))).id == PT_ &&
+		(*((t_rs *)(*(*rule)))).lstate == 0)
 			return (QUIT);
 		else
 			return (ascend(rule));

@@ -79,6 +79,7 @@ int	main(int agrc, char *argv, char **env)
 	{
 		if (ft_readline(&(hll.str), "minishell_user: ") == FAILURE)
 			return (EXIT_FAILURE);
+		//hll.str = "((test | test) > file) | cat";
 		hll.ret = parser(lexer(&hll), hll.start);
 		if (hll.ret == SUCCESS)
 		{

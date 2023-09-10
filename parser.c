@@ -27,7 +27,7 @@ static char	ft_alloc_loc2(t_rs *state, r *loc)
 	return (SUCCESS);
 }
 
-char	ft_alloc_loc(t_rs *state, r *loc) //TODO : final version
+char	ft_alloc_loc(t_rs *state, r *loc)
 {
 	int		i;
 	t_loc	*location;
@@ -54,7 +54,14 @@ static char	check_production(r **rule, char type, char *f_type)
 
 	lstate = (*((t_rs *)(**rule))).lstate;
 	location = (((t_loc *)(*((*rule) + 1))) + lstate);
-//printf("index = %d, rule = %d, value = %lld \n", (*location).index, (*((t_rs *)(**rule))).id, *((*rule) + (*location).index));
+
+/*if ((*((t_rs *)(**rule))).id != PT_)
+{
+	int prev_id = (*((t_rs *)(*((r*)((*location).prev))))).id;
+		printf("prev_id = %d, type = %d, index = %d, rule = %d, value = %lld \n", prev_id, type, (*location).index, (*((t_rs *)(**rule))).id, *((*rule) + (*location).index));
+}
+else
+printf("type = %d, index = %d, rule = %d, value = %lld \n", type, (*location).index, (*((t_rs *)(**rule))).id, *((*rule) + (*location).index));*/
 	if ((*location).index != 0)
 		return (firstof_one(rule, type, f_type, (*location).index));
 	return (firstof_all(rule, type, f_type));
@@ -96,6 +103,8 @@ char	parser(t_leaf *tr, rule_elem *rule)
 	prompt = rule;
 	while ((*(tr + (++i))).type != -1)
 	{
+		if (e(tr + i) == FAILURE)
+			return (FAILURE);
 		if ((*(tr + i)).type == CLS_PAR && d(tr + i) == FAILURE)
 			return (reset_state(prompt), FAILURE);
 		if ((*(tr + i)).type == OP_PAR && c(tr + i) == FAILURE)
