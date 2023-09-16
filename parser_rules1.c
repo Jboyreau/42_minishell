@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_rules1.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jboyreau <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/16 17:47:21 by jboyreau          #+#    #+#             */
+/*   Updated: 2023/09/16 17:47:25 by jboyreau         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 // unsigned long long int cfg[cfg_size] = {{tab_size, lstate, id}, tab{prev, index}, terminals/non_terminals, -2(aka |), -1(aka end), firstof(cfg)}

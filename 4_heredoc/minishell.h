@@ -146,4 +146,10 @@ char		d(t_leaf *tr);
 char		e(t_leaf *tr);
 //Execute
 void		execute_tree(t_leaf *tree, t_lv *va);
+//Heredoc
+char		heredoc(t_leaf *tr);
+void		back_tracking(char **folder, char *file_name);
+//Utils
+char		*ft_strdup(const char *s);
+int			ft_strlen(char	*str);
 #endif
