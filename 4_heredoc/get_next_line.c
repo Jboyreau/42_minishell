@@ -73,7 +73,7 @@ static char	*ft_realloc(char *next_line, char *b, int *alloc)
 	}
 	tmp = ft_alloc(*alloc, next_line);
 	if (tmp == 0)
-		return (FAILURE);
+		return (0);
 	if (next_line != 0)
 	{
 		while (*(next_line + (++i)))
@@ -91,7 +91,7 @@ static int	ft_read(char *b, int fd)
 
 	if (*b != 0)
 		return (1);
-	write(1, ">", 1);
+	write(1, "> ", 2);
 	test = read(fd, b, BUFFER_SIZE);
 	if (test < BF)
 		*(b + test) = 0;
@@ -116,8 +116,8 @@ char	*gnl(int fd)
 		if (test == -1 || (test == 0 && next_line == 0 && *b == 0))
 			return (NULL);
 		next_line = ft_realloc(next_line, b, &alloc);
-		if (next_line == FAILURE)
-			return (FAILURE);
+		if (next_line == NULL)
+			return ((char *)FAILURE);
 		if (ft_check_next_line(next_line, test) == 0)
 			break ;
 	}

@@ -23,7 +23,7 @@
 # define FMI 0
 
 int		ft_strlen(char *str, char mode);
-char	*get_next_line(int fd);
+char	*gnl(int fd);
 char	ft_check_next_line(char *next_line, int test);
 char	*ft_reshape(char *next_line);
 #endif

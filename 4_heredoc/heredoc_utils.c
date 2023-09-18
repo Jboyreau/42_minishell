@@ -9,17 +9,36 @@
 /*   Updated: 2023/09/16 17:06:20 by jboyreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <unistd.h>
 #include <stdlib.h>
+#include <stdio.h>
+
+char	cmp_lim_str(char *str, char *word, int len)
+{
+	int i;
+
+	i = 0;
+	while (i < len)
+	{
+		if (*(word + i) != *(str + i))
+			return (0);
+		++i;
+	}
+	if (*(str + i) != '\n')
+		return (0);
+	return (1);	
+}
 
 void	d_folder(void *folder)
 {
 	int	i;
 
-	if(folder)
+	if (folder)
 	{
 		i = 0;
-		while (*(folder + i))
-			free(folder + (i++));
+		while (*((char **)folder + i))
+			free(*((char **)folder + (i++)));
 		free(folder);
 	}
 }
@@ -42,7 +61,7 @@ char	*ft_strdup(const char *s)
 	return (dup);
 }
 
-int	ft_strlen(char *str)
+int	ft_strlen1(char *str)
 {
 	int i;
 

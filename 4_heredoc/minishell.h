@@ -85,7 +85,7 @@ typedef struct s_leaf
 
 typedef struct s_commands
 {
-	char	*str = NULL;
+	char	*str;
 	t_leaf	*tr;
 	t_lv	*va;
 	r		*start;
@@ -150,6 +150,8 @@ void		execute_tree(t_leaf *tree, t_lv *va);
 char		heredoc(t_leaf *tr);
 void		back_tracking(char **folder, char *file_name);
 //Utils
+void		d_folder(void *folder);
+char		cmp_lim_str(char *str, char *word, int len);
 char		*ft_strdup(const char *s);
-int			ft_strlen(char	*str);
+int			ft_strlen1(char	*str);
 #endif
