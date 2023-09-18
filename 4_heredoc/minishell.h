@@ -154,4 +154,5 @@ void		d_folder(void *folder);
 char		cmp_lim_str(char *str, char *word, int len);
 char		*ft_strdup(const char *s);
 int			ft_strlen1(char	*str);
+int			ft_readline(char **line, const char *prompt);
 #endif

@@ -18,11 +18,13 @@ int main(void)
 		return (1);
 
 	close(tr[0].fdl);
-	unlink(tr[0].word);
+	//unlink(tr[0].word);
+	printf("%s\n", tr[0].word);
 	free(tr[0].word);
 
 	close(tr[3].fdl);
-	unlink(tr[3].word);
+	//unlink(tr[3].word);
+	printf("%s\n", tr[3].word);
 	free(tr[3].word);
 	return (0);
 }

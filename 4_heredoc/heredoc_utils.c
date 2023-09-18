@@ -13,6 +13,15 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <readline/readline.h>
+#include "minishell.h"
+
+int	ft_readline(char **line, const char *prompt)
+{
+	*line = readline(prompt);
+	if (*line == NULL)
+		return (FAILURE);
+}
 
 char	cmp_lim_str(char *str, char *word, int len)
 {
@@ -25,7 +34,7 @@ char	cmp_lim_str(char *str, char *word, int len)
 			return (0);
 		++i;
 	}
-	if (*(str + i) != '\n')
+	if (*(str + i))
 		return (0);
 	return (1);	
 }

@@ -15,20 +15,20 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include "get_next_line.h"
 #include "minishell.h"
 
-static char	fill_fifo2(t_leaf *lim, int fd, char *str, char test)
+static char	fill_fifo2(t_leaf *lim, int fd, char test)
 {
+	char	*str;
+	
 	if (*((*lim).word) == '\"' && *((*lim).word + (*lim).len - 1) == '\"')
 		test = 1;
 	if (*((*lim).word) == '\'' && *((*lim).word + (*lim).len - 1) == '\'')
 		test = 1;
 	while (1)
 	{
-		str = gnl(1);
-		if (str == (char *)FAILURE) //mem fail
-			return (FAILURE);
+		if (ft_readline(&str, "> ") == FAILURE)
+			return (EXIT_FAILURE);
 		if (str == NULL) //ctr + D
 		{
 			write(2, "minishell: warning: here_document delimited by EOF\n", 51);
@@ -38,7 +38,7 @@ static char	fill_fifo2(t_leaf *lim, int fd, char *str, char test)
 			return (free(str), SUCCESS);
 		if (test == 0)
 			//string_sub2(&str); TODO : char  string_sub2(char **str);
-		write(fd, str, ft_strlen1(str));
+		(write(fd, str, ft_strlen1(str)), write(fd, "\n", 1));
 		free(str);
 	}
 	return (SUCCESS);
@@ -107,7 +107,7 @@ static char	fill_fifo(t_leaf *dl)
 	if ((*dl).word == NULL)
 		return (d_folder(folder), FAILURE);
 	//Remplir le fichier avec gnl tant que j'ai une entrée diférente de lim.
-	if (fill_fifo2(dl + 1, (*dl).fdl, NULL, 0) == FAILURE)
+	if (fill_fifo2(dl + 1, (*dl).fdl, 0) == FAILURE)
 		return (FAILURE);
 	return (SUCCESS);
 }
