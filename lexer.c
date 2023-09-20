@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   lexer.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jboyreau <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/16 17:49:20 by jboyreau          #+#    #+#             */
-/*   Updated: 2023/09/16 17:49:24 by jboyreau         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include <stdlib.h>
 #include <stdio.h> //debug
 #include <unistd.h> //debug
@@ -23,6 +11,9 @@ void	fill_leaf(t_leaf *tr, char type, int len, char *word)
 	(*tr).type = type;
 	(*tr).len = len;
 	(*tr).word = word;
+	(*tr).f_type = 0;
+	(*tr).fdl = 0;
+	(*tr).arg = 0;
 }
 
 static void	fill_tree(char *str, t_leaf *tr)

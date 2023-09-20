@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parser_reset.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jboyreau <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/16 17:47:11 by jboyreau          #+#    #+#             */
-/*   Updated: 2023/09/16 17:47:14 by jboyreau         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include <stdlib.h>
 #include "minishell.h"
 
@@ -52,7 +40,7 @@ static void	reset_state2(rule_elem *pre, rule_elem *suf)
 	reset(suf2);
 }
 
-static void	reset_state1(rule_elem *p, rule_elem *nl)
+static void	reset_state1(rule_elem *p)
 {
 	rule_elem	*p1;
 	rule_elem	*cmd;
@@ -89,5 +77,5 @@ void	reset_state(rule_elem *pt)
 	reset(tst);
 	reset(tst1);
 	reset(tst2);
-	reset_state1(p, (void *)(*(tst2 + 3)));
+	reset_state1(p);
 }

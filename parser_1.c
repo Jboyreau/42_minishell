@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parser_1.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jboyreau <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/16 17:45:55 by jboyreau          #+#    #+#             */
-/*   Updated: 2023/09/16 17:47:41 by jboyreau         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 #include <stdio.h>
 
@@ -18,13 +6,13 @@ static char	firstof(r* rule, int type)
 	int	i;
 
 	i = 2;
-	while (*(rule + i) != -1)
+	while (*(rule + i) != (r)-1)
 		++i;
 	++i;
-	while(*(rule + i) != -1)
+	while(*(rule + i) != (r)-1)
 	{
 //printf("*(rule + %d) = %lld, type = %d\n", i, *(rule + i), type);
-		if (*(rule + i) == type)
+		if (*(rule + i) == (r)type)
 			return (type);
 		++i;
 	}
@@ -36,9 +24,9 @@ static char	rule_is_last(r *rule)
 	int	i;
 
 	i = 0;
-	while (*(rule + i) != -1 && *(rule + i) != -2)
+	while (*(rule + i) != (r)-1 && *(rule + i) != (r)-2)
 		++i;
-	if (*(rule + i) == -1)
+	if (*(rule + i) == (r)-1)
 		return(SUCCESS);
 	return (FAILURE);
 }
@@ -48,7 +36,7 @@ static char	search_epsilon(r *rule)
 	int	i;
 
 	i = 2;
-	while (*(rule + i) != Z && *(rule + i) != -1)
+	while (*(rule + i) != Z && *(rule + i) != (r)-1)
 		++i;
 	if (*(rule + i) == Z)
 		return(SUCCESS);
@@ -57,7 +45,7 @@ static char	search_epsilon(r *rule)
 
 char	firstof_one(r **rule, char type, char *f_type, int i)
 {
-	if (*((*rule) + i) == -1 || *((*rule) + i) == -2)
+	if (*((*rule) + i) == (r)-1 || *((*rule) + i) == (r)-2)
 	{
 		if ((*((t_rs *)(*(*rule)))).id == PT_ &&
 		(*((t_rs *)(*(*rule)))).lstate == 0)
@@ -65,7 +53,7 @@ char	firstof_one(r **rule, char type, char *f_type, int i)
 		else
 			return (ascend(rule));
 	}
-	if (*((*rule) + i) < Z && *((*rule) + i) == type)
+	if (*((*rule) + i) < Z && *((*rule) + i) == (r)type)
 		return (stay(rule, type, f_type, i));
 	if (*((*rule) + i) > Z)
 	{
@@ -89,9 +77,9 @@ char	firstof_all(r **rule, char type, char *f_type)
 	l = (t_loc *)(*((*rule) + 1));
 	ls = (*((t_rs *)(**rule))).lstate;
 	i = 2;
-	while (*((*rule) + i) != -1)
+	while (*((*rule) + i) != (r)-1)
 	{
-		if (*((*rule) + i) < Z && *((*rule) + i) == type)
+		if (*((*rule) + i) < Z && *((*rule) + i) == (r)type)
 				return (((*(l + ls)).index) = i, stay(rule, type, f_type, i));
 		if (*((*rule) + i) > Z && firstof((r *)(*((*rule) + i)), type) == type)
 				return (((*(l + ls)).index) = i, dive(i, rule));
@@ -101,9 +89,9 @@ char	firstof_all(r **rule, char type, char *f_type)
 				return (ascend(rule));
 			return (QUIT);
 		}
-		while (*((*rule) + i) != -1 && *((*rule) + i) != -2)
+		while (*((*rule) + i) != (r)-1 && *((*rule) + i) != (r)-2)
 			++i;
-		if (*((*rule) + i) == -2)
+		if (*((*rule) + i) == (r)-2)
 			++i;
 	}
 	return (0);

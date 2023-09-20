@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jboyreau <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/16 17:48:46 by jboyreau          #+#    #+#             */
-/*   Updated: 2023/09/16 17:48:49 by jboyreau         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include <unistd.h>
 #include <stdlib.h>
 #include "minishell.h"
@@ -86,19 +74,21 @@ char	indentifier_is_valide(char *variable, int i, int l)
 	return (SUCCESS);
 }
 
-t_lv	*ft_export(t_lv *va, char **env, char *variable, int len)
+char	ft_export(t_lv **va, char **env, char *variable, int len)
 {
 	static char *content;
 	static char *name;
 
-	if (variable == NULL)
-		return (print_va(va), va);
-	if (*variable == 0)
-		return (write(2, "minishell: export: `': not a valid identifier\n", 46), va);
-	if (indentifier_is_valide(variable, 0, 0) == FAILURE)
-		return (va);	
-	if (variable)
+	if (*va != NULL && variable == NULL)
+		return (print_va(*va), SUCCESS);
+	if (variable != NULL)
+	{
+		if (*variable == 0)
+			return (write(2, "minishell: export: `': not a valid identifier\n", 46), FAILURE);
+		if (indentifier_is_valide(variable, 0, 0) == FAILURE)
+			return (FAILURE);
 		if (allocate_var_name(variable, &name, &content, len) == FAILURE)
-			return (NULL);
-	return (export_var(va, name, content, env));
+			return (FAILURE);
+	}
+	return (*va = export_var(*va, name, content, env), SUCCESS);
 }

@@ -5,3 +5,9 @@ Export
 	-export "" ou '' -> invalid;
 	-export $NULL <=> export;
 Signals;
+
+finir wildcard (allocation des arguments)
+gerer $? (recup exit status deniere commande executee et la mettre dans la var)
+export (gerer dollar au debut de la declaration si variable existe + export sans =)
+finir built in (penser a gerer options si necessaire)
+checker leaks

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jboyreau <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/16 17:06:29 by jboyreau          #+#    #+#             */
-/*   Updated: 2023/09/16 20:23:32 by jboyreau         ###   ########.fr       */
+/*   Updated: 2023/09/18 14:54:17 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,10 @@
 #include <fcntl.h>
 #include "minishell.h"
 
-static char	fill_fifo2(t_leaf *lim, int fd, char test)
+static char	fill_fifo2(t_leaf *lim, int fd, t_lv *va)
 {
 	char	*str;
-	
-	if (*((*lim).word) == '\"' && *((*lim).word + (*lim).len - 1) == '\"')
-		test = 1;
-	if (*((*lim).word) == '\'' && *((*lim).word + (*lim).len - 1) == '\'')
-		test = 1;
+
 	while (1)
 	{
 		if (ft_readline(&str, "> ") == FAILURE)
@@ -34,10 +30,8 @@ static char	fill_fifo2(t_leaf *lim, int fd, char test)
 			write(2, "minishell: warning: here_document delimited by EOF\n", 51);
 			break ;
 		}
-		if (cmp_lim_str(str, (*lim).word, (*lim).len)) //limiter
+		if (cmp_lim_str(str, (*lim).word, (*lim).len, 0)) //limiter
 			return (free(str), SUCCESS);
-		if (test == 0)
-			//string_sub2(&str); TODO : char  string_sub2(char **str);
 		(write(fd, str, ft_strlen1(str)), write(fd, "\n", 1));
 		free(str);
 	}
@@ -88,7 +82,7 @@ static char	**make_folder(int i, const char *path)
 	return (*(folder + i) = NULL, closedir(dir), folder);
 }
 
-static char	fill_fifo(t_leaf *dl)
+static char	fill_fifo(t_leaf *dl, t_lv *va)
 {
 	static char	file_name[255] = "./temp/";
 	char		**folder;
@@ -107,19 +101,19 @@ static char	fill_fifo(t_leaf *dl)
 	if ((*dl).word == NULL)
 		return (d_folder(folder), FAILURE);
 	//Remplir le fichier avec gnl tant que j'ai une entrée diférente de lim.
-	if (fill_fifo2(dl + 1, (*dl).fdl, 0) == FAILURE)
+	if (fill_fifo2(dl + 1, (*dl).fdl, va) == FAILURE)
 		return (FAILURE);
 	return (SUCCESS);
 }
 
-char	heredoc(t_leaf *tr)
+char	heredoc(t_leaf *tr, t_lv *va)
 {
 	int	i;
 
 	i = -1;
 	while ((*(tr + (++i))).type != -1)
 		if ((*(tr + i)).type == DL)
-			if (fill_fifo(tr + i) == FAILURE)
+			if (fill_fifo(tr + i, va) == FAILURE)
 				return (FAILURE);
 	return (SUCCESS);
 }

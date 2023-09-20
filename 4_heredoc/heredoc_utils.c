@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   heredoc_strlen.c                                   :+:      :+:    :+:   */
+/*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jboyreau <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/16 17:06:14 by jboyreau          #+#    #+#             */
-/*   Updated: 2023/09/16 17:06:20 by jboyreau         ###   ########.fr       */
+/*   Updated: 2023/09/18 14:53:24 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,24 @@ int	ft_readline(char **line, const char *prompt)
 		return (FAILURE);
 }
 
-char	cmp_lim_str(char *str, char *word, int len)
+char	cmp_lim_str(char *str, char *word, int len, int i)
 {
-	int i;
-
-	i = 0;
+	if (*word == '"' && *(word + len - 1) == '"')
+	{
+		while (len > 0 && *word == '"' && *(word + len - 1) == '"')
+		{
+			++word;
+			len -= 2;
+		}
+	}
+	else if (*word == '\'' && *(word + len - 1) == '\'')
+	{
+		while (len > 0 && *word == '\'' && *(word + len - 1) == '\'')
+		{
+			++word;
+			len -= 2;
+		}
+	}
 	while (i < len)
 	{
 		if (*(word + i) != *(str + i))

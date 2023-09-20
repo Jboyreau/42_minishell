@@ -79,6 +79,7 @@ typedef struct s_leaf
 	char	type;
 	int		fdl;	//limiter file descriptor
 	int		len;
+	char	*lim;
 	char	*word;
 	char	**arg;
 }	t_leaf;
@@ -109,6 +110,13 @@ typedef struct s_rule_state
 	int			lstate;
 	int			id;
 }	t_rs;
+
+typedef struct s_string
+{
+	char	*content;
+	int		cursor;
+}				t_string;
+
 
 //Lexer:
 char		char_is_token(char c0, char c1, int *i);
@@ -147,12 +155,22 @@ char		e(t_leaf *tr);
 //Execute
 void		execute_tree(t_leaf *tree, t_lv *va);
 //Heredoc
-char		heredoc(t_leaf *tr);
+char		heredoc(t_leaf *tr, t_lv *va);
 void		back_tracking(char **folder, char *file_name);
 //Utils
 void		d_folder(void *folder);
-char		cmp_lim_str(char *str, char *word, int len);
+char		cmp_lim_str(char *str, char *word, int len, int i);
 char		*ft_strdup(const char *s);
 int			ft_strlen1(char	*str);
 int			ft_readline(char **line, const char *prompt);
+
+char			string_sub2(char **str, t_lv *va);
+unsigned int	string_len2(char *str, t_lv *va);
+char			is_metachar(char c);
+char			find_n_name(char *name, t_lv *va, int *l, int n);
+int				string_len(const char *s);
+char			string_cpy2(char **str, t_lv *va, t_string *new);
+
+t_lv		*ft_export(t_lv *va, char **env, char *variable, int len);
+
 #endif

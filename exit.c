@@ -1,0 +1,86 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/26 04:22:20 by cbessonn          #+#    #+#             */
+/*   Updated: 2023/09/20 16:33:21 by cbessonn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+
+int	ft_isdigit(int c)
+{
+	return (c >= '0' && c <= '9');
+}
+
+int	str_is_digit(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (str[i] == '-')
+		i++;
+	while (str[i])
+	{
+		if (ft_isdigit(str[i]) == 0)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+unsigned char	ft_atoi(const char *nptr)
+{
+	unsigned char	signe;
+	unsigned char	nb;
+
+	signe = 1;
+	nb = 0;
+	while ((*nptr >= 9 && *nptr <= 13) || *nptr == 32)
+		nptr++;
+	if (*nptr == '+' || *nptr == '-')
+	{
+		if (*nptr == '-')
+			signe *= -signe;
+		nptr++;
+	}
+	while (ft_isdigit(*nptr))
+	{
+		nb = 10 * nb + (*nptr - 48);
+		nptr++;
+	}
+	return (nb * signe);
+}
+
+int	ft_exit(t_leaf *cmd, t_exec *ex)
+{
+	unsigned char	code;
+
+	if ((cmd->arg[1]) == 0)
+		code = 0;
+	else
+	{
+		if (str_is_digit(cmd->arg[1]))
+			code = atoi(cmd->arg[1]); 
+		else
+		{
+			write(2, "minishell: exit: ", 18);
+			write(2, cmd->arg[1], ft_strlen(cmd->arg[1]));
+			write(2, ": numeric argument required\n", 28);
+			return (1);
+		}
+		if (cmd->arg[2] != 0)
+			return (write(2, "minishell: exit: too many arguments\n", 37), 1);
+	}
+	//free what have to be freed
+	(dll(&(ex->cmd_ptr->str), &(ex->cmd_ptr->tr)), dall(ex->cmd_ptr->va, ex->cmd_ptr->start));
+	write(2, "exit\n", 5);
+	exit(code);
+}

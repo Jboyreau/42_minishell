@@ -1,14 +1,73 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-enum e_ret
+extern int subindex; //A ENLEVER ------------------------
+
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <stdbool.h>
+
+/*	Token types:
+	{
+		Indentifiers	:
+			files
+			variables
+			commandes arg0 arg1 arg2 ... arg n
+
+		Punctuations	:
+			\n
+			)
+
+		Keywords		:
+			'		(dans une séquence entre guillemets)
+			"		(dans une séquence entre guillemets, ne marche pas pour $)
+
+		Operators		:
+			(	unary
+					string)
+			<	binary/unary	(input redirection)
+					commande < file
+					< file (sans commande spécifié, lit stdin à partir de file sans rien faire d'autre)
+			>	binary			(output redirection)
+					commande > file
+			>>  binary			(output redirection append)
+					commande >> file
+			<<	binary/unary	(input redirection and heredoc)
+					commande << LIMITER
+					<< LIMITER (sans commande spécifié, lit stdin à partir d'stdin sans rine faire d'autre)
+			|	binary
+					cmd | cmd
+			&&	binary		(go yt)
+					cmd && cmd
+			||	binary		(go yt)
+					cmd || cmd
+
+		Constantes(export param) :
+			string	"Alice" ou Alice
+			tableau	("rouge" "vert" "bleu")
+			=	binary			(affecte une valeur à une variable)
+					variable = value
+
+		Dans les strings:
+			*	binary/unary	(se substitue par tous les noms de fichiers du dossier courant, la commande est dupliquée autant de fois qu'il y a une correspondance entre les fichiers du dossier et l'operand)
+					commande *string
+					commande ...*...
+					*string
+					...*...
+			$	unary			(substite l'operand et l'operateur par une valeur)
+					string
+					?		(fait référence à une variable contenant le statut de sortie de la derniere commande)
+	}
+*/
+
+enum ret
 {
 	SUCCESS,
 	FAILURE,
 	MEM_FAIL,
 };
 
-enum e_types
+enum types
 {
 //Indentifiers:
 	W,				//					0
@@ -27,7 +86,7 @@ enum e_types
 	Z,				// ZERO_LINK		11
 };
 
-enum e_file_type
+enum file_type
 {
 	CMD,	//commande	0
 	ARG,	//argument	1
@@ -35,7 +94,7 @@ enum e_file_type
 	FIL,	//file		3
 };
 
-enum e_rule_id
+enum rule_id
 {
 	PT_,	//0
 	TST_,	//1
@@ -56,7 +115,7 @@ enum e_rule_id
 	RED_,	//16
 };
 
-enum e_production_result
+enum production_result
 {
 	DIVE,
 	STAY,
@@ -64,14 +123,15 @@ enum e_production_result
 	QUIT,
 };
 
-typedef unsigned long long int	rule_elem;
-typedef unsigned long long int	r;
+typedef unsigned long long int rule_elem;
 
-typedef struct s_local_var
+typedef	rule_elem r;
+
+typedef struct	s_local_var
 {
 	char	*name;
 	char	*content;
-}	t_lv;
+} t_lv;
 
 typedef struct s_leaf
 {
@@ -81,11 +141,11 @@ typedef struct s_leaf
 	int		len;
 	char	*word;
 	char	**arg;
-}	t_leaf;
+} t_leaf;
 
-typedef struct s_commands
+typedef struct	s_commands
 {
-	char	*str = NULL;
+	char	*str;
 	t_leaf	*tr;
 	t_lv	*va;
 	r		*start;
@@ -95,40 +155,71 @@ typedef struct s_commands
 	int		count;
 	int		len;
 	int		len1;
-}	t_cmd;
+	struct sigaction new_action;
+} t_cmd;
 
-typedef struct s_location
+typedef struct	s_location
 {
 	rule_elem	*prev;
 	int			index;
-}	t_loc;
+} t_loc;
 
-typedef struct s_rule_state
+typedef struct	s_rule_state
 {
 	int			size;
 	int			lstate;
 	int			id;
-}	t_rs;
+} t_rs;
+
+typedef struct s_exec
+{
+	char	cmd_pos;
+	int		nb_of_cmd;
+	pid_t	last_pid;
+	int		save_first;
+	int		sub_end;
+	char	**env;
+	int 	status;
+	t_cmd	*cmd_ptr;
+}				t_exec;
+
+typedef struct s_string
+{
+	char	*content;
+	int		cursor;
+}				t_string;
+
+typedef struct s_list
+{
+	char	*content;
+	struct	s_list *next;
+}				t_list;
+
+typedef struct s_str_array
+{
+	char	**ptr;
+	int		size;
+}		t_str_array;
 
 //Lexer:
 char		char_is_token(char c0, char c1, int *i);
-char		rev_char_is_token(char c0, char c1, int *j);
 char		fchar_is_token(t_leaf *tr, char *str, int *i);
 void		longest_token(char *str, int *i, int *count);
 void		flongest_token(t_leaf *tr, char *str, int *i, int *count);
 void		fill_leaf(t_leaf *tr, char type, int len, char *word);
 t_leaf		*lexer(t_cmd *hll);
-char		rev_char_is_token(char c0, char c1, int *j);
+char        rev_char_is_token(char c0, char c1, int *j);
 //String_parsing:
-t_lv		*ft_export(t_lv *va, char **env, char *variable, int len);
+char		builtin_export(t_lv **va, char **env, t_leaf *cmd);
+char		ft_export(t_lv **va, char **env, char *variable, int len);
 t_lv		*export_var(t_lv *va, char *name, char *content, char **env);
 t_lv		*destroy_va(t_lv *va);
 char		find_name(char *name, t_lv *va, int *l);
 void		print_va(t_lv *va);
 //Arg_format:
-char		args_to_array(t_leaf *cmd, t_leaf *arg);
+char		args_to_array(t_leaf *cmd, t_leaf *arg, t_lv *va);
 //Syntaxe analysis:
-rule_elem	*init_rules(void);
+rule_elem	*init_rules();
 rule_elem	*init1(r *red, r *tst, r *suf);
 rule_elem	*init_id(rule_elem *prompt);
 char		parser(t_leaf *tr, rule_elem *rule);
@@ -143,7 +234,68 @@ void		reset_state(rule_elem *pt);
 char		ft_alloc_loc(t_rs *state, r *loc);
 char		c(t_leaf *tr);
 char		d(t_leaf *tr);
-char		e(t_leaf *tr);
+char        e(t_leaf *tr);
+
+//String sub
+
+char		*string_sub(t_leaf *tok, t_lv *va);
+int			ft_strlen(const char *s);
+char		is_metachar(char c);
+char		find_n_name(char *name, t_lv *va, int *l, int n);
+char		string_cpy(t_leaf *tok, t_lv *va, t_string *str);
+uint		string_len(t_leaf *tok, t_lv *va);
+
 //Execute
-void		execute_tree(t_leaf *tree, t_lv *va);
+void	execute_tree(t_leaf *tree, t_lv *va);
+void	execute(t_cmd *hll, t_leaf *token, char **env);
+pid_t	exec_pipeline(t_leaf *cmd, t_exec *ex, int i, int *pipefd);
+pid_t	pipe_subshell(t_leaf *cmd, t_exec *ex, int *pipefd);
+void	clean_prompt(t_leaf **token);
+int		execute_sub(t_cmd *hll, t_leaf *token, int i, char **env);
+void	prefix_redirect(t_leaf *token, int i, t_exec *ex);
+void	suffix_redirect(t_leaf *token, t_exec *ex);
+bool	ft_split(t_str_array *array, char const *s, char c);
+char	*ft_strjoin(char const *s1, char const *s2);
+void	exec_cmd(t_leaf	*cmd, int i, t_exec *ex);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
+//Heredoc
+char		heredoc(t_leaf *tr);
+void		back_tracking(char **folder, char *file_name);
+//Utils
+void		d_folder(void *folder);
+char		cmp_lim_str(char *str, char *word, int len, int i);
+char		*ft_strdup(const char *s);
+int			ft_strlen1(char	*str);
+int			ft_readline1(char **line, const char *prompt);
+//Heredoc sub
+char			string_sub2(char **str, t_lv *va);
+unsigned int	string_len2(char *str, t_lv *va);
+char			string_cpy2(char **str, t_lv *va, t_string *new);
+
+//Destroyer
+void	destroy_arg(t_leaf *tr);
+
+//Linked list
+void	ft_lstadd_back(t_list **lst, t_list *new);
+t_list	*ft_lstnew(void *content);
+void	ft_lstclear(t_list **lst);
+
+//signal
+void	sigint_handler(int sig);
+void	sigquit_handler(int sig);
+
+//Builtins
+void	builtins_check(t_leaf *cmd, t_exec *ex);
+int		ft_echo(t_leaf *cmd);
+int		ft_pwd(void);
+int		ft_cd(t_leaf *cmd);
+int		ft_exit(t_leaf *cmd, t_exec *ex);
+char	is_nofork_builtin(t_leaf *cmd);
+int		nofork_builtins_exec(t_leaf *cmd, int i, t_exec *ex);
+
+//Destroyer
+void	dall(t_lv *va, r *start);
+void	dll(char **str, t_leaf **tr);
+void	ft_str_array_free(t_str_array *array);
+
 #endif

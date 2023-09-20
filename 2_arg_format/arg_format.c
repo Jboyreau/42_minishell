@@ -30,7 +30,6 @@ static char ft_realloc(t_leaf *cmd, int *size)
 	(*cmd).arg = new_arg;
 	return (SUCCESS);
 }
-
 static int	arglen(char **arg)
 {
 	int i;
