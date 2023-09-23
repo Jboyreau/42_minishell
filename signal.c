@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 10:25:19 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/20 16:13:53 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/23 14:52:36 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,35 +22,31 @@
 void	sigint_handler(int sig)
 {
 	static int	child;
+	static int	heredoc;
 
-	if (sig == -4)
+	if (heredoc == 1 && sig == SIGINT)
+		(close (STDIN_FILENO), write(2, "\n", 1), heredoc = 2, g_signal = 130);
+	else if (child == 0 && sig == SIGINT)
 	{
-		child = 2;
-		return ;
+		g_signal = 130;
+		(rl_on_new_line(), rl_replace_line("", 0));
+		if (heredoc != 2)
+			write(2, "\n", 1);
+		rl_redisplay();
 	}
-	if (sig == -3)
+	else if (child == 1)
+		signal(SIGINT, SIG_DFL);
+	else if (sig == -5)
+		heredoc = 1;
+	else if (sig == -4)
+		child = 2;
+	else if (sig == -3)
 	{
 		child = 0;
-		return ;
+		heredoc = 0;
 	}
-	if (sig == -2)
-	{
+	else if (sig == -2)
 		child = 1;
-		return ;
-	}
-	if (child == 1)
-	{
-		signal(SIGINT, SIG_DFL);
-		return ;
-	}
-	if (child == 0 && sig == SIGINT)
-	{
-		write(2, "\n", 1);
-    	rl_replace_line("", 0);
-    	rl_on_new_line();
-    	rl_redisplay();
-		return ;
-	}
 }
 
 void	sigquit_handler(int sig)

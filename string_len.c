@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 15:44:41 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/19 15:44:41 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/23 15:45:32 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,23 @@
 #define SUCCESS 0
 #define FAILURE 1
 
+int	sig_len(void)
+{
+	int	temp;
+	int	i;
+
+	i = 0;
+	temp = g_signal;
+	if (temp == 0)
+		return (1);
+	while (temp)
+	{
+		temp /= 10;
+		++i;
+	}
+	return (i);
+}
+
 int	content_len(t_leaf *tok, int *i, t_lv *va)
 {
 	int	len;
@@ -28,6 +45,8 @@ int	content_len(t_leaf *tok, int *i, t_lv *va)
 	l = 0;
 	var_len = 0;
 	++(*i);
+	if (*(tok->word + *i) == '?')
+		return (++(*i), sig_len());
 	while (!is_metachar(*(tok->word + *i + len)) && *i + len < tok->len)
 		++len;
 	if (len)
@@ -43,13 +62,6 @@ int	content_len(t_leaf *tok, int *i, t_lv *va)
 	return (1);
 }
 
-// int is_complete_quote(t_leaf *tok, int i, char quote_type)
-// {
-// 	while (*(tok->word + i) != quote_type && i < tok->len)
-// 		++i;
-// 	return (i);
-// }
-
 int	quote_len(t_leaf *tok, int *i, char quote_type, t_lv *va)
 {
 	int	len;
@@ -60,9 +72,9 @@ int	quote_len(t_leaf *tok, int *i, char quote_type, t_lv *va)
 	++(*i);
 	while (*(tok->word + *i + len) != quote_type && *i + len < tok->len)
 		len++;
-	if (*(tok->word + *i + len) != quote_type) //if is incomplete quote, return the size of 1 char (for the actual quote not being interpreted)
+	if (*(tok->word + *i + len) != quote_type)
 		return (1);
-	if (quote_type == DOUBLE_QUOTE) //if double quote we need to expand
+	if (quote_type == DOUBLE_QUOTE)
 	{
 		while (*(tok->word + *i) != DOUBLE_QUOTE && *i < tok->len)
 		{
@@ -85,7 +97,8 @@ unsigned int	string_len(t_leaf *tok, t_lv *va)
 	len = 0;
 	while (i < tok->len)
 	{
-		if (*(tok->word + i) == DOUBLE_QUOTE || *(tok->word + i) == SIMPLE_QUOTE)
+		if (*(tok->word + i) == DOUBLE_QUOTE
+			|| *(tok->word + i) == SIMPLE_QUOTE)
 		{
 			len += quote_len(tok, &i, *(tok->word + i), va);
 		}

@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 11:27:06 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/19 11:27:07 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/22 12:44:26 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,40 +19,37 @@
 #include <unistd.h>
 #include "get_next_line.h"
 
-int	open_file(t_leaf *redirect_to, t_leaf *redirection, t_lv *va)
+int	open_file(t_leaf *redirect_to, t_leaf *redirection, t_lv *va, t_cmd *hll)
 {
-    int flag;
-	char *file;
-	int	fd;
+	int		flag;
+	char	*file;
+	int		fd;
 
 	file = string_sub(redirect_to, va);
 	if (file == 0)
-		return (fprintf(stderr, "file malloc failed"), -1);
+		return (write(2, "file malloc failed\n", 20), exit_failure(hll), -1);
+	if (wildcard_redirect(file) == -1)
+		return (free(file), exit_failure(hll), -1);
 	if (redirection->type == L)
-        fd = open(file, O_RDONLY);
-    else
-    {
-        if (redirection->type == DR)
-            flag = O_APPEND;
-        else
-            flag = O_TRUNC;
-        fd = open(file, O_WRONLY | flag | O_CREAT, 0666);
-    }
-	free(file);
-	if (fd == -1)
+		fd = open(file, O_RDONLY);
+	else
 	{
-		fprintf(stderr, "minishell: %s: No such file or directory\n", file); //a remplacer
-		exit(1);
+		if (redirection->type == DR)
+			flag = O_APPEND;
+		else
+			flag = O_TRUNC;
+		fd = open(file, O_WRONLY | flag | O_CREAT, 0666);
 	}
-	return (fd);
+	if (fd == -1)
+		return (write(2, "minishell : ", 12), write(2, file, ft_strlen(file)),
+			write(2, ": No such file or directory\n", 29), free(file), -1);
+	return (free(file), fd);
 }
 
-void	expand_heredoc(t_leaf *redirect, t_lv *va)
+void	expand_heredoc(t_leaf *redirect, t_lv *va, char *str, int fd)
 {
-	char 	*str;
-	t_list 	*head;
-	t_list 	*lst;
-	int		fd;
+	t_list	*head;
+	t_list	*lst;
 
 	head = NULL;
 	fd = open(redirect->word, O_RDONLY);
@@ -61,7 +58,7 @@ void	expand_heredoc(t_leaf *redirect, t_lv *va)
 	while (1)
 	{
 		str = gnl(fd);
-		if (str == NULL) //EOF
+		if (str == NULL)
 			break ;
 		if (string_sub2(&str, va) == FAILURE)
 			ft_lstclear(&head);
@@ -72,28 +69,28 @@ void	expand_heredoc(t_leaf *redirect, t_lv *va)
 	fd = open(redirect->word, O_WRONLY | O_TRUNC);
 	while (head)
 	{
-		write(fd, head->content, ft_strlen(head->content));
-		write(fd, "\n", 1);
+		(write(fd, head->content, ft_strlen(head->content)), write(fd, "\n", 1));
 		head = head->next;
 	}
-	close(fd);
-	ft_lstclear(&head);
+	(close(fd), ft_lstclear(&head));
 }
 
-void	file_redirect(t_leaf *redirect, t_exec *ex)
+int	file_redirect(t_leaf *redirect, t_exec *ex)
 {
 	int	fd;
 
 	if (redirect->type == DL)
 	{
-		expand_heredoc(redirect, ex->cmd_ptr->va);
+		expand_heredoc(redirect, ex->cmd_ptr->va, NULL, 0);
 		fd = open(redirect->word, O_RDONLY);
 		if (dup2(redirect->fdl, STDIN_FILENO) == -1)
 			perror("dup2 failed");
 		close(fd);
-		return ;
+		return (0);
 	}
-	fd = open_file((redirect + 1), redirect, ex->cmd_ptr->va);
+	fd = open_file((redirect + 1), redirect, ex->cmd_ptr->va, ex->cmd_ptr);
+	if (fd == -1)
+		return (-1);
 	if (redirect->type == L)
 		dup2(fd, STDIN_FILENO);
 	else if (redirect->type == R)
@@ -101,9 +98,10 @@ void	file_redirect(t_leaf *redirect, t_exec *ex)
 	else if (redirect->type == DR)
 		dup2(fd, STDOUT_FILENO);
 	close(fd);
+	return (0);
 }
 
-void	prefix_redirect(t_leaf *token, int i, t_exec *ex)
+int	pre_redir(t_leaf *token, int i, t_exec *ex)
 {
 	int	first_redir;
 
@@ -111,19 +109,21 @@ void	prefix_redirect(t_leaf *token, int i, t_exec *ex)
 	while (i >= 0 && (token[i].type >= L && token[i].type <= DR))
 	{
 		first_redir = i;
-		i -= 2;		
+		i -= 2;
 	}
 	if (first_redir == -1)
-		return ;
+		return (0);
 	i = first_redir;
 	while (token[i].type != -1 && token[i].type != W)
 	{
-		file_redirect(token + i, ex);
+		if (file_redirect(token + i, ex) == -1)
+			return (-1);
 		i += 2;
 	}
+	return (0);
 }
 
-void	suffix_redirect(t_leaf *token, t_exec *ex)
+int	suf_redir(t_leaf *token, t_exec *ex)
 {
 	t_leaf	*cmd;
 
@@ -133,15 +133,18 @@ void	suffix_redirect(t_leaf *token, t_exec *ex)
 	{
 		if (token->type >= L && token->type <= DR)
 		{
-			file_redirect(token, ex);
+			if (file_redirect(token, ex) == -1)
+				return (-1);
 			token += 2;
 		}
 		else if (token->type == W)
 		{
-			args_to_array(cmd, token, ex->cmd_ptr->va);
+			if (wildcard(cmd, token) == 0)
+				args_to_array(cmd, token, ex->cmd_ptr->va);
 			token++;
 		}
 		else
 			break ;
 	}
+	return (0);
 }

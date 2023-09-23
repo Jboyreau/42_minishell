@@ -1,31 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export_4.c                                         :+:      :+:    :+:   */
+/*   minishell_utils_2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/20 18:07:36 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/22 12:51:38 by cbessonn         ###   ########.fr       */
+/*   Created: 2023/09/22 12:35:43 by cbessonn          #+#    #+#             */
+/*   Updated: 2023/09/22 12:57:55 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "minishell.h"
-#include <stdio.h>
 
-char	builtin_export(t_lv **va, char **env, t_leaf *cmd)
+char	only_space(char *str)
 {
 	int	i;
 
 	i = 0;
-	while (*((*cmd).arg + (++i)))
+	while (str[i])
 	{
-		if (ft_export(va, env, *((*cmd).arg + i),
-			ft_strlen(*((*cmd).arg + i))) == FAILURE)
+		if (str[i] != ' ' && (str[i] < 9 || str[i] > 13))
 			return (FAILURE);
+		++i;
 	}
-	if (i == 1)
-		return (ft_export(va, env, NULL, 0));
 	return (SUCCESS);
 }

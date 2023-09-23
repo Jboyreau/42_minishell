@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/22 12:35:37 by cbessonn          #+#    #+#             */
+/*   Updated: 2023/09/23 16:17:31 by cbessonn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include <stdio.h> //debug
 #include <unistd.h> //debug
@@ -18,7 +30,7 @@ void	fill_leaf(t_leaf *tr, char type, int len, char *word)
 
 static void	fill_tree(char *str, t_leaf *tr)
 {
-	int i;
+	int	i;
 	int	count;
 
 	i = 0;
@@ -27,7 +39,9 @@ static void	fill_tree(char *str, t_leaf *tr)
 	{
 		while (*(str + i) == ' ')
 			++i;
-		if (fchar_is_token(tr + count, str, &i) == SUCCESS)
+		if (*(str + i) == 0)
+			break ;
+		if (*(str + i) && fis_token(tr + count, str, &i, i) == SUCCESS)
 			++count;
 		else
 			flongest_token(tr + count, str, &i, &count);
@@ -36,7 +50,7 @@ static void	fill_tree(char *str, t_leaf *tr)
 
 static int	token_count(char *str)
 {
-	int i;
+	int	i;
 	int	count;
 
 	i = 0;
@@ -45,7 +59,9 @@ static int	token_count(char *str)
 	{
 		while (*(str + i) == ' ')
 			++i;
-		if (char_is_token(*(str + i), *(str + i + 1), &i) == SUCCESS)
+		if (*(str + i) == 0)
+			break ;
+		if (is_token(i, &i, str) == SUCCESS)
 			++count;
 		else
 			longest_token(str, &i, &count);

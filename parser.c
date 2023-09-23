@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 15:45:01 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/19 15:45:02 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/22 13:43:08 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ char	ft_alloc_loc(t_rs *state, r *loc)
 	{
 		(*state).size = ALLOC_SIZE;
 		*loc = (r)malloc((*state).size * sizeof(t_loc));
-			if (*loc == 0)
-				return (MEM_FAIL);
+		if (*loc == 0)
+			return (MEM_FAIL);
 		i = -1;
 		location = (t_loc *)(*loc);
 		while (++i < (*state).size)
@@ -66,11 +66,12 @@ static char	check_production(r **rule, char type, char *f_type)
 
 	lstate = (*((t_rs *)(**rule))).lstate;
 	location = (((t_loc *)(*((*rule) + 1))) + lstate);
-
 /*if ((*((t_rs *)(**rule))).id != PT_)
 {
 	int prev_id = (*((t_rs *)(*((r*)((*location).prev))))).id;
-		printf("prev_id = %d, type = %d, index = %d, rule = %d, value = %lld \n", prev_id, type, (*location).index, (*((t_rs *)(**rule))).id, *((*rule) + (*location).index));
+		printf("prev_id = %d, type = %d, index = %d, rule = %d,
+		value = %lld \n", prev_id, type, (*location).index,
+			(*((t_rs *)(**rule))).id, *((*rule) + (*location).index));
 }
 else
 printf("type = %d, index = %d, rule = %d, value = %lld \n", type, (*location).index, (*((t_rs *)(**rule))).id, *((*rule) + (*location).index));*/

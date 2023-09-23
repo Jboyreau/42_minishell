@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 04:22:20 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/20 16:33:21 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/22 12:47:34 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ int	str_is_digit(char *str)
 	return (1);
 }
 
-unsigned char	ft_atoi(const char *nptr)
+int	ft_atoi(const char *nptr)
 {
-	unsigned char	signe;
-	unsigned char	nb;
+	int	signe;
+	int	nb;
 
 	signe = 1;
 	nb = 0;
@@ -61,14 +61,14 @@ unsigned char	ft_atoi(const char *nptr)
 
 int	ft_exit(t_leaf *cmd, t_exec *ex)
 {
-	unsigned char	code;
+	int	code;
 
 	if ((cmd->arg[1]) == 0)
 		code = 0;
 	else
 	{
 		if (str_is_digit(cmd->arg[1]))
-			code = atoi(cmd->arg[1]); 
+			code = atoi(cmd->arg[1]);
 		else
 		{
 			write(2, "minishell: exit: ", 18);
@@ -79,8 +79,8 @@ int	ft_exit(t_leaf *cmd, t_exec *ex)
 		if (cmd->arg[2] != 0)
 			return (write(2, "minishell: exit: too many arguments\n", 37), 1);
 	}
-	//free what have to be freed
-	(dll(&(ex->cmd_ptr->str), &(ex->cmd_ptr->tr)), dall(ex->cmd_ptr->va, ex->cmd_ptr->start));
+	(dll(&(ex->cmd_ptr->str), &(ex->cmd_ptr->tr)),
+		dall(ex->cmd_ptr->va, ex->cmd_ptr->start));
 	write(2, "exit\n", 5);
 	exit(code);
 }

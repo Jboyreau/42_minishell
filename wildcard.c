@@ -6,70 +6,53 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 15:44:23 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/19 15:44:24 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/22 13:19:48 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
 #include <dirent.h> 
 #include <stdio.h> 
 
 #define MATCH 0
 #define NOMATCH 1
 
-/*
-opendir
-readdir
-closedir
-
-Il faut ignorer les fichiers caches et . et ..
-
-*.c
-*.*
-******.c
-a*.c
-*a.c
-
-*i*d*r* -> ok
-*i*d*l->pas ok
-wildcard
-
-Gere les files comme '*file'
-Gerer le cas :
-*card*toto -> wildcard ne match pas
-*/
-
-int string_search(char *pattern, char *name, int *i, int *j)
+int	string_search(t_leaf *arg, char *name, int *i, int *j)
 {
-	while (pattern[*i] == '*')
+	while (arg->word[*i] == '*' && *i < arg->len)
 		++(*i);
-	if (name[*j] != pattern[*i])
+	if (name[*j] != arg->word[*i])
 	{
-		while (name[*j] && name[*j] != pattern[*i])
+		while (name[*j])
+		{
+			if (name[*j] == arg->word[*i] && name[*j + 1] != arg->word[*i])
+				break ;
 			++(*j);
-		if (name[*j] != pattern[*i])
+		}
+		if (name[*j] != arg->word[*i])
 			return (NOMATCH);
 	}
 	return (MATCH);
 }
 
-int	match(char *pattern, char *name)
+int	match(t_leaf *arg, char *name)
 {
 	int	i;
 	int	j;
 
 	i = 0;
 	j = 0;
-	while (pattern[i])
+	while (i < arg->len)
 	{
-		if (pattern[i] == '*')
+		if (arg->word[i] == '*')
 		{
-			if (string_search(pattern, name, &i, &j) == NOMATCH)
+			if (string_search(arg, name, &i, &j) == NOMATCH)
 				return (NOMATCH);
 		}
 		else
-			if (pattern[i] != name[j])
+			if (arg->word[i] != name[j])
 				return (NOMATCH);
-		if (pattern[i] == 0)
+		if (arg->word[i] == 0)
 			break ;
 		++j;
 		++i;
@@ -79,112 +62,45 @@ int	match(char *pattern, char *name)
 	return (MATCH);
 }
 
-int	wildcard(char *pattern)
+int	is_a_wildcard(t_leaf *arg)
 {
-	DIR	*d;
-	struct dirent *dir;
+	int	i;
 
-	d = opendir(".");
-	if (d) {
-		dir = readdir(d);
-		while (dir != NULL) {
-			if (dir->d_name[0] != '.')
-				if (match(pattern, dir->d_name) == MATCH)
-					//do stuff
-			dir = readdir(d);
-		}
-		closedir(d);
+	i = 0;
+	while (i < arg->len)
+	{
+		if (arg->word[i] == '*')
+			return (1);
+		i++;
 	}
 	return (0);
 }
 
-// int	main(void)
-// {
-// 	//wildcard(pattern);
-// 	char	*patt[30];
-// 	char	*name[30];
-// 	char 	*exp[30];
+int	wildcard(t_leaf *cmd, t_leaf *arg)
+{
+	DIR				*d;
+	struct dirent	*dir;
+	int				is_matching;
 
-// 	patt[0] = "*a";
-// 	name[0] = "abcd";
-// 	exp[0] = "NO MATCH";
-
-// 	patt[1] = "a*";
-// 	name[1] = "abcd";
-// 	exp[1] = "MATCH";
-
-// 	patt[2] = "*a*";
-// 	name[2] = "abcd";
-// 	exp[2] = "MATCH";
-
-// 	patt[3] = "*a*c*";
-// 	name[3] = "abcd";
-// 	exp[3] = "MATCH";
-
-// 	patt[4] = "*.c";
-// 	name[4] = "file.c";
-// 	exp[4] = "MATCH";
-
-// 	patt[5] = "*.c";
-// 	name[5] = "file";
-// 	exp[5] = "NO MATCH";
-
-// 	patt[6] = "*.*";
-// 	name[6] = "file.c";
-// 	exp[6] = "MATCH";
-
-// 	patt[7] = "*.*";
-// 	name[7] = "file";
-// 	exp[7] = "NO MATCH";
-
-// 	patt[8] = "*a*c*z";
-// 	name[8] = "abcd";
-// 	exp[8] = "NO MATCH";
-
-// 	patt[9] = "toto*a";
-// 	name[9] = "toto";
-// 	exp[9] = "NO MATCH";
-
-// 	patt[10] = "toto*";
-// 	name[10] = "toto";
-// 	exp[10] = "MATCH";
-
-// 	patt[11] = "toto*o";
-// 	name[11] = "totoo";
-// 	exp[11] = "MATCH";
-
-// 	patt[12] = "a";
-// 	name[12] = "a";
-// 	exp[12] = "MATCH";
-
-// 	patt[13] = "c*****u****_*****";
-// 	name[13] = "coucou_ca_va";
-// 	exp[13] = "MATCH";
-
-// 	patt[14] = "c*****u****_";
-// 	name[14] = "coucou_ca_va";
-// 	exp[14] = "NO MATCH";
-	
-// 	patt[15] = "*******";
-// 	name[15] = "toto";
-// 	exp[15] = "MATCH";
-
-// 	patt[16] = "*es*";
-// 	name[16] = "test";
-// 	exp[16] = "MATCH";
-
-// 	patt[17] = "test.*";
-// 	name[17] = "test.txt";
-// 	exp[17] = "MATCH";
-	
-	
-// 	for (int i = 0; i < 18; i++)
-// 	{
-// 		printf("----------------TEST %d----------------\n\n", i);
-// 		printf("Pattern : %s\nFile : %s\n", patt[i], name[i]);
-// 		printf("Expect : %s\n", exp[i]);
-// 		printf(match(patt[i], name[i]) == MATCH ? "Result : MATCH\n" : "Result : NO MATCH\n");
-// 		printf("\n");
-// 	}
-// 	return 0;
-// }
+	if (is_a_wildcard(arg) == 0)
+		return (0);
+	is_matching = 0;
+	d = opendir(".");
+	if (!d)
+		return (0);
+	dir = readdir(d);
+	while (dir != NULL)
+	{
+		if (dir->d_name[0] != '.')
+		{
+			if (match(arg, dir->d_name) == MATCH)
+			{
+				++is_matching;
+				args_to_array_wildcard(cmd, dir->d_name);
+			}
+		}
+		dir = readdir(d);
+	}
+	closedir(d);
+	return (is_matching);
+}

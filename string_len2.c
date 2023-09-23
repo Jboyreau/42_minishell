@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 15:44:36 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/19 15:44:37 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/23 16:01:14 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ int	content_len2(char *str, int *i, t_lv *va)
 	l = 0;
 	var_len = 0;
 	++(*i);
+	if (*(str + *i) == '?')
+		return (++(*i), sig_len());
 	while (str[*i + len] && !is_metachar(str[*i + len]))
 		++len;
 	if (len)

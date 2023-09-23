@@ -11,4 +11,3 @@ void	print_va(t_lv *va)
 	while ((*(va + (++i))).name)
 		printf("declare -x %s=\"%s\"\n", (*(va + i)).name, (*(va + i)).content);
 }
-

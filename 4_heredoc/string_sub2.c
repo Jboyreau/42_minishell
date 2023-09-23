@@ -28,7 +28,13 @@ char	find_n_name(char *name, t_lv *va, int *l, int n)
 char	is_metachar(char c)
 {
 	return (c == '"' || c == '\'' || c == '$' || c == '&'
-		|| c == '|' || c == '<' || c == '>');
+		|| c == '|' || c == '<' || c == '>' || c == '@'
+			|| c == '=' || c == '#' || c == '.' || c == '/'
+				|| c == ',' || c == '%' || c == '-' || c == '*'
+					|| c == '+' || c == '!' || c == ':'
+						|| c == '~' || c == '^' || c == '{'
+							|| c == '}' || c == '\\' || c == '['
+								|| c == ']');
 }
 
 char	string_sub2(char **str, t_lv *va)

@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_error.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/22 12:36:03 by cbessonn          #+#    #+#             */
+/*   Updated: 2023/09/22 13:42:22 by cbessonn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <unistd.h>
 #include "minishell.h"
 
-static char	print_error1(int type, char * word, int len)
+static char	print_error1(int type, char *word, int len)
 {
 	if (type == DL)
 		return (write(2, "<<'\n", 4), FAILURE);

@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 10:25:41 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/20 17:26:56 by jboyreau         ###   ########.fr       */
+/*   Updated: 2023/09/23 15:24:13 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,16 @@
 #include <errno.h>
 #include "minishell.h"
 
+short int g_signal = 0;
+
 void	dall(t_lv *va, r *start)
 {
 	destroy_va(va);
 	parser_destroyer(start);
 }
 
-void	dll(char **str, t_leaf **tr) //CRITICAL, DON'T TOUCH.
+//CRITICAL, DON'T TOUCH.
+void	dll(char **str, t_leaf **tr)
 {
 	if (str)
 	{
@@ -34,6 +37,19 @@ void	dll(char **str, t_leaf **tr) //CRITICAL, DON'T TOUCH.
 		*str = NULL;
 	}
 	destroy_arg(*tr);
+	if (*tr)
+		free(*tr);
+	return (*tr = NULL, (void)0);
+}
+
+void	dll_here(char **str, t_leaf **tr)
+{
+	if (str)
+	{
+		if (*str)
+			free(*str);
+		*str = NULL;
+	}
 	if (*tr)
 		free(*tr);
 	return (*tr = NULL, (void)0);
@@ -79,30 +95,73 @@ static char	check_nl(t_cmd *hll, char type, int i, int j)
 	return (SUCCESS);
 }
 
+char	parse_prompt(t_cmd *hll, char **env)
+{
+	hll->ret = parser(lexer(hll), hll->start);
+	if (hll->ret == SUCCESS)
+	{
+		hll->ret = check_nl(hll, (*(hll->tr + hll->count - 3)).type, 0, 0);
+		if (hll->ret == MEM_FAIL)
+			return (dll(&hll->str, &hll->tr), dall(hll->va, hll->start), 1);
+		if (hll->ret == SUCCESS)
+		{
+			if (heredoc(hll->tr) == SUCCESS)
+				clean_prompt(&hll->tr), execute(hll, hll->tr, env);
+			else
+			{
+				dll_here(&hll->str, &hll->tr);
+				return (2);
+			}
+		}	
+	}
+	else if (hll->ret == MEM_FAIL)
+			return (dll(&hll->str, &hll->tr), dall(hll->va, hll->start), 1);
+	return (0);
+}
+
+// hll.ret = parser(lexer(&hll), hll.start);
+// 		if (hll.ret == SUCCESS)
+// 		{
+// 			hll.ret = check_nl(&hll, (*(hll.tr + hll.count - 3)).type, 0, 0);
+// 			if (hll.ret == MEM_FAIL)
+// 				return (dll(&(hll.str), &(hll.tr)), dall(hll.va, hll.start), 1);
+// 			if (hll.ret == SUCCESS)
+// 			{
+// 				if (heredoc(hll.tr) == SUCCESS)
+// 					clean_prompt(&hll.tr), execute(&hll, hll.tr, env);
+// 				else
+// 				{
+// 					dll_here(&(hll.str), &(hll.tr));
+// 					continue ;
+// 				}
+// 			}	
+// 		}
+// 		else if (hll.ret == MEM_FAIL)
+// 			return (dll(&(hll.str), &(hll.tr)), dall(hll.va, hll.start), 1);
+
 int	main(int argc, char **argv, char **env)
 {
-	(void)argc;
-	(void)argv;
 	static t_cmd	hll = {.str = NULL, .tr = NULL, .va = NULL};
+	char			parse_res;
 
+	((void)argc, (void)argv);
+	if (isatty(0) == 0 || isatty(1) == 0 || isatty(2) == 0)
+		return (1);
 	(signal(SIGINT, sigint_handler), signal(SIGQUIT, SIG_IGN));
 	ft_export(&hll.va, env, NULL, 0);
 	hll.start = init_rules();
 	while (1)
 	{
 		if (ft_readline(&(hll.str), "minishell_user: ") == FAILURE)
-			return (write(2, "exit\n", 5), dall(hll.va, hll.start), EXIT_FAILURE);
-		hll.ret = parser(lexer(&hll), hll.start);
-		if (hll.ret == SUCCESS)
-		{
-			hll.ret = check_nl(&hll, (*(hll.tr + hll.count - 3)).type, 0, 0);
-			if (hll.ret == MEM_FAIL)
-				return (dll(&(hll.str), &(hll.tr)), dall(hll.va, hll.start), 1);
-			if (hll.ret == SUCCESS)
-				(heredoc(hll.tr), clean_prompt(&hll.tr), execute(&hll, hll.tr, env));
-		}
-		else if (hll.ret == MEM_FAIL)
-			return (dll(&(hll.str), &(hll.tr)), dall(hll.va, hll.start), 1);
+			return (write(2, "exit\n", 5), dall(hll.va, hll.start), 0);
+		sigint_handler(-3);
+		if (only_space(hll.str) == SUCCESS)
+			continue ;
+		parse_res = parse_prompt(&hll, env);
+		if (parse_res == 1)
+			return (1);
+		else if (parse_res == 2)
+			continue ;
 		dll(&(hll.str), &(hll.tr));
 	}
 	return (dall(hll.va, hll.start), EXIT_SUCCESS);

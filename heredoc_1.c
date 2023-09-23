@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 15:45:24 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/19 15:45:24 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/22 12:53:31 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 static char	end(char **folder, char *file_name)
 {
-	int 	i;
+	int		i;
 	int		j;
 	char	*str;
 
@@ -51,7 +51,7 @@ void	inc(char *file_name, int last)
 
 static char	add(char **folder, char *file_name, int len)
 {
-	int i;
+	int	i;
 	int	last;
 
 	i = -1;

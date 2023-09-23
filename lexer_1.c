@@ -1,4 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer_1.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/22 12:35:25 by cbessonn          #+#    #+#             */
+/*   Updated: 2023/09/23 16:18:22 by cbessonn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
+#include <stdio.h>
 
 #define SUCCESS 0
 #define FAILURE 1
@@ -29,8 +42,8 @@ static void	normal_string(char *str, int *i, int *count)
 	if (*(str + (*i)) == '$')
 	{
 		j = *i;
-		while (j > -1 && *(str + j) != '$' && *(str + j) != ' ' &&
-		rev_char_is_token(*(str + j), *(str + j + 1), &j) == FAILURE)
+		while (j > -1 && *(str + j) != '$' && is_space(j, str) &&
+		ris_token(j, &j, str) == FAILURE)
 			--j;
 		if (j > 0)
 			if ((*str + j) == '$')
@@ -38,9 +51,9 @@ static void	normal_string(char *str, int *i, int *count)
 	}
 	while (*(str + (*i)))
 	{
-		if (*(str + (*i)) == ' ' || (*(str + (*i)) == '$' && test == 0))
+		if (is_space(*i, str) || (*(str + (*i)) == '$' && test == 0))
 			return (++(*count), (void)0);
-		if (char_is_token(*(str + (*i)), *(str + (*i) + 1), i) == SUCCESS)
+		if (is_token(*i, i, str) == SUCCESS)
 			return (*count += 2, (void)0);
 		++(*i);
 	}
@@ -57,10 +70,12 @@ static void	dq_sequence(char *str, int *i, int *count)
 		++j;
 	if (*(str + j) == 0)
 		return (normal_string(str, i, count));
-	while (char_is_token(str[j], str[j + 1], &b) == 1 && *(str + j) != ' ')
-		++j;	
-	if (*(str + j) == '\n')
-		return (normal_string(str, i, count));
+	while (is_token(j, &b, str) == 1 && is_space(j, str) == 0)
+	{
+		++j;
+		if (*(str + j) == 0)
+			break ;
+	}
 	return (*i = j, ++(*count), (void)0);
 }
 
@@ -74,10 +89,12 @@ static void	q_sequence(char *str, int *i, int *count)
 		++j;
 	if (*(str + j) == 0)
 		return (normal_string(str, i, count));
-	while (char_is_token(str[j], str[j + 1], &b) == 1 && *(str + j) != ' ')
+	while (is_token(j, &b, str) == 1 && is_space(j, str) == 0)
+	{
 		++j;
-	if (*(str + j) == '\n')
-		return (normal_string(str, i, count));
+		if (*(str + j) == 0)
+			break ;
+	}
 	return (*i = j, ++(*count), (void)0);
 }
 

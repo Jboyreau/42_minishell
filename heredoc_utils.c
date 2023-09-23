@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/16 17:06:14 by jboyreau          #+#    #+#             */
-/*   Updated: 2023/09/20 16:33:41 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/22 12:54:57 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char	cmp_lim_str(char *str, char *word, int len, int i)
 	}
 	if (*(str + i))
 		return (0);
-	return (1);	
+	return (1);
 }
 
 void	d_folder(void *folder)
@@ -86,7 +86,7 @@ char	*ft_strdup(const char *s)
 
 int	ft_strlen1(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (*(str + i))

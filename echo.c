@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 04:22:20 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/20 12:28:59 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/22 12:42:20 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,13 @@ int	ft_echo(t_leaf *cmd)
 	args = cmd->arg + 1;
 	no_line_return = 0;
 	i = check_line_break_option(args, &no_line_return);
-
 	while (args[i] != NULL)
 	{
 		if (write(STDOUT_FILENO, args[i], strlen(args[i])) == -1)
 			perror("write error");
 		if (args[i + 1] != NULL)
 			if (write(STDOUT_FILENO, " ", 1) == -1)
-			perror("write error");
+				perror("write error");
 		i++;
 	}
 	if (no_line_return == 0)

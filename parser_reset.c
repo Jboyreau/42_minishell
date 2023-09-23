@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_reset.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/22 12:36:14 by cbessonn          #+#    #+#             */
+/*   Updated: 2023/09/22 13:40:41 by cbessonn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include "minishell.h"
 
@@ -14,7 +26,7 @@ static void	reset(r *rule)
 	i = 0;
 	while (i < (*state).size)
 	{
-		(*(location +i)).index = 0;
+		(*(location + i)).index = 0;
 		++i;
 	}
 	if ((*state).id == PT_)

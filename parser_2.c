@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_2.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/22 12:35:57 by cbessonn          #+#    #+#             */
+/*   Updated: 2023/09/22 13:00:59 by cbessonn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 #include "minishell.h"
 
-char dive(int i, r **rule)
+char	dive(int i, r **rule)
 {
 	t_rs	*state;
 	r		*prev;
@@ -50,18 +62,18 @@ char stay(r **rule, char type, char *f_type, int i)
 	if (type == W)
 	{
 		if ((*((t_rs *)(**rule))).id == CMD_)
-			return(*f_type = CMD, STAY);
+			return (*f_type = CMD, STAY);
 		if ((*((t_rs *)(**rule))).id == CMD1_)
-			return(*f_type = CMD, STAY);
+			return (*f_type = CMD, STAY);
 		if ((*((t_rs *)(**rule))).id == SUF_)
-			return(*f_type = ARG, STAY);
+			return (*f_type = ARG, STAY);
 		if ((*((t_rs *)(**rule))).id == SUF2_)
-			return(*f_type = ARG, STAY);
+			return (*f_type = ARG, STAY);
 		if ((*((t_rs *)(**rule))).id == RED_)
 		{
 			if (*((*rule) + i - 1) == DL)
-				return(*f_type = LIM, STAY);
-			return(*f_type = FIL, STAY);
+				return (*f_type = LIM, STAY);
+			return (*f_type = FIL, STAY);
 		}
 	}
 	return (STAY);

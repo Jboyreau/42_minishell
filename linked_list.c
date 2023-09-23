@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 11:27:40 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/19 11:27:42 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/22 12:56:53 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 	(li)->next = new;
 	li = li->next;
 	li->next = NULL;
-
 }
 
 t_list	*ft_lstnew(void *content)

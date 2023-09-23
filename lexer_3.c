@@ -1,4 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer_3.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/22 14:37:36 by cbessonn          #+#    #+#             */
+/*   Updated: 2023/09/23 16:19:22 by cbessonn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
+#include <stdio.h>
 
 #define SUCCESS 0
 #define FAILURE 1
@@ -31,8 +44,8 @@ static void	fnormal_string(t_leaf *tr, char *str, int *i, int *count)
 	if (*(str + (*i)) == '$')
 	{
 		j = *i;
-		while (j > -1 && *(str + j) != '$' && *(str + j) != ' ' &&
-		rev_char_is_token(*(str + j), *(str + j + 1), &j) == FAILURE)
+		while (j > -1 && *(str + j) != '$' && is_space(j, str) &&
+		ris_token(j, &j, str) == FAILURE)
 			--j;
 		if (j > 0)
 			if ((*str + j) == '$')
@@ -40,9 +53,9 @@ static void	fnormal_string(t_leaf *tr, char *str, int *i, int *count)
 	}
 	while (*(str + (*i)))
 	{
-		if (*(str + (*i)) == ' ' || (*(str + (*i)) == '$' && test == 0))
+		if (is_space(*i, str) || (*(str + (*i)) == '$' && test == 0))
 			return (fill_leaf(tr, W, *i-s, str + s), ++(*count), (void)0);
-		if (char_is_token(*(str + (*i)), *(str + (*i) + 1), &j) == SUCCESS)
+		if (is_token(*i, &j, str) == SUCCESS)
 			return (fill_leaf(tr, W, *i-s, str + s), ++(*count), (void)0);
 		++(*i);
 	}
@@ -59,10 +72,12 @@ static void	fdq_sequence(t_leaf *tr, char *str, int *i, int *count)
 		++j;
 	if (*(str + j) == 0)
 		return (fnormal_string(tr, str, i, count));
-	while (char_is_token(str[j], str[j + 1], &b) == 1 && *(str + j) != ' ')
+	while (is_token(j, &b, str) == 1 && is_space(j, str) == 0)
+	{
 		++j;
-	if (*(str + j) == '\n')
-		return (fnormal_string(tr, str, i, count));
+		if (*(str + j) == 0)
+			break ;
+	}
 	fill_leaf(tr, W, (j - (*i)), str + (*i));
 	return (*i = j, ++(*count), (void)0);
 }
@@ -77,10 +92,12 @@ static void	fq_sequence(t_leaf *tr, char *str, int *i, int *count)
 		++j;
 	if (*(str + j) == 0)
 		return (fnormal_string(tr, str, i, count));
-	while (char_is_token(str[j], str[j + 1], &b) == 1 && *(str + j) != ' ')
+	while (is_token(j, &b, str) == 1 && is_space(j, str) == 0)
+	{
 		++j;
-	if (*(str + j) == '\n')
-		return (fnormal_string(tr, str, i, count));
+		if (*(str + j) == 0)
+			break ;
+	}
 	fill_leaf(tr, W, (j - (*i)), str + (*i));
 	return (*i = j, ++(*count), (void)0);
 }
@@ -93,3 +110,4 @@ void	flongest_token(t_leaf *tr, char *str, int *i, int *count)
 		return (fdq_sequence(tr, str, i, count));
 	return (fnormal_string(tr, str, i, count));
 }
+

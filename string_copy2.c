@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 15:44:47 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/19 15:44:48 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/23 15:58:52 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ char	content_cpy2(char **str, int *i, t_lv *va, t_string *new)
 	l = 0;
 	content_len = 0;
 	++(*i);
+	if (*((*str) + *i) == '?')
+		return (ft_putnbr_q(g_signal, new), ++(*i), SUCCESS);
 	while (!is_metachar((*str)[*i + len]) && (*str)[*i + len])
 		++len;
 	if (len == 0)
@@ -38,7 +40,8 @@ char	content_cpy2(char **str, int *i, t_lv *va, t_string *new)
 	{
 		content_len = ft_strlen1((*(va + l)).content);
 		while (content_len--)
-			*((*new).content + ((*new).cursor++)) = *((*(va + l)).content + j++);
+			*((*new).content + ((*new).cursor++))
+				= *((*(va + l)).content + j++);
 	}
 	return ((*i) += len, SUCCESS);
 }

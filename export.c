@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/20 18:08:30 by cbessonn          #+#    #+#             */
+/*   Updated: 2023/09/23 16:59:25 by cbessonn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <unistd.h>
 #include <stdlib.h>
 #include "minishell.h"
@@ -7,14 +19,14 @@
 
 t_lv	*destroy_va(t_lv *va)
 {
-	int i;
+	int	i;
 
 	if (va == NULL)
 		return (NULL);
 	i = 0;
 	while ((*(va + i)).name)
 	{
-		free((*(va + i)).name);	
+		free((*(va + i)).name);
 		++i;
 	}
 	free(va);
@@ -49,20 +61,19 @@ char	allocate_var_name(char *var, char **name, char **content, int len)
 
 char	indentifier_is_valide(char *variable, int i, int l)
 {
-	l = 0;
-	while (*(variable + l) != '=' && *(variable + l))
+	while (*(variable + l))
 		++l;
-	if (*(variable) != '_')
-		if (*(variable) < 'A' || *(variable) > 'Z')
-			if (*(variable) < 'a' || *(variable) > 'z')
-			{
-				(write(2, "minishell: export: `", 21), write(2, variable, l));
-				write(2, "': not a valid identifier\n", 26);
-				return (FAILURE);
-			}
-	i = 0;
+	if ((*variable == ' ' || *variable == '\t')
+		|| (*variable >= '0' && *variable <= '9'))
+		{
+			(write(2, "minishell: export: `", 21), write(2, variable, l));
+			write(2, "': not a valid identifier\n", 26);
+			return (FAILURE);
+		}
 	while (*(variable + ++i) != '=' && *(variable + i) != '\0')
+	{
 		if (*(variable + i) != '_')
+		{
 			if (*(variable + i) < 'A' || *(variable + i) > 'Z')
 				if (*(variable + i) < 'a' || *(variable + i) > 'z')
 					if (*(variable + i) < '0' || *(variable + i) > '9')
@@ -71,6 +82,8 @@ char	indentifier_is_valide(char *variable, int i, int l)
 						write(2, "': not a valid identifier\n", 26);
 						return (FAILURE);
 					}
+		}
+	}
 	return (SUCCESS);
 }
 

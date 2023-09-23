@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export_1.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/22 12:34:51 by cbessonn          #+#    #+#             */
+/*   Updated: 2023/09/22 12:50:24 by cbessonn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "minishell.h"
@@ -27,7 +39,7 @@ t_lv	*realloc_va(t_lv *va, t_lv **new_va, int *size)
 
 int	va_len(t_lv *va)
 {
-	int len;
+	int	len;
 
 	len = 0;
 	while ((*(va + len)).name)
@@ -43,7 +55,10 @@ char	env_to_va(char *var, t_lv *va)
 	i = 0;
 	while (*(var + i))
 		++i;
-	(*va).name = malloc(i + 1);
+	if (*var == '?')
+		(*va).name = malloc(64);
+	else
+		(*va).name = malloc(i + 1);
 	if ((*va).name == NULL)
 		return (FAILURE);
 	i = -1;
@@ -52,11 +67,10 @@ char	env_to_va(char *var, t_lv *va)
 		*((*va).name + i) = *(var + i);
 	*((*va).name + i) = 0;
 	(*va).content = (*va).name + (++i);
-	j = 0;
-	while (*(var + i + j))
+	j = -1;
+	while (*(var + i + ++j))
 	{
 		*((*va).content + j) = *(var + i + j);
-		++j;
 	}
 	*((*va).content + j) = 0;
 	return (SUCCESS);
@@ -64,7 +78,7 @@ char	env_to_va(char *var, t_lv *va)
 
 static char	va_init(t_lv **va, char **env, int *size)
 {
-	int len;
+	int	len;
 
 	*size = 0;
 	while (*(env + (*size)))
@@ -77,7 +91,9 @@ static char	va_init(t_lv **va, char **env, int *size)
 	while (*(env + (++len)))
 		if (env_to_va(*(env + len), (*va) + len) == FAILURE)
 			return (FAILURE);
-	(*((*va) + len)).name = NULL;
+	if (env_to_va("?=0", (*va) + len) == FAILURE)
+		return (FAILURE);
+	(*((*va) + len + 1)).name = NULL;
 	return (SUCCESS);
 }
 

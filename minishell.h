@@ -7,6 +7,8 @@ extern int subindex; //A ENLEVER ------------------------
 #include <sys/wait.h>
 #include <stdbool.h>
 
+extern short int	g_signal;
+
 /*	Token types:
 	{
 		Indentifiers	:
@@ -202,6 +204,7 @@ typedef struct s_str_array
 }		t_str_array;
 
 //Lexer:
+char		only_space(char *str);
 char		char_is_token(char c0, char c1, int *i);
 char		fchar_is_token(t_leaf *tr, char *str, int *i);
 void		longest_token(char *str, int *i, int *count);
@@ -209,15 +212,21 @@ void		flongest_token(t_leaf *tr, char *str, int *i, int *count);
 void		fill_leaf(t_leaf *tr, char type, int len, char *word);
 t_leaf		*lexer(t_cmd *hll);
 char        rev_char_is_token(char c0, char c1, int *j);
+char		is_space(int i_space, char *str);
+char		is_token(int i_op, int *i, char *str);
+char		fis_token(t_leaf *tr, char *str, int *i, int i_op);
+char		ris_token(int i_op, int *j, char *str);
+
 //String_parsing:
-char		builtin_export(t_lv **va, char **env, t_leaf *cmd);
-char		ft_export(t_lv **va, char **env, char *variable, int len);
+char        builtin_export(t_lv **va, char **env, t_leaf *cmd);
+char        ft_export(t_lv **va, char **env, char *variable, int len);
 t_lv		*export_var(t_lv *va, char *name, char *content, char **env);
 t_lv		*destroy_va(t_lv *va);
 char		find_name(char *name, t_lv *va, int *l);
 void		print_va(t_lv *va);
 //Arg_format:
 char		args_to_array(t_leaf *cmd, t_leaf *arg, t_lv *va);
+char		args_to_array_wildcard(t_leaf *cmd, char *filename);
 //Syntaxe analysis:
 rule_elem	*init_rules();
 rule_elem	*init1(r *red, r *tst, r *suf);
@@ -244,20 +253,33 @@ char		is_metachar(char c);
 char		find_n_name(char *name, t_lv *va, int *l, int n);
 char		string_cpy(t_leaf *tok, t_lv *va, t_string *str);
 uint		string_len(t_leaf *tok, t_lv *va);
+void		ft_putnbr_q(int n, t_string *str);
+int			sig_len(void);
 
 //Execute
 void	execute_tree(t_leaf *tree, t_lv *va);
+void	open_pipe(int *pipefd, char cmd_pos, t_cmd *hll);
 void	execute(t_cmd *hll, t_leaf *token, char **env);
 pid_t	exec_pipeline(t_leaf *cmd, t_exec *ex, int i, int *pipefd);
+void	redirect_pipe(int *pipefd, char cmd_pos);
 pid_t	pipe_subshell(t_leaf *cmd, t_exec *ex, int *pipefd);
 void	clean_prompt(t_leaf **token);
 int		execute_sub(t_cmd *hll, t_leaf *token, int i, char **env);
-void	prefix_redirect(t_leaf *token, int i, t_exec *ex);
-void	suffix_redirect(t_leaf *token, t_exec *ex);
+int		pre_redir(t_leaf *token, int i, t_exec *ex);
+int		suf_redir(t_leaf *token, t_exec *ex);
 bool	ft_split(t_str_array *array, char const *s, char c);
 char	*ft_strjoin(char const *s1, char const *s2);
 void	exec_cmd(t_leaf	*cmd, int i, t_exec *ex);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
+void	last_par(t_leaf *token, int *i);
+char	check_sub_pos(t_leaf *token, int fpar, int lpar);
+char	check_cmd_pos(t_leaf *token, int i);
+int		wait_cmd(int nb_of_cmd, pid_t last_pid);
+int		wait_cmd_sub(int nb_of_cmd, pid_t last_pid);
+void	handle_sub_command(t_exec *ex, t_leaf *tok, int i, int *pipefd);
+void	handle_subshell(t_leaf *token, int *i, int *pipefd, t_exec *ex);
+int		update_exit_stat(t_lv *va, int code);
+
 //Heredoc
 char		heredoc(t_leaf *tr);
 void		back_tracking(char **folder, char *file_name);
@@ -292,10 +314,17 @@ int		ft_cd(t_leaf *cmd);
 int		ft_exit(t_leaf *cmd, t_exec *ex);
 char	is_nofork_builtin(t_leaf *cmd);
 int		nofork_builtins_exec(t_leaf *cmd, int i, t_exec *ex);
+int 	unset(t_lv *va, char** arg);
+int		env(t_lv *va);
 
 //Destroyer
 void	dall(t_lv *va, r *start);
 void	dll(char **str, t_leaf **tr);
 void	ft_str_array_free(t_str_array *array);
+void	exit_failure(t_cmd *hll);
+
+//Wildcard
+int		wildcard(t_leaf *cmd, t_leaf *arg);
+int		wildcard_redirect(char *file);
 
 #endif

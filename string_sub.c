@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 11:27:26 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/19 11:27:26 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/23 14:48:39 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	ft_strlen(const char *s)
 char	find_n_name(char *name, t_lv *va, int *l, int n)
 {
 	int	i;
-	int j;
+	int	j;
 
 	i = -1;
 	while ((*(va + (++i))).name)
@@ -40,7 +40,7 @@ char	find_n_name(char *name, t_lv *va, int *l, int n)
 		j = -1;
 		while (*((*(va + i)).name + (++j)) && j < n)
 			if (*((*(va + i)).name + j) != *(name + j))
-				break;
+				break ;
 		if (*((*(va + i)).name + j) == 0 && n == j)
 			return (*l = i, SUCCESS);
 	}
@@ -50,13 +50,19 @@ char	find_n_name(char *name, t_lv *va, int *l, int n)
 char	is_metachar(char c)
 {
 	return (c == '"' || c == '\'' || c == '$' || c == '&'
-		|| c == '|' || c == '<' || c == '>');
+		|| c == '|' || c == '<' || c == '>' || c == '@'
+			|| c == '=' || c == '#' || c == '.' || c == '/'
+				|| c == ',' || c == '%' || c == '-' || c == '*'
+					|| c == '+' || c == '!' || c == ':'
+						|| c == '~' || c == '^' || c == '{'
+							|| c == '}' || c == '\\' || c == '['
+								|| c == ']');
 }
 
 char	*string_sub(t_leaf *tok, t_lv *va)
 {
-	int		len;
-	t_string str;
+	int			len;
+	t_string	str;
 
 	len = string_len(tok, va);
 	str.cursor = 0;
@@ -69,5 +75,3 @@ char	*string_sub(t_leaf *tok, t_lv *va)
 		string_cpy(tok, va, &str);
 	return (str.content);
 }
-
-//TODO : variable array echo $TAB et ${TAB[0]}

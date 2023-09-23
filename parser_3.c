@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_3.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/22 12:36:00 by cbessonn          #+#    #+#             */
+/*   Updated: 2023/09/22 13:34:35 by cbessonn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include <stdio.h>
 
@@ -21,29 +33,31 @@ char	e(t_leaf *tr)
 	return (SUCCESS);
 }
 
-char    c(t_leaf *tr)
+char	c(t_leaf *tr)
 {
-    int i;
-    int    count;
+	int	i;
+	int	count;
 
-    count = 0;
-    i = 0;
-    while ((*(tr + i)).type != NL)
-    {
-        if ((*(tr + i)).type == OP_PAR)
-            ++count;
+	count = 0;
+	i = 0;
+	while ((*(tr + i)).type != -1)
+	{
+		if ((*(tr + i)).type == OP_PAR)
+			++count;
         if ((*(tr + i)).type == CLS_PAR)
-            --count;
+			--count;
         if (count == 0)
-        {
-            if ((*(tr + 1)).type == OP_PAR)
-                if ((*(tr + i)).type == CLS_PAR)
-                    if ((*(tr + i - 1)).type == CLS_PAR)
-                        return (FAILURE);
-        }
-        ++i;
-    }
-    return (SUCCESS);
+		{
+			if ((*(tr + 1)).type == OP_PAR)
+				if ((*(tr + i)).type == CLS_PAR)
+					if ((*(tr + i - 1)).type == CLS_PAR)
+						return (FAILURE);
+		}
+		++i;
+	}
+	if (count != 0)
+		return (FAILURE);
+	return (SUCCESS);
 }
 
 char	d(t_leaf *tr)

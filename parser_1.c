@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_1.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/22 12:35:53 by cbessonn          #+#    #+#             */
+/*   Updated: 2023/09/22 13:44:09 by cbessonn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include <stdio.h>
 
-static char	firstof(r* rule, int type)
+static char	firstof(r *rule, int type)
 {
 	int	i;
 
@@ -9,7 +21,7 @@ static char	firstof(r* rule, int type)
 	while (*(rule + i) != (r)-1)
 		++i;
 	++i;
-	while(*(rule + i) != (r)-1)
+	while (*(rule + i) != (r)-1)
 	{
 //printf("*(rule + %d) = %lld, type = %d\n", i, *(rule + i), type);
 		if (*(rule + i) == (r)type)
@@ -27,7 +39,7 @@ static char	rule_is_last(r *rule)
 	while (*(rule + i) != (r)-1 && *(rule + i) != (r)-2)
 		++i;
 	if (*(rule + i) == (r)-1)
-		return(SUCCESS);
+		return (SUCCESS);
 	return (FAILURE);
 }
 
@@ -39,7 +51,7 @@ static char	search_epsilon(r *rule)
 	while (*(rule + i) != Z && *(rule + i) != (r)-1)
 		++i;
 	if (*(rule + i) == Z)
-		return(SUCCESS);
+		return (SUCCESS);
 	return (FAILURE);
 }
 
@@ -61,7 +73,7 @@ char	firstof_one(r **rule, char type, char *f_type, int i)
 			return (dive(i, rule));
 		if (search_epsilon((r*)(*((*rule) + i))) == SUCCESS)
 		{
-			return (++((*((t_loc *)(*((*rule) + 1)) 
+			return (++((*((t_loc *)(*((*rule) + 1))
 			+ (*((t_rs *)(*(*rule)))).lstate)).index), ASCEND);
 		}
 	}
@@ -80,10 +92,10 @@ char	firstof_all(r **rule, char type, char *f_type)
 	while (*((*rule) + i) != (r)-1)
 	{
 		if (*((*rule) + i) < Z && *((*rule) + i) == (r)type)
-				return (((*(l + ls)).index) = i, stay(rule, type, f_type, i));
+			return (((*(l + ls)).index) = i, stay(rule, type, f_type, i));
 		if (*((*rule) + i) > Z && firstof((r *)(*((*rule) + i)), type) == type)
-				return (((*(l + ls)).index) = i, dive(i, rule));
-		if (rule_is_last((*rule) + i) ==  SUCCESS)
+			return (((*(l + ls)).index) = i, dive(i, rule));
+		if (rule_is_last((*rule) + i) == SUCCESS)
 		{
 			if (search_epsilon(*rule) == SUCCESS)
 				return (ascend(rule));

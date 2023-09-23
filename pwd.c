@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 22:07:55 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/20 16:07:15 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/23 11:22:35 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 int	ft_pwd(void)
 {
-	char buffer[PATH_MAX];
+	char	buffer[PATH_MAX];
 
 	if (getcwd(buffer, sizeof(buffer)) == NULL)
 	{
