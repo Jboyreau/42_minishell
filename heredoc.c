@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/16 17:06:29 by jboyreau          #+#    #+#             */
-/*   Updated: 2023/09/23 15:55:48 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/23 17:52:06 by jboyreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,15 @@
 static char	fill_fifo2(t_leaf *lim, int fd)
 {
 	char	*str;
-	int 	temp_fd;
+	int		temp_fd;
 
 	while (1)
 	{
 		sigint_handler(-5);
 		temp_fd = dup(STDIN_FILENO);
 		if (ft_readline1(&str, "> ") == FAILURE)
-			return (sigint_handler(-6), dup2(temp_fd, STDIN_FILENO), close(temp_fd), EXIT_FAILURE);
+			return (sigint_handler(-6),
+				dup2(temp_fd, STDIN_FILENO), close(temp_fd), EXIT_FAILURE);
 		dup2(temp_fd, STDIN_FILENO);
 		close(temp_fd);
 		sigint_handler(-6);
@@ -94,7 +95,7 @@ static char	fill_fifo(t_leaf *dl)
 	char		**folder;
 
 	folder = make_folder(0, "./.tmp/");
-	if	(folder == NULL)
+	if (folder == NULL)
 		return (FAILURE);
 	(back_tracking(folder, file_name + 7), d_folder(folder));
 	(*dl).fdl = open(file_name, O_CREAT | O_WRONLY, 0666);

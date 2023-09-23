@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 12:35:25 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/23 16:18:22 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/23 18:00:02 by jboyreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,11 @@
 
 char	char_is_token(char c0, char c1, int *i)
 {
-	char *t;
+	char	*t;
 
 	t = ")\n(<>|";
-
 	if ((c0 == '<' || c0 == '>' || c0 == '|' || c0 == '&') && (c0 == c1))
-			return ((*i) += 2, SUCCESS);
+		return ((*i) += 2, SUCCESS);
 	while (*t)
 	{
 		if (c0 == *t)
@@ -42,12 +41,14 @@ static void	normal_string(char *str, int *i, int *count)
 	if (*(str + (*i)) == '$')
 	{
 		j = *i;
-		while (j > -1 && *(str + j) != '$' && is_space(j, str) &&
-		ris_token(j, &j, str) == FAILURE)
+		while (j > -1 && *(str + j) != '$' && is_space(j, str)
+			&& ris_token(j, &j, str) == FAILURE)
 			--j;
-		if (j > 0)
-			if ((*str + j) == '$')
-				(++(*i), test = 0);
+		if (j > 0 && ((*str + j) == '$'))
+		{
+			++(*i);
+			test = 0;
+		}
 	}
 	while (*(str + (*i)))
 	{

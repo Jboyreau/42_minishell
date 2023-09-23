@@ -6,14 +6,14 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 12:36:14 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/22 13:40:41 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/23 19:10:44 by jboyreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "minishell.h"
 
-static void	reset(r *rule)
+static void	reset(t_r *rule)
 {
 	int		i;
 	t_rs	*state;
@@ -35,12 +35,12 @@ static void	reset(r *rule)
 		(*state).lstate = -1;
 }
 
-static void	reset_state2(rule_elem *pre, rule_elem *suf)
+static void	reset_state2(t_r *pre, t_r *suf)
 {
-	rule_elem	*pre1;
-	rule_elem	*suf1;
-	rule_elem	*suf2;
-	rule_elem	*red;
+	t_r	*pre1;
+	t_r	*suf1;
+	t_r	*suf2;
+	t_r	*red;
 
 	pre1 = (void *)(*(pre + 3));
 	red = (void *)(*(pre + 2));
@@ -52,13 +52,13 @@ static void	reset_state2(rule_elem *pre, rule_elem *suf)
 	reset(suf2);
 }
 
-static void	reset_state1(rule_elem *p)
+static void	reset_state1(t_r *p)
 {
-	rule_elem	*p1;
-	rule_elem	*cmd;
-	rule_elem	*cmd1;
-	rule_elem	*cmd2;
-	rule_elem	*par;
+	t_r	*p1;
+	t_r	*cmd;
+	t_r	*cmd1;
+	t_r	*cmd2;
+	t_r	*par;
 
 	p1 = (void *)(*(p + 3));
 	cmd = (void *)(*(p + 2));
@@ -73,12 +73,12 @@ static void	reset_state1(rule_elem *p)
 	reset_state2((void *)(*(cmd + 4)), (void *)(*(cmd2 + 2)));
 }
 
-void	reset_state(rule_elem *pt)
+void	reset_state(t_r *pt)
 {
-	rule_elem	*tst;
-	rule_elem	*p;
-	rule_elem	*tst1;
-	rule_elem	*tst2;
+	t_r	*tst;
+	t_r	*p;
+	t_r	*tst1;
+	t_r	*tst2;
 
 	tst = (void *)(*(pt + 2));
 	p = (void *)(*(tst + 2));

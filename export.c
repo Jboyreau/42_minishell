@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:08:30 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/23 16:59:25 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/23 17:36:27 by jboyreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char	allocate_var_name(char *var, char **name, char **content, int len)
 		return (*content = *name + i, SUCCESS);
 	*content = *name + (++i);
 	j = 0;
-	while (*(var + i + j) && i +j < len)
+	while (*(var + i + j) && i + j < len)
 	{
 		*(*content + j) = *(var + i + j);
 		++j;
@@ -65,23 +65,23 @@ char	indentifier_is_valide(char *variable, int i, int l)
 		++l;
 	if ((*variable == ' ' || *variable == '\t')
 		|| (*variable >= '0' && *variable <= '9'))
-		{
-			(write(2, "minishell: export: `", 21), write(2, variable, l));
-			write(2, "': not a valid identifier\n", 26);
-			return (FAILURE);
-		}
+	{
+		(write(2, "minishell: export: `", 21), write(2, variable, l));
+		write(2, "': not a valid identifier\n", 26);
+		return (FAILURE);
+	}
 	while (*(variable + ++i) != '=' && *(variable + i) != '\0')
 	{
 		if (*(variable + i) != '_')
 		{
-			if (*(variable + i) < 'A' || *(variable + i) > 'Z')
-				if (*(variable + i) < 'a' || *(variable + i) > 'z')
-					if (*(variable + i) < '0' || *(variable + i) > '9')
-					{
-						(write(2, "minishell: export: `", 21), write(2, variable, l));
-						write(2, "': not a valid identifier\n", 26);
-						return (FAILURE);
-					}
+			if ((*(variable + i) < 'A' || *(variable + i) > 'Z')
+				&& (*(variable + i) < 'a' || *(variable + i) > 'z')
+				&& (*(variable + i) < '0' || *(variable + i) > '9'))
+			{
+				write(2, "minishell: export: `", 21);
+				write(2, variable, l);
+				return (write(2, "': not a valid identifier\n", 26), FAILURE);
+			}
 		}
 	}
 	return (SUCCESS);
@@ -89,15 +89,17 @@ char	indentifier_is_valide(char *variable, int i, int l)
 
 char	ft_export(t_lv **va, char **env, char *variable, int len)
 {
-	static char *content;
-	static char *name;
+	static char	*content;
+	static char	*name;
 
 	if (*va != NULL && variable == NULL)
 		return (print_va(*va), SUCCESS);
 	if (variable != NULL)
 	{
 		if (*variable == 0)
-			return (write(2, "minishell: export: `': not a valid identifier\n", 46), FAILURE);
+			return (
+				write(2, "minishell: export: `': not a valid identifier\n", 46),
+				FAILURE);
 		if (indentifier_is_valide(variable, 0, 0) == FAILURE)
 			return (FAILURE);
 		if (allocate_var_name(variable, &name, &content, len) == FAILURE)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_4.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jboyreau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/20 18:07:36 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/22 12:51:38 by cbessonn         ###   ########.fr       */
+/*   Created: 2023/09/23 17:16:23 by jboyreau          #+#    #+#             */
+/*   Updated: 2023/09/23 17:17:37 by jboyreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	builtin_export(t_lv **va, char **env, t_leaf *cmd)
 	while (*((*cmd).arg + (++i)))
 	{
 		if (ft_export(va, env, *((*cmd).arg + i),
-			ft_strlen(*((*cmd).arg + i))) == FAILURE)
+				ft_strlen(*((*cmd).arg + i))) == FAILURE)
 			return (FAILURE);
 	}
 	if (i == 1)

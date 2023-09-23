@@ -6,58 +6,57 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 12:35:53 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/22 13:44:09 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/23 19:40:33 by jboyreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdio.h>
 
-static char	firstof(r *rule, int type)
+static char	firstof(t_r *rule, int type)
 {
 	int	i;
 
 	i = 2;
-	while (*(rule + i) != (r)-1)
+	while (*(rule + i) != (t_r)-1)
 		++i;
 	++i;
-	while (*(rule + i) != (r)-1)
+	while (*(rule + i) != (t_r)-1)
 	{
-//printf("*(rule + %d) = %lld, type = %d\n", i, *(rule + i), type);
-		if (*(rule + i) == (r)type)
+		if (*(rule + i) == (t_r)type)
 			return (type);
 		++i;
 	}
 	return (12);
 }
 
-static char	rule_is_last(r *rule)
+static char	rule_is_last(t_r *rule)
 {
 	int	i;
 
 	i = 0;
-	while (*(rule + i) != (r)-1 && *(rule + i) != (r)-2)
+	while (*(rule + i) != (t_r)-1 && *(rule + i) != (t_r)-2)
 		++i;
-	if (*(rule + i) == (r)-1)
+	if (*(rule + i) == (t_r)-1)
 		return (SUCCESS);
 	return (FAILURE);
 }
 
-static char	search_epsilon(r *rule)
+static char	search_epsilon(t_r *rule)
 {
 	int	i;
 
 	i = 2;
-	while (*(rule + i) != Z && *(rule + i) != (r)-1)
+	while (*(rule + i) != Z && *(rule + i) != (t_r)-1)
 		++i;
 	if (*(rule + i) == Z)
 		return (SUCCESS);
 	return (FAILURE);
 }
 
-char	firstof_one(r **rule, char type, char *f_type, int i)
+char	firstof_one(t_r **rule, char type, char *f_type, int i)
 {
-	if (*((*rule) + i) == (r)-1 || *((*rule) + i) == (r)-2)
+	if (*((*rule) + i) == (t_r)-1 || *((*rule) + i) == (t_r)-2)
 	{
 		if ((*((t_rs *)(*(*rule)))).id == PT_ &&
 		(*((t_rs *)(*(*rule)))).lstate == 0)
@@ -65,22 +64,22 @@ char	firstof_one(r **rule, char type, char *f_type, int i)
 		else
 			return (ascend(rule));
 	}
-	if (*((*rule) + i) < Z && *((*rule) + i) == (r)type)
+	if (*((*rule) + i) < Z && *((*rule) + i) == (t_r)type)
 		return (stay(rule, type, f_type, i));
 	if (*((*rule) + i) > Z)
 	{
-		if (firstof((r *)(*((*rule) + i)), type) == type)
+		if (firstof((t_r *)(*((*rule) + i)), type) == type)
 			return (dive(i, rule));
-		if (search_epsilon((r*)(*((*rule) + i))) == SUCCESS)
+		if (search_epsilon((t_r *)(*((*rule) + i))) == SUCCESS)
 		{
 			return (++((*((t_loc *)(*((*rule) + 1))
-			+ (*((t_rs *)(*(*rule)))).lstate)).index), ASCEND);
+						+ (*((t_rs *)(*(*rule)))).lstate)).index), ASCEND);
 		}
 	}
 	return (QUIT);
 }
 
-char	firstof_all(r **rule, char type, char *f_type)
+char	firstof_all(t_r **rule, char typ, char *f_typ)
 {
 	int		i;
 	t_loc	*l;
@@ -89,11 +88,11 @@ char	firstof_all(r **rule, char type, char *f_type)
 	l = (t_loc *)(*((*rule) + 1));
 	ls = (*((t_rs *)(**rule))).lstate;
 	i = 2;
-	while (*((*rule) + i) != (r)-1)
+	while (*((*rule) + i) != (t_r)(-1))
 	{
-		if (*((*rule) + i) < Z && *((*rule) + i) == (r)type)
-			return (((*(l + ls)).index) = i, stay(rule, type, f_type, i));
-		if (*((*rule) + i) > Z && firstof((r *)(*((*rule) + i)), type) == type)
+		if (*((*rule) + i) < Z && *((*rule) + i) == (t_r)typ)
+			return (((*(l + ls)).index) = i, stay(rule, typ, f_typ, i));
+		if (*((*rule) + i) > Z && firstof((t_r *)(*((*rule) + i)), typ) == typ)
 			return (((*(l + ls)).index) = i, dive(i, rule));
 		if (rule_is_last((*rule) + i) == SUCCESS)
 		{
@@ -101,9 +100,9 @@ char	firstof_all(r **rule, char type, char *f_type)
 				return (ascend(rule));
 			return (QUIT);
 		}
-		while (*((*rule) + i) != (r)-1 && *((*rule) + i) != (r)-2)
+		while (*((*rule) + i) != (t_r)(-1) && *((*rule) + i) != (t_r)(-2))
 			++i;
-		if (*((*rule) + i) == (r)-2)
+		if (*((*rule) + i) == (t_r)(-2))
 			++i;
 	}
 	return (0);

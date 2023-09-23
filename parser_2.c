@@ -6,17 +6,17 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 12:35:57 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/22 13:00:59 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/23 19:41:55 by jboyreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "minishell.h"
 
-char	dive(int i, r **rule)
+char	dive(int i, t_r **rule)
 {
 	t_rs	*state;
-	r		*prev;
+	t_r		*prev;
 	t_loc	*loc;
 	int		lstate;
 
@@ -24,7 +24,7 @@ char	dive(int i, r **rule)
 	lstate = (*((t_rs *)(**rule))).lstate;
 	((*(loc + lstate)).index) = i + 1;
 	prev = *rule;
-	*rule = (r *)(*((*rule) + i));
+	*rule = (t_r *)(*((*rule) + i));
 	++((*((t_rs *)(**rule))).lstate);
 	lstate = (*((t_rs *)(**rule))).lstate;
 	state = (t_rs *)(*(*rule));
@@ -36,7 +36,7 @@ char	dive(int i, r **rule)
 	return (DIVE);
 }
 
-char ascend(r **rule)
+char	ascend(t_r **rule)
 {
 	int		*save_lstate;
 	t_loc	*loc;
@@ -51,7 +51,7 @@ char ascend(r **rule)
 	return (ASCEND);
 }
 
-char stay(r **rule, char type, char *f_type, int i)
+char	stay(t_r **rule, char type, char *f_type, int i)
 {
 	t_loc	*loc;
 	int		lstate;

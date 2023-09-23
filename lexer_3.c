@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 14:37:36 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/23 16:19:22 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/23 18:13:04 by jboyreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,11 @@
 
 char	rev_char_is_token(char c0, char c1, int *j)
 {
-	char *t;
+	char	*t;
 
 	t = ")\n(<>|";
-
 	if ((c0 == '<' || c0 == '>' || c0 == '|' || c0 == '&') && (c0 == c1))
-			return ((*j) -= 2, SUCCESS);
+		return ((*j) -= 2, SUCCESS);
 	while (*t)
 	{
 		if (c0 == *t)
@@ -35,7 +34,7 @@ char	rev_char_is_token(char c0, char c1, int *j)
 
 static void	fnormal_string(t_leaf *tr, char *str, int *i, int *count)
 {
-	int s;
+	int	s;
 	int	j;
 	int	test;
 
@@ -44,22 +43,22 @@ static void	fnormal_string(t_leaf *tr, char *str, int *i, int *count)
 	if (*(str + (*i)) == '$')
 	{
 		j = *i;
-		while (j > -1 && *(str + j) != '$' && is_space(j, str) &&
-		ris_token(j, &j, str) == FAILURE)
+		while (j > -1 && *(str + j) != '$' && is_space(j, str)
+			&& ris_token(j, &j, str) == FAILURE)
 			--j;
-		if (j > 0)
-			if ((*str + j) == '$')
-				(++(*i), test = 0);
+		if (j > 0 && (*str + j) == '$')
+			++(*i);
+		if (j > 0 && (*str + j) == '$')
+			test = 0;
 	}
 	while (*(str + (*i)))
 	{
 		if (is_space(*i, str) || (*(str + (*i)) == '$' && test == 0))
-			return (fill_leaf(tr, W, *i-s, str + s), ++(*count), (void)0);
-		if (is_token(*i, &j, str) == SUCCESS)
-			return (fill_leaf(tr, W, *i-s, str + s), ++(*count), (void)0);
-		++(*i);
+			return (fill_leaf(tr, W, *i - s, str + s), ++(*count), (void)0);
+		if (++(*i), is_token(*i, &j, str) == SUCCESS)
+			return (fill_leaf(tr, W, *i - s, str + s), ++(*count), (void)0);
 	}
-	return (fill_leaf(tr, W, *i-s, str + s), ++(*count), (void)0);
+	return (fill_leaf(tr, W, *i - s, str + s), ++(*count), (void)0);
 }
 
 static void	fdq_sequence(t_leaf *tr, char *str, int *i, int *count)
@@ -110,4 +109,3 @@ void	flongest_token(t_leaf *tr, char *str, int *i, int *count)
 		return (fdq_sequence(tr, str, i, count));
 	return (fnormal_string(tr, str, i, count));
 }
-

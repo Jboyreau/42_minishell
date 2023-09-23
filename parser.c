@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 15:45:01 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/22 13:43:08 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/23 19:46:53 by jboyreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "minishell.h"
 #define ALLOC_SIZE 500
 
-static char	ft_alloc_loc2(t_rs *state, r *loc)
+static char	ft_alloc_loc2(t_rs *state, t_r *loc)
 {
 	int		i;
 	t_loc	*location;
@@ -34,12 +34,12 @@ static char	ft_alloc_loc2(t_rs *state, r *loc)
 	}
 	while (++i < (*state).size)
 		(*(new + i)).index = 0;
-	*loc = (r)new;
+	*loc = (t_r)new;
 	free(location);
 	return (SUCCESS);
 }
 
-char	ft_alloc_loc(t_rs *state, r *loc)
+char	ft_alloc_loc(t_rs *state, t_r *loc)
 {
 	int		i;
 	t_loc	*location;
@@ -47,7 +47,7 @@ char	ft_alloc_loc(t_rs *state, r *loc)
 	if ((*state).size == 0)
 	{
 		(*state).size = ALLOC_SIZE;
-		*loc = (r)malloc((*state).size * sizeof(t_loc));
+		*loc = (t_r)malloc((*state).size * sizeof(t_loc));
 		if (*loc == 0)
 			return (MEM_FAIL);
 		i = -1;
@@ -59,28 +59,19 @@ char	ft_alloc_loc(t_rs *state, r *loc)
 	return (ft_alloc_loc2(state, loc));
 }
 
-static char	check_production(r **rule, char type, char *f_type)
+static char	check_production(t_r **rule, char type, char *f_type)
 {
 	t_loc	*location;
 	int		lstate;
 
 	lstate = (*((t_rs *)(**rule))).lstate;
 	location = (((t_loc *)(*((*rule) + 1))) + lstate);
-/*if ((*((t_rs *)(**rule))).id != PT_)
-{
-	int prev_id = (*((t_rs *)(*((r*)((*location).prev))))).id;
-		printf("prev_id = %d, type = %d, index = %d, rule = %d,
-		value = %lld \n", prev_id, type, (*location).index,
-			(*((t_rs *)(**rule))).id, *((*rule) + (*location).index));
-}
-else
-printf("type = %d, index = %d, rule = %d, value = %lld \n", type, (*location).index, (*((t_rs *)(**rule))).id, *((*rule) + (*location).index));*/
 	if ((*location).index != 0)
 		return (firstof_one(rule, type, f_type, (*location).index));
 	return (firstof_all(rule, type, f_type));
 }
 
-static char	find_token(char *f_type, char type, rule_elem **rule)
+static char	find_token(char *f_type, char type, t_r **rule)
 {
 	char	ret;
 	t_rs	*state;
@@ -104,11 +95,11 @@ static char	find_token(char *f_type, char type, rule_elem **rule)
 	return (SUCCESS);
 }
 
-char	parser(t_leaf *tr, rule_elem *rule)
+char	parser(t_leaf *tr, t_r *rule)
 {
 	int	i;
 	int	ret;
-	r	*prompt;
+	t_r	*prompt;
 
 	if (tr == NULL)
 		return (MEM_FAIL);
@@ -125,7 +116,8 @@ char	parser(t_leaf *tr, rule_elem *rule)
 		ret = find_token(&(*(tr + i)).f_type, (*(tr + i)).type, &rule);
 		if (ret == FAILURE)
 			return (reset_state(prompt),
-			print_error((*(tr + i)).type, (*(tr + i)).word, (*(tr + i)).len));
+				print_error((*(tr + i)).type, (*(tr + i)).word,
+					(*(tr + i)).len));
 		if (ret == MEM_FAIL)
 			return (MEM_FAIL);
 	}

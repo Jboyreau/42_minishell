@@ -125,9 +125,9 @@ enum production_result
 	QUIT,
 };
 
-typedef unsigned long long int rule_elem;
+typedef unsigned long long int	t_rule_elem;
 
-typedef	rule_elem r;
+typedef t_rule_elem	t_r;
 
 typedef struct	s_local_var
 {
@@ -150,7 +150,7 @@ typedef struct	s_commands
 	char	*str;
 	t_leaf	*tr;
 	t_lv	*va;
-	r		*start;
+	t_r		*start;
 	char	*str1;
 	char	*str2;
 	char	ret;
@@ -162,7 +162,7 @@ typedef struct	s_commands
 
 typedef struct	s_location
 {
-	rule_elem	*prev;
+	t_rule_elem	*prev;
 	int			index;
 } t_loc;
 
@@ -201,7 +201,7 @@ typedef struct s_str_array
 {
 	char	**ptr;
 	int		size;
-}		t_str_array;
+}				t_str_array;
 
 //Lexer:
 char		only_space(char *str);
@@ -228,19 +228,19 @@ void		print_va(t_lv *va);
 char		args_to_array(t_leaf *cmd, t_leaf *arg, t_lv *va);
 char		args_to_array_wildcard(t_leaf *cmd, char *filename);
 //Syntaxe analysis:
-rule_elem	*init_rules();
-rule_elem	*init1(r *red, r *tst, r *suf);
-rule_elem	*init_id(rule_elem *prompt);
-char		parser(t_leaf *tr, rule_elem *rule);
+t_rule_elem	*init_rules();
+t_rule_elem	*init1(t_r *red, t_r *tst, t_r *suf);
+t_rule_elem	*init_id(t_rule_elem *prompt);
+char		parser(t_leaf *tr, t_rule_elem *rule);
 char		print_error(int type, char *word, int len);
-void		parser_destroyer(rule_elem *prompt);
-char		firstof_all(r **rule, char type, char *f_type);
-char		firstof_one(r **rule, char type, char *f_type, int i);
-char		dive(int i, r **rule);
-char		stay(r **rule, char type, char *f_type, int i);
-char		ascend(r **rule);
-void		reset_state(rule_elem *pt);
-char		ft_alloc_loc(t_rs *state, r *loc);
+void		parser_destroyer(t_rule_elem *prompt);
+char		firstof_all(t_r **rule, char typ, char *f_typ);
+char		firstof_one(t_r **rule, char type, char *f_type, int i);
+char		dive(int i, t_r **rule);
+char		stay(t_r **rule, char type, char *f_type, int i);
+char		ascend(t_r **rule);
+void		reset_state(t_rule_elem *pt);
+char		ft_alloc_loc(t_rs *state, t_r *loc);
 char		c(t_leaf *tr);
 char		d(t_leaf *tr);
 char        e(t_leaf *tr);
@@ -318,13 +318,16 @@ int 	unset(t_lv *va, char** arg);
 int		env(t_lv *va);
 
 //Destroyer
-void	dall(t_lv *va, r *start);
+void	dall(t_lv *va, t_r *start);
 void	dll(char **str, t_leaf **tr);
 void	ft_str_array_free(t_str_array *array);
 void	exit_failure(t_cmd *hll);
+void	destroy_arg_child(t_leaf *tr);
+void	dll_child(char **str, t_leaf **tr);
 
 //Wildcard
 int		wildcard(t_leaf *cmd, t_leaf *arg);
 int		wildcard_redirect(char *file);
 
 #endif
+

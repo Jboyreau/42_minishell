@@ -6,19 +6,19 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 15:45:14 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/19 15:45:14 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/23 19:01:56 by jboyreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "minishell.h"
 
-static void	parser_destroyer2(rule_elem *pre, rule_elem *suf)
+static void	parser_destroyer2(t_r *pre, t_r *suf)
 {
-	rule_elem	*pre1;
-	rule_elem	*suf1;
-	rule_elem	*suf2;
-	rule_elem	*red;
+	t_r	*pre1;
+	t_r	*suf1;
+	t_r	*suf2;
+	t_r	*red;
 
 	pre1 = (void *)(*(pre + 3));
 	red = (void *)(*(pre + 2));
@@ -38,13 +38,13 @@ static void	parser_destroyer2(rule_elem *pre, rule_elem *suf)
 		free((void *)(*(red + 1)));
 }
 
-static void	parser_destroyer1(rule_elem *p, rule_elem *nl)
+static void	parser_destroyer1(t_r *p, t_r *nl)
 {
-	rule_elem	*p1;
-	rule_elem	*cmd;
-	rule_elem	*cmd1;
-	rule_elem	*cmd2;
-	rule_elem	*par;
+	t_r	*p1;
+	t_r	*cmd;
+	t_r	*cmd1;
+	t_r	*cmd2;
+	t_r	*par;
 
 	p1 = (void *)(*(p + 3));
 	cmd = (void *)(*(p + 2));
@@ -66,12 +66,12 @@ static void	parser_destroyer1(rule_elem *p, rule_elem *nl)
 	parser_destroyer2((void *)(*(cmd + 4)), (void *)(*(cmd2 + 2)));
 }
 
-void	parser_destroyer(rule_elem *pt)
+void	parser_destroyer(t_r *pt)
 {
-	rule_elem	*tst;
-	rule_elem	*p;
-	rule_elem	*tst1;
-	rule_elem	*tst2;
+	t_r	*tst;
+	t_r	*p;
+	t_r	*tst1;
+	t_r	*tst2;
 
 	tst = (void *)(*(pt + 2));
 	p = (void *)(*(tst + 2));

@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 10:25:41 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/23 15:24:13 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/23 19:24:30 by jboyreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 #include <errno.h>
 #include "minishell.h"
 
-short int g_signal = 0;
+short int	g_signal = 0;
 
-void	dall(t_lv *va, r *start)
+void	dall(t_lv *va, t_r *start)
 {
 	destroy_va(va);
 	parser_destroyer(start);
@@ -106,7 +106,7 @@ char	parse_prompt(t_cmd *hll, char **env)
 		if (hll->ret == SUCCESS)
 		{
 			if (heredoc(hll->tr) == SUCCESS)
-				clean_prompt(&hll->tr), execute(hll, hll->tr, env);
+				(clean_prompt(&hll->tr), execute(hll, hll->tr, env));
 			else
 			{
 				dll_here(&hll->str, &hll->tr);
@@ -115,7 +115,7 @@ char	parse_prompt(t_cmd *hll, char **env)
 		}	
 	}
 	else if (hll->ret == MEM_FAIL)
-			return (dll(&hll->str, &hll->tr), dall(hll->va, hll->start), 1);
+		return (dll(&hll->str, &hll->tr), dall(hll->va, hll->start), 1);
 	return (0);
 }
 

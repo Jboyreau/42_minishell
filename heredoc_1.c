@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 15:45:24 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/22 12:53:31 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/23 17:50:37 by jboyreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static char	add(char **folder, char *file_name, int len)
 			return (FAILURE);
 		if (*(file_name + last) != 'z')
 			++(*(file_name + last));
-		else 
+		else
 			inc(file_name, last);
 	}
 	return (SUCCESS);
@@ -75,7 +75,7 @@ static char	add(char **folder, char *file_name, int len)
 
 void	back_tracking(char **folder, char *file_name)
 {
-	int len;
+	int	len;
 
 	len = 1;
 	while (add(folder, file_name, len) == FAILURE)
