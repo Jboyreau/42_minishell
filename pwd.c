@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 22:07:55 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/23 11:22:35 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/24 21:58:48 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,11 @@ int	ft_pwd(void)
 	else
 	{
 		if (write(STDOUT_FILENO, &buffer, ft_strlen(buffer)) == -1)
-			perror("write error");
+			return (perror("bash: pwd: write error:No space left on device"),
+				-1);
 		if (write(STDOUT_FILENO, "\n", 1) == -1)
-			perror("write error");
+			return (perror("bash: pwd: write error: No space left on device"),
+				-1);
 	}
 	return (0);
 }

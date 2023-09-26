@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 12:34:51 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/22 12:50:24 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/23 20:47:19 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static char	va_init(t_lv **va, char **env, int *size)
 {
 	int	len;
 
-	*size = 0;
+	*size = 1;
 	while (*(env + (*size)))
 		++(*size);
 	(*size) <<= 1;

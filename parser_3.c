@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 12:36:00 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/23 20:22:12 by jboyreau         ###   ########.fr       */
+/*   Updated: 2023/09/24 21:19:46 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,12 @@ char	e(t_leaf *tr)
 	return (SUCCESS);
 }
 
-char	c(t_leaf *tr)
+char	c(t_leaf *tr, int *test)
 {
 	int			i;
 	int			count;
-	static int	test = 0;
 
-	if (test++ > 0)
+	if ((*test)++ > 0)
 		return (SUCCESS);
 	count = 0;
 	i = -1;

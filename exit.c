@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 04:22:20 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/22 12:47:34 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/24 16:06:14 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	ft_atoi(const char *nptr)
 	return (nb * signe);
 }
 
-int	ft_exit(t_leaf *cmd, t_exec *ex)
+int	ft_exit(t_leaf *cmd, t_exec *ex, int *tempfd)
 {
 	int	code;
 
@@ -70,17 +70,18 @@ int	ft_exit(t_leaf *cmd, t_exec *ex)
 		if (str_is_digit(cmd->arg[1]))
 			code = atoi(cmd->arg[1]);
 		else
-		{
-			write(2, "minishell: exit: ", 18);
-			write(2, cmd->arg[1], ft_strlen(cmd->arg[1]));
-			write(2, ": numeric argument required\n", 28);
-			return (1);
-		}
+			return (write(2, "minishell: exit: ", 18), write(2, cmd->arg[1],
+					ft_strlen(cmd->arg[1])), write(2,
+					": numeric argument required\n", 28), 1);
 		if (cmd->arg[2] != 0)
 			return (write(2, "minishell: exit: too many arguments\n", 37), 1);
 	}
-	(dll(&(ex->cmd_ptr->str), &(ex->cmd_ptr->tr)),
-		dall(ex->cmd_ptr->va, ex->cmd_ptr->start));
-	write(2, "exit\n", 5);
+	if (ex->cmd_pos == 0)
+		dll(&(ex->cmd_ptr->str), &(ex->cmd_ptr->tr));
+	else
+		dll_child(&(ex->cmd_ptr->str), &(ex->cmd_ptr->tr));
+	(dall(ex->cmd_ptr->va, ex->cmd_ptr->start), write(2, "exit\n", 5));
+	if (tempfd != 0)
+		(close(tempfd[0]), close(tempfd[1]));
 	exit(code);
 }

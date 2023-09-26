@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 11:27:16 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/23 14:56:15 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/25 13:31:40 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ void	handle_command(t_exec *ex, t_leaf *token, int i, int *pipefd)
 	{
 		ex->status = nofork_builtins_exec(token, i, ex);
 		g_signal = ex->status;
-		//update_exit_stat(ex->cmd_ptr->va, ex->status);
 	}
 	else
 	{
@@ -94,7 +93,6 @@ void	handle_command(t_exec *ex, t_leaf *token, int i, int *pipefd)
 		{
 			ex->status = wait_cmd(ex->nb_of_cmd, ex->last_pid);
 			g_signal = ex->status;
-			//update_exit_stat(ex->cmd_ptr->va, ex->status);
 		}
 	}
 }
@@ -107,10 +105,13 @@ void	execute(t_cmd *hll, t_leaf *token, char **env)
 
 	ex.env = env;
 	ex.cmd_ptr = hll;
-	i = 0;
-	while (token[i].type != -1)
+	ex.redir_alone = 0;
+	i = -1;
+	while (token[++i].type != -1)
 	{
-		if (token[i].type == W && token[i].f_type == CMD)
+		if (token[i].type == L || token[i].type == R || token[i].type == DR)
+			check_if_cmd(token, &i, &ex, pipefd);
+		else if (token[i].type == W && token[i].f_type == CMD)
 			handle_command(&ex, token, i, pipefd);
 		else if (token[i].type == OP_PAR)
 			handle_subshell(token, &i, pipefd, &ex);
@@ -122,6 +123,5 @@ void	execute(t_cmd *hll, t_leaf *token, char **env)
 				if (token[++i].type == OP_PAR)
 					last_par(token, &i);
 		}
-		i++;
 	}
 }

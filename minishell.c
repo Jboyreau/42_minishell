@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 10:25:41 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/23 19:24:30 by jboyreau         ###   ########.fr       */
+/*   Updated: 2023/09/25 14:38:39 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,6 @@
 
 short int	g_signal = 0;
 
-void	dall(t_lv *va, t_r *start)
-{
-	destroy_va(va);
-	parser_destroyer(start);
-}
-
 //CRITICAL, DON'T TOUCH.
 void	dll(char **str, t_leaf **tr)
 {
@@ -37,19 +31,6 @@ void	dll(char **str, t_leaf **tr)
 		*str = NULL;
 	}
 	destroy_arg(*tr);
-	if (*tr)
-		free(*tr);
-	return (*tr = NULL, (void)0);
-}
-
-void	dll_here(char **str, t_leaf **tr)
-{
-	if (str)
-	{
-		if (*str)
-			free(*str);
-		*str = NULL;
-	}
 	if (*tr)
 		free(*tr);
 	return (*tr = NULL, (void)0);
@@ -87,7 +68,7 @@ static char	check_nl(t_cmd *hll, char type, int i, int j)
 		j = -1;
 		while (i + (++j) < (*hll).len + 2 && (*hll).str)
 			*((*hll).str + i + j) = *((*hll).str2 + j);
-		(*hll).ret = parser(lexer(hll), (*hll).start);
+		(*hll).ret = parser(lexer(hll), (*hll).start, -1, 0);
 		if (free((*hll).str2), (*hll).ret)
 			return ((*hll).ret);
 		(free((*hll).str1), type = (*((*hll).tr + (*hll).count - 3)).type);
@@ -97,7 +78,7 @@ static char	check_nl(t_cmd *hll, char type, int i, int j)
 
 char	parse_prompt(t_cmd *hll, char **env)
 {
-	hll->ret = parser(lexer(hll), hll->start);
+	hll->ret = parser(lexer(hll), hll->start, -1, 0);
 	if (hll->ret == SUCCESS)
 	{
 		hll->ret = check_nl(hll, (*(hll->tr + hll->count - 3)).type, 0, 0);
@@ -108,14 +89,14 @@ char	parse_prompt(t_cmd *hll, char **env)
 			if (heredoc(hll->tr) == SUCCESS)
 				(clean_prompt(&hll->tr), execute(hll, hll->tr, env));
 			else
-			{
-				dll_here(&hll->str, &hll->tr);
-				return (2);
-			}
+				return (dll(&hll->str, &hll->tr), 2);
 		}	
 	}
 	else if (hll->ret == MEM_FAIL)
 		return (dll(&hll->str, &hll->tr), dall(hll->va, hll->start), 1);
+	else if (hll->ret == FAILURE)
+		return (dll_no_here(&(hll->str), &(hll->tr)), 0);
+	dll(&(hll->str), &(hll->tr));
 	return (0);
 }
 
@@ -162,7 +143,6 @@ int	main(int argc, char **argv, char **env)
 			return (1);
 		else if (parse_res == 2)
 			continue ;
-		dll(&(hll.str), &(hll.tr));
 	}
 	return (dall(hll.va, hll.start), EXIT_SUCCESS);
 }

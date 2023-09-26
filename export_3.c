@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 12:34:58 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/22 12:51:18 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/24 22:24:02 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,20 @@ void	print_va(t_lv *va)
 		return ;
 	i = -1;
 	while ((*(va + (++i))).name)
+	{
 		if (*((*(va + i)).name) != '?' && *((*(va + i)).name) > -1)
-			printf("declare -x %s=\"%s\"\n", (*(va + i)).name,
-				(*(va + i)).content);
+		{
+			if (*(*(va + i)).content == '\0')
+			{
+				if (printf("declare -x %s\n", (*(va + i)).name) == -1)
+					return (perror("minishell: export: write error"));
+			}
+			else
+			{
+				if (printf("declare -x %s=\"%s\"\n", (*(va + i)).name,
+						(*(va + i)).content) == -1)
+					return (perror("minishell: export: write error"));
+			}
+		}
+	}
 }

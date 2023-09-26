@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/16 17:06:29 by jboyreau          #+#    #+#             */
-/*   Updated: 2023/09/23 17:52:06 by jboyreau         ###   ########.fr       */
+/*   Updated: 2023/09/25 14:46:25 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,7 @@ static char	fill_fifo(t_leaf *dl)
 	if ((*dl).word == NULL)
 		return (d_folder(folder), FAILURE);
 	if (fill_fifo2(dl + 1, (*dl).fdl) == FAILURE)
-		return (close((*dl).fdl), unlink((*dl).word)
-			, free((*dl).word), FAILURE);
+		return (close((*dl).fdl), FAILURE);
 	close((*dl).fdl);
 	return (SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:55:31 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/23 14:58:14 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/25 12:47:32 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void	handle_subshell(t_leaf *token, int *i, int *pipefd, t_exec *ex)
 	if (ex->cmd_pos == NO_PIPE || ex->cmd_pos == LAST_CMD)
 	{
 		ex->status = wait_cmd(ex->nb_of_cmd, ex->last_pid);
-		//update_exit_stat(ex->cmd_ptr->va, ex->status);
 		g_signal = ex->status;
 	}
 	token[*i].type = CLS_PAR;
@@ -52,7 +51,6 @@ void	handle_sub_command(t_exec *ex, t_leaf *tok, int i, int *pipefd)
 	if (ex->cmd_pos == NO_PIPE || ex->cmd_pos == LAST_CMD)
 	{
 		ex->status = wait_cmd(ex->nb_of_cmd, ex->last_pid);
-		//update_exit_stat(ex->cmd_ptr->va, ex->status);
 		g_signal = ex->status;
 	}
 }
@@ -64,8 +62,11 @@ int	execute_sub(t_cmd *hll, t_leaf *tok, int i, char **env)
 
 	ex.env = env;
 	ex.cmd_ptr = hll;
+	ex.redir_alone = 0;
 	while (tok[i].type != -1)
 	{
+		if (tok[i].type == L || tok[i].type == R || tok[i].type == DR)
+			check_if_cmd(tok, &i, &ex, pipefd);
 		if (tok[i].type == W && tok[i].f_type == CMD)
 			handle_sub_command(&ex, tok, i, pipefd);
 		else if (tok[i].type == OP_PAR)
@@ -76,7 +77,7 @@ int	execute_sub(t_cmd *hll, t_leaf *tok, int i, char **env)
 				last_par(tok, &i);
 		i++;
 	}
-	(dll(&(ex.cmd_ptr->str), &(ex.cmd_ptr->tr)),
+	(dll_child(&(ex.cmd_ptr->str), &(ex.cmd_ptr->tr)),
 		dall(ex.cmd_ptr->va, ex.cmd_ptr->start));
 	exit(ex.status);
 }

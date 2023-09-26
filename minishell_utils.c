@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 15:44:11 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/23 14:13:40 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/23 18:35:32 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,32 +15,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdio.h>
-
-void	destroy_arg(t_leaf *tr)
-{
-	int	i;
-	int	j;
-
-	i = -1;
-	if (tr)
-	{
-		while ((*(tr + (++i))).type != -1)
-		{
-			if ((*(tr + i)).type == W && (*(tr + i)).f_type == CMD)
-			{
-				j = -1;
-				while ((*(tr + i)).arg && *((*(tr + i)).arg + (++j)))
-					free(*((*(tr + i)).arg + j));
-				free((*(tr + i)).arg);
-			}
-			if ((*(tr + i)).type == DL && (*(tr + i + 1)).type == W)
-			{
-				unlink((*(tr + i)).word);
-				free((*(tr + i)).word);
-			}
-		}
-	}
-}
 
 void	ft_str_array_free(t_str_array *array)
 {
@@ -85,9 +59,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	if (n && (!ft_strlen(s1) || !ft_strlen(s2)))
-		return ((unsigned char)*s1 - (unsigned char)*s2);
-	while ((*s1 || *s2) && n > 0)
+	while (*s2 && n > 0)
 	{
 		if ((unsigned char)*s1 != (unsigned char)*s2)
 			return ((unsigned char)*s1 - (unsigned char)*s2);
@@ -95,6 +67,8 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 		s2++;
 		n--;
 	}
+	if (*s2 != 0 || n != 0)
+		return (1);
 	return (0);
 }
 

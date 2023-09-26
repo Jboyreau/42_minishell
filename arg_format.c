@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 12:33:53 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/22 12:39:01 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/24 16:19:30 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,4 +92,17 @@ char	args_to_array_wildcard(t_leaf *cmd, char *filename)
 		return (FAILURE);
 	*((*cmd).arg + len + 1) = NULL;
 	return (SUCCESS);
+}
+
+char	fill_arg(t_leaf *cmd, t_leaf *token, t_exec *ex)
+{
+	if (*(token->word) == '$')
+	{
+		if (split_args(cmd, token, ex->cmd_ptr->va) == FAILURE)
+			return (-1);
+	}
+	else
+		if (args_to_array(cmd, token, ex->cmd_ptr->va) == FAILURE)
+			return (-1);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 11:27:06 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/22 12:44:26 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/25 12:38:08 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ int	open_file(t_leaf *redirect_to, t_leaf *redirection, t_lv *va, t_cmd *hll)
 	file = string_sub(redirect_to, va);
 	if (file == 0)
 		return (write(2, "file malloc failed\n", 20), exit_failure(hll), -1);
-	if (wildcard_redirect(file) == -1)
-		return (free(file), exit_failure(hll), -1);
 	if (redirection->type == L)
 		fd = open(file, O_RDONLY);
 	else
@@ -54,7 +52,7 @@ void	expand_heredoc(t_leaf *redirect, t_lv *va, char *str, int fd)
 	head = NULL;
 	fd = open(redirect->word, O_RDONLY);
 	if (fd == -1)
-		perror("heredoc : fifo :");
+		return (perror("heredoc : fifo"));
 	while (1)
 	{
 		str = gnl(fd);
@@ -67,11 +65,10 @@ void	expand_heredoc(t_leaf *redirect, t_lv *va, char *str, int fd)
 	}
 	close(fd);
 	fd = open(redirect->word, O_WRONLY | O_TRUNC);
-	while (head)
-	{
-		(write(fd, head->content, ft_strlen(head->content)), write(fd, "\n", 1));
-		head = head->next;
-	}
+	lst = head;
+	while (lst)
+		(write(fd, lst->content, ft_strlen(lst->content)),
+			write(fd, "\n", 1), lst = lst->next);
 	(close(fd), ft_lstclear(&head));
 }
 
@@ -139,8 +136,8 @@ int	suf_redir(t_leaf *token, t_exec *ex)
 		}
 		else if (token->type == W)
 		{
-			if (wildcard(cmd, token) == 0)
-				args_to_array(cmd, token, ex->cmd_ptr->va);
+			if (fill_arg(cmd, token, ex) == -1)
+				return (-1);
 			token++;
 		}
 		else

@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 11:27:01 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/22 14:47:30 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/25 12:33:49 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <signal.h>
-
-bool	get_paths(t_str_array *array, t_lv *va, t_cmd *hll)
-{
-	int	i;
-
-	i = 0;
-	while (va[i].name)
-	{
-		if (ft_strncmp(va[i].name, "PATH", 4) == 0)
-			break ;
-		i++;
-	}
-	if (va[i].name == 0)
-		return (false);
-	if (ft_split(array, va[i].content, ':') == false)
-		return (exit_failure(hll), false);
-	return (true);
-}
 
 void	exec_path(char *cmd_with_path, t_leaf *cmd, t_exec *ex, char *new_cmd)
 {
@@ -94,31 +76,51 @@ t_leaf	*cmd, t_str_array *paths, t_exec *ex)
 	cmd->arg[0] = save_cmd;
 }
 
+void	get_paths(t_str_array *array, t_exec *ex, t_leaf *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (ex->cmd_ptr->va[i].name)
+	{
+		if (ft_strncmp(ex->cmd_ptr->va[i].name, "PATH", 4) == 0)
+			break ;
+		i++;
+	}
+	if (ex->cmd_ptr->va[i].name == 0)
+		return ;
+	if (ft_split(array, ex->cmd_ptr->va[i].content, ':') == false)
+		return (exit_failure(ex->cmd_ptr));
+	if (*((cmd)->arg[0]) != '/' && *((cmd)->arg[0]) != '.')
+		test_cmd_with_paths(cmd->arg[0], cmd, array, ex);
+	else
+		ft_str_array_free(array);
+}
+
 void	exec_cmd(t_leaf	*cmd, int i, t_exec *ex)
 {
 	t_str_array	paths;
 	int			er;
 
-	if (pre_redir(cmd, i - 2, ex) == -1 || suf_redir(cmd + i, ex) == -1)
-	{
-		dll(&(ex->cmd_ptr->str), &(ex->cmd_ptr->tr));
-		(dall(ex->cmd_ptr->va, ex->cmd_ptr->start), exit(1));
-	}
+	if (ex->redir_alone)
+		redirect_alone(cmd, i, ex);
+	if (pre_redir(cmd, i - 2, ex) == -1 || suf_redir(cmd + i, ex) == -1
+		|| *((cmd + i)->arg[0]) == '\0')
+		(dll_child(&(ex->cmd_ptr->str), &(ex->cmd_ptr->tr)),
+			dall(ex->cmd_ptr->va, ex->cmd_ptr->start), exit(1));
 	builtins_check(cmd + i, ex);
-	if (get_paths(&paths, ex->cmd_ptr->va, ex->cmd_ptr) == true)
-		if (*((cmd + i)->arg[0]) != '/')
-			test_cmd_with_paths((cmd + i)->arg[0], cmd + i, &paths, ex);
+	get_paths(&paths, ex, cmd + i);
 	er = 0;
 	if (execve((cmd + i)->arg[0], (cmd + i)->arg, ex->env) == -1)
 	{
 		er = errno;
-		if (errno == ENOENT)
-			(write(2, (cmd)->arg[0], ft_strlen(cmd->arg[0])),
+		if (er == ENOENT)
+			(write(2, (cmd + i)->arg[0], ft_strlen((cmd + i)->arg[0])),
 				write(2, ": command not found\n", 21));
 		else
 			perror("");
 	}
-	(dll(&(ex->cmd_ptr->str), &(ex->cmd_ptr->tr)),
+	(dll_child(&(ex->cmd_ptr->str), &(ex->cmd_ptr->tr)),
 		dall(ex->cmd_ptr->va, ex->cmd_ptr->start));
 	exit(er + 125);
 }

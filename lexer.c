@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 12:35:37 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/23 16:17:31 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/25 14:41:16 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ void	fill_leaf(t_leaf *tr, char type, int len, char *word)
 {
 	(*tr).type = type;
 	(*tr).len = len;
-	(*tr).word = word;
+	if (type == DL)
+		(*tr).word = NULL;
+	else
+		(*tr).word = word;
 	(*tr).f_type = 0;
 	(*tr).fdl = 0;
 	(*tr).arg = 0;
@@ -37,7 +40,7 @@ static void	fill_tree(char *str, t_leaf *tr)
 	count = 0;
 	while (*(str + i))
 	{
-		while (*(str + i) == ' ')
+		while (is_space(i, str))
 			++i;
 		if (*(str + i) == 0)
 			break ;
@@ -57,7 +60,7 @@ static int	token_count(char *str)
 	count = 0;
 	while (*(str + i))
 	{
-		while (*(str + i) == ' ')
+		while (is_space(i, str))
 			++i;
 		if (*(str + i) == 0)
 			break ;

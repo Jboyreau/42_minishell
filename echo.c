@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 04:22:20 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/22 12:42:20 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/24 21:44:36 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,14 @@ int	ft_echo(t_leaf *cmd)
 	while (args[i] != NULL)
 	{
 		if (write(STDOUT_FILENO, args[i], strlen(args[i])) == -1)
-			perror("write error");
+			return (perror("minishell: echo:write error"), -1);
 		if (args[i + 1] != NULL)
 			if (write(STDOUT_FILENO, " ", 1) == -1)
-				perror("write error");
+				return (perror("minishell: echo:write error"), -1);
 		i++;
 	}
 	if (no_line_return == 0)
 		if (write(STDOUT_FILENO, "\n", 1) == -1)
-			perror("\n");
+			return (perror("minishell: echo:write error"), -1);
 	return (0);
 }

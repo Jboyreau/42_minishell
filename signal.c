@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 10:25:19 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/23 14:52:36 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/24 19:48:56 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,10 @@ void	sigint_handler(int sig)
 		(close (STDIN_FILENO), write(2, "\n", 1), heredoc = 2, g_signal = 130);
 	else if (child == 0 && sig == SIGINT)
 	{
-		g_signal = 130;
 		(rl_on_new_line(), rl_replace_line("", 0));
 		if (heredoc != 2)
 			write(2, "\n", 1);
-		rl_redisplay();
+		(rl_redisplay(), g_signal = 130);
 	}
 	else if (child == 1)
 		signal(SIGINT, SIG_DFL);

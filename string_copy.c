@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 15:44:54 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/23 15:21:17 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/09/24 16:01:18 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,15 +83,15 @@ char	quote_cpy(t_leaf *tok, int *i, t_lv *va, t_string *str)
 	len = 0;
 	while (*(tok->word + *i + len) != quote_type && *i + len < tok->len)
 		++len;
-	if (len == 0)
-		return (++(*i));
 	if (*(tok->word + *i + len) != quote_type)
 		return ((*((*str).content + ((*str).cursor++)) = quote_type), SUCCESS);
+	if (len == 0)
+		return (++(*i));
 	if (quote_type != D_QUOTE)
 	{
 		while (*(tok->word + *i) != S_QUOTE && *i < tok->len)
 			*((*str).content + ((*str).cursor++)) = *(tok->word + (*i)++);
-		return ((*i) += len, SUCCESS);
+		return (++(*i), SUCCESS);
 	}
 	while (*(tok->word + *i) != D_QUOTE && *i < tok->len)
 	{

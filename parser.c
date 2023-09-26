@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 15:45:01 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/09/23 19:46:53 by jboyreau         ###   ########.fr       */
+/*   Updated: 2023/09/24 21:20:48 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,15 +95,13 @@ static char	find_token(char *f_type, char type, t_r **rule)
 	return (SUCCESS);
 }
 
-char	parser(t_leaf *tr, t_r *rule)
+char	parser(t_leaf *tr, t_r *rule, int i, int test)
 {
-	int	i;
 	int	ret;
 	t_r	*prompt;
 
 	if (tr == NULL)
 		return (MEM_FAIL);
-	i = -1;
 	prompt = rule;
 	while ((*(tr + (++i))).type != -1)
 	{
@@ -111,7 +109,7 @@ char	parser(t_leaf *tr, t_r *rule)
 			return (FAILURE);
 		if ((*(tr + i)).type == CLS_PAR && d(tr + i) == FAILURE)
 			return (reset_state(prompt), FAILURE);
-		if ((*(tr + i)).type == OP_PAR && c(tr + i) == FAILURE)
+		if ((*(tr + i)).type == OP_PAR && c(tr + i, &test) == FAILURE)
 			return (reset_state(prompt), print_error(CLS_PAR, 0, 0));
 		ret = find_token(&(*(tr + i)).f_type, (*(tr + i)).type, &rule);
 		if (ret == FAILURE)
